@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static Color white = Colors.white;
+  static Color transparent = Colors.transparent;
   static Color containerB12 = Colors.black12;
   static Color shadowColor = Colors.black38;
   static Color black = Colors.black;

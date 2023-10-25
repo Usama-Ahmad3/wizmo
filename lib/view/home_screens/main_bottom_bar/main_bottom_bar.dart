@@ -5,7 +5,9 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar_provider.dart';
 
 class MainBottomBar extends StatefulWidget {
-  const MainBottomBar({super.key});
+  int index;
+  MainBottomBarProvider provider;
+  MainBottomBar({super.key, this.index = 0, required this.provider});
 
   @override
   State<MainBottomBar> createState() => _MainBottomBarState();
@@ -13,8 +15,12 @@ class MainBottomBar extends StatefulWidget {
 
 class _MainBottomBarState extends State<MainBottomBar> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print('hi');
     return Consumer<MainBottomBarProvider>(builder: (context, value, child) {
       return Scaffold(
         bottomNavigationBar: ConvexAppBar(
@@ -41,12 +47,13 @@ class _MainBottomBarState extends State<MainBottomBar> {
           ],
           backgroundColor: AppColors.buttonColor,
           style: TabStyle.react,
-          initialActiveIndex: value.initialIndex,
+          initialActiveIndex: widget.index,
           onTap: (index) {
             context.read<MainBottomBarProvider>().pageChange(index);
+            widget.index = value.initialIndex;
           },
         ),
-        body: value.page[value.initialIndex],
+        body: value.page[widget.index],
       );
     });
   }

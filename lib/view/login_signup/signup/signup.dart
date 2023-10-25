@@ -2,10 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:wizmo/main.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/cashed_image.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
-import 'package:wizmo/res/routes/route_name.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
+import 'package:wizmo/view/login_signup/login/login.dart';
 import 'package:wizmo/view/login_signup/signup/signup_provider.dart';
 import 'package:wizmo/view/login_signup/widgets/text_data.dart';
 import '../../../res/colors/app_colors.dart';
@@ -359,10 +362,11 @@ class _SignUpState extends State<SignUp> {
   }
 
   navigateToSignin() {
-    Navigator.pushReplacementNamed(context, RouteName.login);
+    NavigatorClass().navigatorPushReplacment(LogIn(provider: getIt()), context);
   }
 
   navigateToHomeScreen() {
-    Navigator.pushReplacementNamed(context, RouteName.mainBottomBar);
+    NavigatorClass()
+        .navigatorPushReplacment(MainBottomBar(provider: getIt()), context);
   }
 }

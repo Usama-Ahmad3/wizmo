@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:wizmo/main.dart';
+import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_initial_params.dart';
-
-import '../../../res/routes/route_name.dart';
+import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
+import 'package:wizmo/view/login_signup/signup/signup.dart';
 
 class LoginProvider extends ChangeNotifier {
   var passwordController =
@@ -15,7 +17,7 @@ class LoginProvider extends ChangeNotifier {
   bool get obscure => _obscure;
 
   navigateToSignup(BuildContext context) {
-    Navigator.pushReplacementNamed(context, RouteName.signup);
+    NavigatorClass().navigatorPush(SignUp(provider: getIt()), context);
   }
 
   passHide() {
@@ -28,11 +30,8 @@ class LoginProvider extends ChangeNotifier {
     // ignore: prefer_const_constructors
     Future.delayed(Duration(seconds: 2), () {
       _loading = false;
-      Navigator.pushReplacementNamed(
-        context,
-        RouteName.mainBottomBar,
-        arguments: initialParams,
-      );
+      NavigatorClass()
+          .navigatorPushReplacment(MainBottomBar(provider: getIt()), context);
       _loading = false;
     });
     notifyListeners();

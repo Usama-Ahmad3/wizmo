@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wizmo/res/routes/route_name.dart';
+import 'package:wizmo/main.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/login_signup/login/login.dart';
 
 import 'first.dart';
 import 'second.dart';
@@ -28,7 +30,8 @@ class OnBoardingProvider extends ChangeNotifier {
 
   navigateToLogin(BuildContext context) {
     if (currentPageValue == 2) {
-      Navigator.pushReplacementNamed(context, RouteName.login);
+      NavigatorClass()
+          .navigatorPushReplacment(LogIn(provider: getIt()), context);
     } else {
       _currentPageValue += 1;
       navigateToLast(currentPageValue);

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wizmo/main.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
-import 'package:wizmo/res/routes/route_name.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/login_signup/login/login.dart';
+import 'package:wizmo/view/login_signup/signup/signup.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -224,11 +227,11 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   navigateToSignup() {
-    Navigator.pushNamed(context, RouteName.signup);
+    NavigatorClass().navigatorPush(SignUp(provider: getIt()), context);
   }
 
   navigateToLogin() {
-    Navigator.pushNamed(context, RouteName.login);
+    NavigatorClass().navigatorPush(LogIn(provider: getIt()), context);
   }
 
   List icon = [Icons.person, Icons.car_crash_sharp, Icons.favorite];

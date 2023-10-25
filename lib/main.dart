@@ -3,10 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
-import 'package:wizmo/res/routes/route_name.dart';
-import 'package:wizmo/res/routes/routes.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
 import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar_provider.dart';
+import 'package:wizmo/view/login_signup/login/login.dart';
 import 'package:wizmo/view/login_signup/login/login_provider.dart';
 import 'package:wizmo/view/login_signup/signup/signup_provider.dart';
 import 'package:wizmo/view/onboarding/onboarding_provider.dart';
@@ -19,6 +18,7 @@ void main() {
   getIt.registerSingleton<LoginProvider>(LoginProvider());
   getIt.registerSingleton<SignUpProvider>(SignUpProvider());
   getIt.registerSingleton<HomeProvider>(HomeProvider(appRepository: getIt()));
+  getIt.registerSingleton<MainBottomBarProvider>(MainBottomBarProvider());
   runApp(const MyApp());
 }
 
@@ -52,11 +52,10 @@ class MyApp extends StatelessWidget {
                 headline2:
                     TextStyle(color: Colors.grey, fontSize: height * 0.03),
                 headline3:
-                    TextStyle(color: Colors.grey, fontSize: height * 0.022),
+                    TextStyle(color: Colors.grey, fontSize: height * 0.018),
                 headline4: TextStyle(
                     color: AppColors.grey, fontSize: height * 0.017))),
-        initialRoute: RouteName.login,
-        onGenerateRoute: AppRoutes.generateRoutes,
+        home: LogIn(provider: getIt()),
       ),
     );
   }
