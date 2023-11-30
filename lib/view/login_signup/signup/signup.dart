@@ -50,7 +50,7 @@ class _SignUpState extends State<SignUp> {
                       'https://tse4.mm.bing.net/th?id=OIP.ZnFdQZYW4Y7hrqtjsQYQRgHaEJ&pid=Api&P=0&h=220',
                   height: height * 0.4,
                   imageFit: BoxFit.fill,
-                  errorFit: BoxFit.fill,
+                  errorFit: BoxFit.contain,
                   width: width),
               SizedBox(
                 height: height * 0.015,
@@ -254,9 +254,8 @@ class _SignUpState extends State<SignUp> {
                         builder: (context, value, child) {
                           return InkWell(
                             onTap: () {
-                              context
-                                  .read<SignUpProvider>()
-                                  .imagePicker(ImageSource.gallery);
+                              context.read<SignUpProvider>().imagePicker(
+                                  provider: value, context: context);
                             },
                             child: value.image != null
                                 ? ClipRRect(
@@ -362,11 +361,10 @@ class _SignUpState extends State<SignUp> {
   }
 
   navigateToSignin() {
-    NavigatorClass().navigatorPushReplacment(LogIn(provider: getIt()), context);
+    Navigation().pushRep(LogIn(provider: getIt()), context);
   }
 
   navigateToHomeScreen() {
-    NavigatorClass()
-        .navigatorPushReplacment(MainBottomBar(provider: getIt()), context);
+    Navigation().pushRep(MainBottomBar(provider: getIt()), context);
   }
 }

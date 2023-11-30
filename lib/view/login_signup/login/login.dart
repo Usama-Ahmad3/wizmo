@@ -8,7 +8,6 @@ import 'package:wizmo/res/common_widgets/text_field_widget.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_initial_params.dart';
 import 'package:wizmo/view/login_signup/login/login_provider.dart';
 import 'package:wizmo/view/login_signup/widgets/text_data.dart';
-import 'package:wizmo/view/onboarding/onboarding_widgets.dart';
 
 class LogIn extends StatefulWidget {
   LoginProvider provider;
@@ -49,7 +48,7 @@ class _LogInState extends State<LogIn> {
                         'https://tse4.mm.bing.net/th?id=OIP.7jV8fIMTD6_D30jljYWUHgHaEZ&pid=Api&P=0&h=220',
                     height: height * 0.4,
                     imageFit: BoxFit.fill,
-                    errorFit: BoxFit.fill,
+                    errorFit: BoxFit.contain,
                     width: width),
                 SizedBox(
                   height: height * 0.02,

@@ -30,8 +30,7 @@ class OnBoardingProvider extends ChangeNotifier {
 
   navigateToLogin(BuildContext context) {
     if (currentPageValue == 2) {
-      NavigatorClass()
-          .navigatorPushReplacment(LogIn(provider: getIt()), context);
+      Navigation().pushRep(LogIn(provider: getIt()), context);
     } else {
       _currentPageValue += 1;
       navigateToLast(currentPageValue);

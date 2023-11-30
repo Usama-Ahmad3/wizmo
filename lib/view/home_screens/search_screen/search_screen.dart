@@ -38,18 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
             color: AppColors.transparent,
             height: height * 0.07,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Close',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline3!
-                      .copyWith(color: AppColors.blue),
-                ),
-                SizedBox(
-                  width: width * 0.3,
-                ),
                 Text('Filter Search',
                     style: Theme.of(context)
                         .textTheme

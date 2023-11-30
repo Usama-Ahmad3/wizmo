@@ -46,7 +46,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                     style: Theme.of(context)
                         .textTheme
                         .headline3!
-                        .copyWith(color: AppColors.black),
+                        .copyWith(color: AppColors.white),
                   )),
       ),
     );

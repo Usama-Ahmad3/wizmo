@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class NavigatorClass {
-  navigatorPush(page, context) {
+class Navigation {
+  push(page, context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
-  navigatorPushReplacment(page, context) {
+  pushRep(page, context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => page));
   }
 
-  navigatorPop(context) {
+  pop(context) {
     Navigator.pop(context);
   }
 }

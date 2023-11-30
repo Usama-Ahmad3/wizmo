@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wizmo/utils/camera_choice.dart';
 
 class SignUpProvider extends ChangeNotifier {
   var nameController = TextEditingController();
@@ -16,7 +17,13 @@ class SignUpProvider extends ChangeNotifier {
   bool get obscure => _obscure;
   File? _image;
   File? get image => _image;
-  imagePicker(source) async {
+  imagePicker(
+      {required BuildContext context, required SignUpProvider provider}) async {
+    CameraChoice()
+        .cameraChoicePicker(context, MediaQuery.of(context).size, provider);
+  }
+
+  pickImageProviderUse(source) async {
     final XFile? file = await ImagePicker().pickImage(source: source);
     if (file != null) {
       _image = File(file.path);

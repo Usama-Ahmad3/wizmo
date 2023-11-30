@@ -20,7 +20,7 @@ class ThirdScreen extends StatelessWidget {
                   'https://tse4.mm.bing.net/th?id=OIP.cgzfayHlKYHpbDGUNuKfgQHaD0&pid=Api&P=0&h=220',
               height: height * 0.4,
               imageFit: BoxFit.fill,
-              errorFit: BoxFit.fill,
+              errorFit: BoxFit.contain,
               width: width),
           SizedBox(
             height: height * 0.04,

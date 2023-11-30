@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wizmo/main.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
-import 'package:wizmo/utils/navigator_class.dart';
-import 'package:wizmo/view/login_signup/login/login.dart';
-import 'package:wizmo/view/login_signup/signup/signup.dart';
+import 'package:wizmo/view/home_screens/account_screen/account_screen_provider.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+  AccountScreenProvider provider;
+  AccountScreen({super.key, required this.provider});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -94,7 +92,20 @@ class _AccountScreenState extends State<AccountScreen> {
                                 color: AppColors.white,
                                 borderRadius: BorderRadius.circular(10)),
                             child: ListTile(
-                              onTap: () {},
+                              onTap: index == 0
+                                  ? () {
+                                      widget.provider
+                                          .navigateToEditProfile(context);
+                                    }
+                                  : index == 1
+                                      ? () {
+                                          widget.provider
+                                              .navigateToMyCars(context);
+                                        }
+                                      : () {
+                                          widget.provider
+                                              .navigateToSavedCars(context);
+                                        },
                               titleAlignment: ListTileTitleAlignment.center,
                               leading: Icon(
                                 icon[index],
@@ -224,14 +235,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ),
     );
-  }
-
-  navigateToSignup() {
-    NavigatorClass().navigatorPush(SignUp(provider: getIt()), context);
-  }
-
-  navigateToLogin() {
-    NavigatorClass().navigatorPush(LogIn(provider: getIt()), context);
   }
 
   List icon = [Icons.person, Icons.car_crash_sharp, Icons.favorite];

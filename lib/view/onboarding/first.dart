@@ -22,7 +22,7 @@ class FirstScreen extends StatelessWidget {
                     'https://clipart-library.com/images/XpcoqGLTE.png',
                 height: height * 0.4,
                 imageFit: BoxFit.fill,
-                errorFit: BoxFit.fill,
+                errorFit: BoxFit.contain,
                 width: width),
             SizedBox(
               height: height * 0.04,

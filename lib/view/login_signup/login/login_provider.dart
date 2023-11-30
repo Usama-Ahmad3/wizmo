@@ -17,7 +17,7 @@ class LoginProvider extends ChangeNotifier {
   bool get obscure => _obscure;
 
   navigateToSignup(BuildContext context) {
-    NavigatorClass().navigatorPush(SignUp(provider: getIt()), context);
+    Navigation().push(SignUp(provider: getIt()), context);
   }
 
   passHide() {
@@ -30,8 +30,8 @@ class LoginProvider extends ChangeNotifier {
     // ignore: prefer_const_constructors
     Future.delayed(Duration(seconds: 2), () {
       _loading = false;
-      NavigatorClass()
-          .navigatorPushReplacment(MainBottomBar(provider: getIt()), context);
+      Navigation()
+          .pushRep(MainBottomBar(provider: getIt()), context);
       _loading = false;
     });
     notifyListeners();

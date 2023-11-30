@@ -21,7 +21,7 @@ class SecondScreen extends StatelessWidget {
                     'https://tse2.mm.bing.net/th?id=OIP.Tmt44ndHqXvyTP4XHbQm4wHaFj&pid=Api&P=0&h=220',
                 height: height * 0.4,
                 imageFit: BoxFit.fill,
-                errorFit: BoxFit.fill,
+                errorFit: BoxFit.contain,
                 width: width),
             SizedBox(
               height: height * 0.04,

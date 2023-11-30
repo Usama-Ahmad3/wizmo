@@ -25,8 +25,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
+	<string>LaunchScreen</string>
+    	<key>LSApplicationQueriesSchemes</key>
+        <array>
+          <string>sms</string>
+          <string>tel</string>
+        </array>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
