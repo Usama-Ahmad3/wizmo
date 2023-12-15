@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:wizmo/domain/app_repository.dart';
+import 'package:wizmo/main.dart';
+import 'package:wizmo/models/car_engine_power.dart';
+import 'package:wizmo/models/car_engine_size.dart';
+import 'package:wizmo/models/car_fuel_consumption.dart';
+import 'package:wizmo/models/car_gearbox.dart';
+import 'package:wizmo/models/doors.dart';
+import 'package:wizmo/models/insurance.dart';
+import 'package:wizmo/models/mileage.dart';
+import 'package:wizmo/models/seats.dart';
+import 'package:wizmo/models/sell_car_model.dart';
+import 'package:wizmo/models/tax.dart';
+import 'package:wizmo/models/type_fuel.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo.dart';
 
 class AboutYourCarProvider with ChangeNotifier {
+  AppRepository appRepository;
+  AboutYourCarProvider({required this.appRepository});
+
   ///aboutCarDetail
   TextEditingController engineController = TextEditingController();
   TextEditingController fuelController = TextEditingController();
+  TextEditingController insuranceController = TextEditingController();
+  TextEditingController taxController = TextEditingController();
   TextEditingController fuelConsumptionController = TextEditingController();
   TextEditingController powerController = TextEditingController();
   TextEditingController mileageController = TextEditingController();
@@ -12,21 +32,116 @@ class AboutYourCarProvider with ChangeNotifier {
   TextEditingController colorController = TextEditingController();
   TextEditingController doorsController = TextEditingController();
   TextEditingController seatsController = TextEditingController();
-  TextEditingController transmissionController = TextEditingController();
-  List car = [
-    'Ye backend se ayegi is liye list names change ho jaye gey',
-    'BMI',
-    'Audi',
-    'Carola',
-    'Honda',
-    'Suzuki',
-    'Mercedes',
-    'Motorola',
-    'Ferrari',
-    'Sedan',
-    'Ford',
-  ];
-  selectChoice(Size size, BuildContext context, String title) {
+  // TextEditingController transmissionController = TextEditingController();
+  TypeFuel typeFuel = TypeFuel();
+  CarFuelConsumption fuelConsumption = CarFuelConsumption();
+  CarEngineSize carEngineSize = CarEngineSize();
+  CarEnginePower carEnginePower = CarEnginePower();
+  Mileage mileage = Mileage();
+  CarGearbox gearbox = CarGearbox();
+  Doors doors = Doors();
+  Seats seats = Seats();
+  Tax tax = Tax();
+  Insurance insurance = Insurance();
+  Future fuelType(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      typeFuel = TypeFuel.fromJson(response);
+    }
+  }
+
+  Future fuelConsume(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      fuelConsumption = CarFuelConsumption.fromJson(response);
+    }
+  }
+
+  Future engineSize(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      carEngineSize = CarEngineSize.fromJson(response);
+    }
+  }
+
+  Future enginePower(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      carEnginePower = CarEnginePower.fromJson(response);
+    }
+  }
+
+  Future carMileage(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      mileage = Mileage.fromJson(response);
+    }
+  }
+
+  Future gearBox(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      gearbox = CarGearbox.fromJson(response);
+    }
+  }
+
+  Future door({required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      doors = Doors.fromJson(response);
+    }
+  }
+
+  Future seat({required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      seats = Seats.fromJson(response);
+    }
+  }
+
+  Future carTax({required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      tax = Tax.fromJson(response);
+    }
+  }
+
+  Future carInsurance(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      insurance = Insurance.fromJson(response);
+    }
+  }
+
+  selectChoice(Size size, BuildContext context, String title,
+      SellCarModel sellCarModel) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -48,38 +163,92 @@ class AboutYourCarProvider with ChangeNotifier {
             child: Column(
               children: [
                 ...List.generate(
-                    car.length,
+                    title == 'Fuel Type'
+                        ? typeFuel.fuelType!.length
+                        : title == 'Fuel Consumption'
+                            ? fuelConsumption.fuelConsumption!.length
+                            : title == 'Engine Size'
+                                ? carEngineSize.engineSize!.length
+                                : title == 'Engine Power'
+                                    ? carEnginePower.enginePower!.length
+                                    : title == 'Mileage'
+                                        ? mileage.carMileage!.length
+                                        : title == 'Gearbox'
+                                            ? gearbox.gearbox!.length
+                                            : title == 'Doors'
+                                                ? doors.totalDoors!.length
+                                                : title == 'Seats'
+                                                    ? seats.totalSeats!.length
+                                                    : title == 'Tax'
+                                                        ? tax.totalTax!.length
+                                                        : insurance
+                                                            .insuranceGroup!
+                                                            .length,
                     (index) => InkWell(
                           onTap: () {
-                            title == 'Transmission'
-                                ? transmissionController.text = car[index]
-                                : title == 'Fuel Type'
-                                    ? fuelController.text = car[index]
-                                    : title == 'Fuel Consumption'
-                                        ? fuelConsumptionController.text =
-                                            car[index]
-                                        : title == 'Engine Size'
-                                            ? engineController.text = car[index]
-                                            : title == 'Engine Power'
-                                                ? powerController.text =
-                                                    car[index]
-                                                : title == 'Mileage'
-                                                    ? mileageController.text =
-                                                        car[index]
-                                                    : title == 'Gearbox'
-                                                        ? gearBoxController
-                                                            .text = car[index]
-                                                        : title == 'Colour'
-                                                            ? colorController
-                                                                    .text =
-                                                                car[index]
-                                                            : title == 'Doors'
-                                                                ? doorsController
-                                                                        .text =
-                                                                    car[index]
-                                                                : seatsController
-                                                                        .text =
-                                                                    car[index];
+                            if (title == 'Fuel Type') {
+                              fuelController.text =
+                                  typeFuel.fuelType![index].fuelType.toString();
+                              sellCarModel.fuelType =
+                                  typeFuel.fuelType![index].fuelType.toString();
+                            } else if (title == 'Fuel Consumption') {
+                              fuelConsumptionController.text = fuelConsumption
+                                  .fuelConsumption![index].fuelConsume
+                                  .toString();
+                              sellCarModel.consumption = fuelConsumption
+                                  .fuelConsumption![index].fuelConsume
+                                  .toString();
+                            } else if (title == 'Engine Size') {
+                              engineController.text = carEngineSize
+                                  .engineSize![index].engineSize
+                                  .toString();
+                              sellCarModel.engineSize = carEngineSize
+                                  .engineSize![index].engineSize
+                                  .toString();
+                            } else if (title == 'Engine Power') {
+                              powerController.text = carEnginePower
+                                  .enginePower![index].enginePower
+                                  .toString();
+                              sellCarModel.enginePower = carEnginePower
+                                  .enginePower![index].enginePower
+                                  .toString();
+                            } else if (title == 'Mileage') {
+                              mileageController.text = mileage
+                                  .carMileage![index].carMileage
+                                  .toString();
+                              sellCarModel.mileage = mileage
+                                  .carMileage![index].carMileage
+                                  .toString();
+                            } else if (title == 'Gearbox') {
+                              gearBoxController.text =
+                                  gearbox.gearbox![index].gearType.toString();
+                              sellCarModel.gearBox =
+                                  gearbox.gearbox![index].gearType.toString();
+                            } else if (title == 'Doors') {
+                              doorsController.text =
+                                  doors.totalDoors![index].doors.toString();
+                              sellCarModel.doors =
+                                  doors.totalDoors![index].doors.toString();
+                            } else if (title == 'Seats') {
+                              seatsController.text = seats
+                                  .totalSeats![index].totalSeats
+                                  .toString();
+                              sellCarModel.seats = seats
+                                  .totalSeats![index].totalSeats
+                                  .toString();
+                            } else if (title == 'Tax') {
+                              taxController.text =
+                                  tax.totalTax![index].tax.toString();
+                              sellCarModel.tax =
+                                  tax.totalTax![index].tax.toString();
+                            } else {
+                              insuranceController.text = insurance
+                                  .insuranceGroup![index].insuranceGroup
+                                  .toString();
+                              sellCarModel.insurance = insurance
+                                  .insuranceGroup![index].insuranceGroup
+                                  .toString();
+                            }
                             Navigator.pop(context);
                           },
                           child: Padding(
@@ -113,7 +282,54 @@ class AboutYourCarProvider with ChangeNotifier {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        car[index],
+                                        title == 'Fuel Type'
+                                            ? typeFuel.fuelType![index].fuelType
+                                                .toString()
+                                            : title == 'Fuel Consumption'
+                                                ? fuelConsumption
+                                                    .fuelConsumption![index]
+                                                    .fuelConsume
+                                                    .toString()
+                                                : title == 'Engine Size'
+                                                    ? carEngineSize
+                                                        .engineSize![index]
+                                                        .engineSize
+                                                        .toString()
+                                                    : title == 'Engine Power'
+                                                        ? carEnginePower
+                                                            .enginePower![index]
+                                                            .enginePower
+                                                            .toString()
+                                                        : title == 'Mileage'
+                                                            ? mileage
+                                                                .carMileage![
+                                                                    index]
+                                                                .carMileage
+                                                                .toString()
+                                                            : title == 'Gearbox'
+                                                                ? gearbox
+                                                                    .gearbox![
+                                                                        index]
+                                                                    .gearType
+                                                                    .toString()
+                                                                : title ==
+                                                                        'Doors'
+                                                                    ? doors
+                                                                        .totalDoors![
+                                                                            index]
+                                                                        .doors
+                                                                        .toString()
+                                                                    : title ==
+                                                                            'Seats'
+                                                                        ? seats
+                                                                            .totalSeats![
+                                                                                index]
+                                                                            .totalSeats
+                                                                            .toString()
+                                                                        : title ==
+                                                                                'Tax'
+                                                                            ? tax.totalTax![index].tax.toString()
+                                                                            : insurance.insuranceGroup![index].insuranceGroup.toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline3!
@@ -136,5 +352,17 @@ class AboutYourCarProvider with ChangeNotifier {
         ),
       ),
     );
+  }
+
+  navigateToPhoto(SellCarModel sellCarModel, context) {
+    sellCarModel.colour = colorController.text;
+    Navigation().push(
+      AddPhoto(provider: getIt(), sellCarModel: sellCarModel),
+      context,
+    );
+  }
+
+  navigateToBack(context) {
+    Navigation().pop(context);
   }
 }

@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/view/home_screens/search_screen/search_widgets.dart';
-import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

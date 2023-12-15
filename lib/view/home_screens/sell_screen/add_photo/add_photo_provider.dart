@@ -3,13 +3,20 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/utils/camera_choice.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/home_screens/sell_screen/congrats_screen/congrats_screen.dart';
 
 class AddPhotoProvider with ChangeNotifier {
+  AppRepository appRepository;
+  AddPhotoProvider({required this.appRepository});
+
   ///add photo
   List<File>? _image = [];
   List<File>? get image => _image;
+  bool _loading = false;
+  bool get loading => _loading;
   removeImage(int index) {
     _image!.removeAt(index);
     notifyListeners();
@@ -33,53 +40,23 @@ class AddPhotoProvider with ChangeNotifier {
     }
   }
 
-  // imagePic(context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //         title: Text(
-  //           "Upload Picture",
-  //           style: Theme.of(context)
-  //               .textTheme
-  //               .headline2!
-  //               .copyWith(color: AppColors.black),
-  //         ),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: [
-  //               GestureDetector(
-  //                   child: Text(
-  //                     "Choose from gallery",
-  //                     style: Theme.of(context)
-  //                         .textTheme
-  //                         .headline3!
-  //                         .copyWith(
-  //                         color: AppColors.black,
-  //                         fontWeight: FontWeight.normal),
-  //                   ),
-  //                   onTap: () {
-  //                     imagePicker(ImageSource.gallery);
-  //                     Navigator.pop(context);
-  //                   }),
-  //               const Padding(
-  //                 padding: EdgeInsets.all(8.0),
-  //               ),
-  //               GestureDetector(
-  //                 child: Text("Take photo",
-  //                     style: Theme.of(context)
-  //                         .textTheme
-  //                         .headline3!
-  //                         .copyWith(
-  //                         color: AppColors.black,
-  //                         fontWeight: FontWeight.normal)),
-  //                 onTap: () {
-  //                   imagePicker(ImageSource.camera);
-  //                   Navigator.pop(context);
-  //                 },
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       ));
-  // }
+  Future addCarForSell(
+      {required BuildContext context,
+      required String url,
+      required Map detail}) async {
+    _loading = true;
+    notifyListeners();
+    var response =
+        await appRepository.post(url: url, context: context, details: detail);
+    print("response$response");
+    if (response != null) {
+      navigateToCongrats(context);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  navigateToCongrats(BuildContext context) {
+    Navigation().push(const CongratsScreen(), context);
+  }
 }

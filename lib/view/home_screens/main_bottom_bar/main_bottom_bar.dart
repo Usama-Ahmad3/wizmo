@@ -1,8 +1,15 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wizmo/main.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/view/home_screens/account_screen/account_screen.dart';
+import 'package:wizmo/view/home_screens/home_screen/home_initial_params.dart';
+import 'package:wizmo/view/home_screens/home_screen/home_page.dart';
 import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar_provider.dart';
+import 'package:wizmo/view/home_screens/save_screen/save_screen.dart';
+import 'package:wizmo/view/home_screens/search_screen/search_screen.dart';
+import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen.dart';
 
 class MainBottomBar extends StatefulWidget {
   int index;
@@ -16,14 +23,41 @@ class MainBottomBar extends StatefulWidget {
 class _MainBottomBarState extends State<MainBottomBar> {
   @override
   void initState() {
+    _initialIndex = widget.index;
     super.initState();
+  }
+
+  int _initialIndex = 0;
+  final page = [
+    HomePage(
+        initialParams: HomeInitialParams(
+      provider: getIt(),
+    )),
+    const SearchScreen(),
+    SellScreen(
+      provider: getIt(),
+    ),
+    const SaveScreen(),
+    AccountScreen(provider: getIt()),
+  ];
+  pageChange(int index) {
+    _initialIndex = index;
+    widget.index = index;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MainBottomBarProvider>(builder: (context, value, child) {
-      return Scaffold(
+    var authProvider =
+        Provider.of<MainBottomBarProvider>(context, listen: false);
+    return WillPopScope(
+      onWillPop: () {
+        return authProvider.onWillPop(context);
+      },
+      child: Scaffold(
         bottomNavigationBar: ConvexAppBar(
+          curve: Curves.bounceInOut,
+          disableDefaultTabController: false,
           items: const [
             TabItem(
               icon: Icons.home_outlined,
@@ -47,14 +81,13 @@ class _MainBottomBarState extends State<MainBottomBar> {
           ],
           backgroundColor: AppColors.buttonColor,
           style: TabStyle.react,
-          initialActiveIndex: widget.index,
+          initialActiveIndex: _initialIndex,
           onTap: (index) {
-            context.read<MainBottomBarProvider>().pageChange(index);
-            widget.index = value.initialIndex;
+            pageChange(index);
           },
         ),
-        body: value.page[widget.index],
-      );
-    });
+        body: page[_initialIndex],
+      ),
+    );
   }
 }

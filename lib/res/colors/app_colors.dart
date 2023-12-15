@@ -6,6 +6,7 @@ class AppColors {
   static Color containerB12 = Colors.black12;
   static Color shadowColor = Colors.black38;
   static Color black = Colors.black;
+  static Color grey200 = Colors.grey.shade200;
   static Color buttonColor = Color(0xff4a75e8);
   static Color grey = Colors.grey;
   static Color deepPurple = Colors.deepPurple;

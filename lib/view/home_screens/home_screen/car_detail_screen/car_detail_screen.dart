@@ -3,7 +3,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/navigator_class.dart';
@@ -11,7 +10,6 @@ import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/story_page.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
-import 'package:wizmo/view/login_signup/widgets/text_data.dart';
 
 class CarDetailScreen extends StatefulWidget {
   CarDetailInitials carDetailInitials;
@@ -34,7 +32,7 @@ class _DetailScreenState extends State<CarDetailScreen> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Car Detail'),
+        title: const Text('Car Details'),
       ),
       floatingActionButton:
           Consumer<CarDetailProvider>(builder: (context, value, child) {
@@ -100,6 +98,11 @@ class _DetailScreenState extends State<CarDetailScreen> {
                 labelStyle: Theme.of(context).textTheme.headline3,
                 elevation: 3),
           ],
+          activeChild: Icon(
+            Icons.clear,
+            color: AppColors.white,
+            size: height * 0.03,
+          ),
           child: Icon(
             Icons.messenger_outline,
             color: AppColors.white,
@@ -271,8 +274,48 @@ class _DetailScreenState extends State<CarDetailScreen> {
               ),
             ),
             SizedBox(
-              height: height * 0.1,
-            )
+              height: height * 0.01,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+              child: Container(
+                height: height * 0.08,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: AppColors.shadowColor.withOpacity(0.17),
+                        blurStyle: BlurStyle.normal,
+                        offset: const Offset(1, 1),
+                        blurRadius: 12,
+                        spreadRadius: 2)
+                  ],
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                    leading: CircleAvatar(
+                      radius: height * 0.023,
+                      backgroundImage:
+                          const AssetImage("assets/images/profile.jpeg"),
+                    ),
+                    title: Text(
+                      "Brian P.Berry",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      "London, UK",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    trailing: Text(
+                      "Direction",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    )),
+              ),
+            ),
+            SizedBox(
+              height: height * 0.07,
+            ),
           ],
         ),
       ),

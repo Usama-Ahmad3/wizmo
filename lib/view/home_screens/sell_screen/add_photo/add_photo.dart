@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wizmo/models/sell_car_model.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo_provider.dart';
-import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen_provider.dart';
 
 class AddPhoto extends StatefulWidget {
   AddPhotoProvider provider;
-  AddPhoto({super.key, required this.provider});
+  SellCarModel sellCarModel;
+  AddPhoto({super.key, required this.provider, required this.sellCarModel});
 
   @override
   State<AddPhoto> createState() => _AddPhotoState();
@@ -16,6 +17,12 @@ class AddPhoto extends StatefulWidget {
 
 class _AddPhotoState extends State<AddPhoto> {
   AddPhotoProvider get photoProvider => widget.provider;
+  @override
+  void initState() {
+    print('In The Add Photo');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -150,15 +157,15 @@ class _AddPhotoState extends State<AddPhoto> {
                                             child: Stack(
                                               children: [
                                                 SizedBox(
-                                                  height: height * 0.18,
-                                                  width: width * 0.43,
+                                                  height: height * 0.17,
+                                                  width: width * 0.41,
                                                 ),
                                                 Positioned(
-                                                  top: height * 0.01,
+                                                  top: height * 0.015,
                                                   left: 0,
                                                   child: Container(
-                                                      height: height * 0.16,
-                                                      width: width * 0.41,
+                                                      height: height * 0.15,
+                                                      width: width * 0.38,
                                                       decoration: BoxDecoration(
                                                           boxShadow: [
                                                             BoxShadow(
@@ -186,9 +193,12 @@ class _AddPhotoState extends State<AddPhoto> {
                                                                 .circular(
                                                                     height *
                                                                         0.015),
-                                                        child: Image.file(value
-                                                            .image![index - 1]
-                                                            .absolute),
+                                                        child: Image.file(
+                                                            value
+                                                                .image![
+                                                                    index - 1]
+                                                                .absolute,
+                                                            fit: BoxFit.fill),
                                                       )),
                                                 ),
                                                 Positioned(
@@ -222,10 +232,19 @@ class _AddPhotoState extends State<AddPhoto> {
                         ),
                       ),
                     ),
-                    Positioned(
-                        bottom: height * 0.093,
-                        left: width * 0.075,
-                        child: ButtonWidget(text: 'Continue', onTap: () {})),
+                    Consumer<AddPhotoProvider>(
+                        builder: (context, value, child) {
+                      return Positioned(
+                          bottom: height * 0.093,
+                          left: width * 0.075,
+                          child: ButtonWidget(
+                              text: 'Continue',
+                              onTap: () {
+                                Map detail = {};
+                                value.addCarForSell(
+                                    context: context, url: '', detail: detail);
+                              }));
+                    }),
                     Positioned(
                         bottom: height * 0.014,
                         left: width * 0.075,

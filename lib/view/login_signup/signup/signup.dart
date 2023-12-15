@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
-import 'package:wizmo/res/common_widgets/cashed_image.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
@@ -45,13 +45,15 @@ class _SignUpState extends State<SignUp> {
               SizedBox(
                 height: height * 0.04,
               ),
-              cachedNetworkImage(
-                  cuisineImageUrl:
-                      'https://tse4.mm.bing.net/th?id=OIP.ZnFdQZYW4Y7hrqtjsQYQRgHaEJ&pid=Api&P=0&h=220',
-                  height: height * 0.4,
-                  imageFit: BoxFit.fill,
-                  errorFit: BoxFit.contain,
-                  width: width),
+              Lottie.asset('assets/lotie_files/cars.json',
+                  height: height * 0.4, width: width),
+              // cachedNetworkImage(
+              //     cuisineImageUrl:
+              //         'https://tse4.mm.bing.net/th?id=OIP.ZnFdQZYW4Y7hrqtjsQYQRgHaEJ&pid=Api&P=0&h=220',
+              //     height: height * 0.4,
+              //     imageFit: BoxFit.fill,
+              //     errorFit: BoxFit.contain,
+              //     width: width),
               SizedBox(
                 height: height * 0.015,
               ),
@@ -66,45 +68,49 @@ class _SignUpState extends State<SignUp> {
                 height: height * 0.015,
               ),
               TextData(text: 'Name'),
-              TextFieldWidget(
-                controller: provider.nameController,
-                hintText: 'Enter Your Name',
-                prefixIcon: Icons.person,
-                onTap: () {},
-                onChanged: (value) {
-                  return provider.test();
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "email field can't empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) => TextFieldWidget(
+                  controller: value.nameController,
+                  hintText: 'Enter Your Name',
+                  prefixIcon: Icons.person,
+                  onTap: () {},
+                  onChanged: (value) {
+                    // return provider.test();
+                  },
+                  onValidate: (value) {
+                    if (value.isEmpty) {
+                      return "email field can't empty";
+                    }
+                    return null;
+                  },
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(height * 0.034),
+                      borderSide: BorderSide(color: AppColors.white)),
+                ),
               ),
               SizedBox(
                 height: height * 0.01,
               ),
               TextData(text: 'Email'),
-              TextFieldWidget(
-                controller: provider.emailController,
-                hintText: 'Enter Your Email',
-                prefixIcon: Icons.email_outlined,
-                onTap: () {},
-                onChanged: (value) {
-                  return provider.test();
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "email field can't be empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) => TextFieldWidget(
+                  controller: value.emailController,
+                  hintText: 'Enter Your Email',
+                  prefixIcon: Icons.email_outlined,
+                  onTap: () {},
+                  onChanged: (value) {
+                    // return provider.test();
+                  },
+                  onValidate: (value) {
+                    if (value.isEmpty) {
+                      return "email field can't be empty";
+                    }
+                    return null;
+                  },
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(height * 0.034),
+                      borderSide: BorderSide(color: AppColors.white)),
+                ),
               ),
               SizedBox(
                 height: height * 0.01,
@@ -123,7 +129,7 @@ class _SignUpState extends State<SignUp> {
                   },
                   onTap: () {},
                   onChanged: (value) {
-                    return provider.test();
+                    // return provider.test();
                   },
                   onValidate: (value) {
                     if (value.isEmpty) {
@@ -146,89 +152,134 @@ class _SignUpState extends State<SignUp> {
                 height: height * 0.01,
               ),
               TextData(text: 'Contact'),
-              TextFieldWidget(
-                controller: provider.contactController,
-                hintText: 'Enter Contact Number',
-                prefixIcon: Icons.contacts,
-                onTap: () {},
-                onChanged: (value) {
-                  return provider.test();
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) {
+                  return TextFieldWidget(
+                    controller: value.contactController,
+                    type: TextInputType.phone,
+                    hintText: 'Enter Contact Number',
+                    prefixIcon: Icons.contacts,
+                    onTap: () {},
+                    onChanged: (value) {
+                      // return provider.test();
+                    },
+                    onValidate: (value) {
+                      if (value.isEmpty) {
+                        return "Contact field can't be empty";
+                      }
+                      return null;
+                    },
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(height * 0.034),
+                        borderSide: BorderSide(color: AppColors.white)),
+                  );
                 },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "Contact field can't be empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              TextData(text: 'Address'),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) => TextFieldWidget(
+                  controller: value.addressController,
+                  hintText: 'Enter Your Address',
+                  prefixIcon: Icons.location_history_rounded,
+                  onTap: () {},
+                  onChanged: (value) {
+                    // return provider.test();
+                  },
+                  onValidate: (value) {
+                    if (value.isEmpty) {
+                      return "Address field can't be empty";
+                    }
+                    return null;
+                  },
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(height * 0.034),
+                      borderSide: BorderSide(color: AppColors.white)),
+                ),
               ),
               SizedBox(
                 height: height * 0.01,
               ),
               TextData(text: 'License'),
-              TextFieldWidget(
-                controller: provider.licenseController,
-                hintText: 'Enter Your License Number',
-                prefixIcon: Icons.approval,
-                onTap: () {},
-                onChanged: (value) {
-                  return provider.test();
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "License field can't be empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) => TextFieldWidget(
+                  controller: value.licenseController,
+                  hintText: 'Enter Your License Number',
+                  prefixIcon: Icons.approval,
+                  onTap: () {},
+                  onChanged: (value) {
+                    // return provider.test();
+                  },
+                  onValidate: (value) {
+                    if (value.isEmpty) {
+                      return "License field can't be empty";
+                    }
+                    return null;
+                  },
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(height * 0.034),
+                      borderSide: BorderSide(color: AppColors.white)),
+                ),
               ),
               SizedBox(
                 height: height * 0.01,
               ),
               TextData(text: 'ID Card'),
-              TextFieldWidget(
-                controller: provider.idCardController,
-                hintText: 'Enter Your ID Card Number',
-                prefixIcon: Icons.info_outline,
-                onTap: () {},
-                onChanged: (value) {
-                  return provider.test();
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "ID field can't be empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) => TextFieldWidget(
+                  controller: value.idCardController,
+                  hintText: 'Enter Your ID Card Number',
+                  prefixIcon: Icons.info_outline,
+                  onTap: () {},
+                  onChanged: (value) {
+                    // return provider.test();
+                  },
+                  onValidate: (value) {
+                    if (value.isEmpty) {
+                      return "ID field can't be empty";
+                    }
+                    return null;
+                  },
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(height * 0.034),
+                      borderSide: BorderSide(color: AppColors.white)),
+                ),
               ),
               SizedBox(
                 height: height * 0.01,
               ),
               TextData(text: 'Date of Birth'),
-              TextFieldWidget(
-                controller: provider.dobController,
-                hintText: 'Enter Your Date of Birth',
-                prefixIcon: Icons.date_range,
-                onTap: () {},
-                onChanged: (value) {
-                  return provider.test();
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "DOB field can't be empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) => InkWell(
+                  onTap: () async {
+                    final date = await value.slecteDtateTime(context);
+                    if (date != null) {
+                      value.dobController.text =
+                          value.formatter.format(date).toString();
+                    }
+                  },
+                  child: TextFieldWidget(
+                    controller: value.dobController,
+                    hintText: 'Enter Your Date of Birth',
+                    prefixIcon: Icons.date_range,
+                    enable: false,
+                    onTap: () {},
+                    onChanged: (value) {
+                      // return provider.test();
+                    },
+                    onValidate: (value) {
+                      if (value.isEmpty) {
+                        return "DOB field can't be empty";
+                      }
+                      return null;
+                    },
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(height * 0.034),
+                        borderSide: BorderSide(color: AppColors.white)),
+                  ),
+                ),
               ),
               SizedBox(
                 height: height * 0.04,
@@ -279,17 +330,35 @@ class _SignUpState extends State<SignUp> {
               SizedBox(
                 height: height * 0.03,
               ),
-              Center(
-                child: ButtonWidget(
-                  text: 'Sign Up',
-                  onTap: () {
-                    if (formKey.currentState!.validate()) {
-                      print('Go HomeScreen');
-                      navigateToHomeScreen();
-                    }
-                  },
-                  loading: false,
-                ),
+              Consumer<SignUpProvider>(
+                builder: (context, value, child) {
+                  return Center(
+                    child: ButtonWidget(
+                      text: 'Sign Up',
+                      onTap: () async {
+                        if (formKey.currentState!.validate()) {
+                          Map signUpDetails = {
+                            'name': value.nameController.text,
+                            'email': value.emailController.text,
+                            'password': value.passwordController.text,
+                            'address': value.addressController.text,
+                            'phone_number': value.contactController.text,
+                            'date_of_birth': value.dobController.text,
+                            'driver_license': value.licenseController.text,
+                            'id_card': value.idCardController.text,
+                            'profile_image': value.image,
+                          };
+                          print(signUpDetails);
+                          value.signup(
+                              signupDetails: signUpDetails,
+                              url: "${AppUrls.baseUrl}${AppUrls.signup}",
+                              context: context);
+                        }
+                      },
+                      loading: value.loading,
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 height: height * 0.03,

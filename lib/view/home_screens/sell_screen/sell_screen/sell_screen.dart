@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wizmo/main.dart';
+import 'package:provider/provider.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
-import 'package:wizmo/utils/navigator_class.dart';
-import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_car.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen_provider.dart';
 
 class SellScreen extends StatefulWidget {
@@ -17,327 +16,509 @@ class SellScreen extends StatefulWidget {
 
 class _SellScreenState extends State<SellScreen> {
   SellScreenProvider get sellProvider => widget.provider;
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     print('In the Sell Screen');
     super.initState();
   }
 
+  final nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var authProvider = Provider.of<SellScreenProvider>(context, listen: false);
+    authProvider.checkAuth(context);
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-            'Create a new ad',
-            style: Theme.of(context)
-                .textTheme
-                .headline2!
-                .copyWith(color: AppColors.black),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size(width * 0.9, height * 0.005),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: width * 0.05,
-                ),
-                Container(
-                  height: height * 0.005,
-                  width: width * 0.2,
-                  color: AppColors.buttonColor,
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                Container(
-                  height: height * 0.005,
-                  width: width * 0.2,
-                  color: AppColors.grey,
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                Container(
-                  height: height * 0.005,
-                  width: width * 0.2,
-                  color: AppColors.grey,
-                ),
-              ],
+        appBar: AppBar(
+            title: Text(
+              'Create a new ad',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2!
+                  .copyWith(color: AppColors.black),
             ),
-          )),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: height * 0.05,
+            bottom: PreferredSize(
+              preferredSize: Size(width * 0.9, height * 0.005),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  Container(
+                    height: height * 0.005,
+                    width: width * 0.2,
+                    color: AppColors.buttonColor,
+                  ),
+                  SizedBox(
+                    width: width * 0.01,
+                  ),
+                  Container(
+                    height: height * 0.005,
+                    width: width * 0.2,
+                    color: AppColors.grey,
+                  ),
+                  SizedBox(
+                    width: width * 0.01,
+                  ),
+                  Container(
+                    height: height * 0.005,
+                    width: width * 0.2,
+                    color: AppColors.grey,
+                  ),
+                ],
               ),
+            )),
+        body: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: height * 0.05,
+                  ),
 
-              ///name
-              TextFieldWidget(
-                controller: sellProvider.nameController,
-                hintText: 'Enter your name',
-                onTap: () {},
-                onChanged: (value) {
-                  return null;
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "name field can't empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
+                  ///name
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => TextFieldWidget(
+                      controller: provider.nameController,
+                      hintText: 'Enter your name',
+                      type: TextInputType.text,
+                      onTap: () {},
+                      onChanged: (value) {
+                        // provider.checkAuth(context);
+                        print(value);
+                      },
+                      onValidate: (value) {
+                        if (value.isEmpty) {
+                          return "name field can't empty";
+                        }
+                        return null;
+                      },
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(height * 0.034),
+                          borderSide: BorderSide(color: AppColors.white)),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///Make
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getMake(
+                                loginDetails: null,
+                                url: '${AppUrls.baseUrl}${AppUrls.make}',
+                                context: context)
+                            .then((val) {
+                          provider.selectChoice(
+                              MediaQuery.of(context).size, context, 'Make');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.makeController,
+                        hintText: 'Select Make',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "make field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(
+                              color: AppColors.white,
+                            )),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///model
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getModel(
+                                loginDetails: null,
+                                url: '${AppUrls.baseUrl}${AppUrls.carModel}',
+                                context: context)
+                            .then((val) {
+                          provider.selectChoice(
+                              MediaQuery.of(context).size, context, 'Model');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.modelController,
+                        hintText: 'Select your car model',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "car model field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///modelVariation
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getModelVariation(
+                                loginDetails: null,
+                                url:
+                                    '${AppUrls.baseUrl}${AppUrls.carVariation}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(MediaQuery.of(context).size,
+                              context, 'Variation');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.modelVariationController,
+                        hintText: 'Select your car model variation',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "car model variation field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///year
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getYear(
+                                loginDetails: null,
+                                url: '${AppUrls.baseUrl}${AppUrls.carYear}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(
+                              MediaQuery.of(context).size, context, 'Year');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.yearController,
+                        hintText: 'Select your car year',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "car year field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///bodyType
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getBodyType(
+                                loginDetails: null,
+                                url: '${AppUrls.baseUrl}${AppUrls.carBodyType}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(MediaQuery.of(context).size,
+                              context, 'body_type');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.bodyTypeController,
+                        hintText: 'Select body_type',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "body_type field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///acceleration
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getAcceleration(
+                                loginDetails: null,
+                                url:
+                                    '${AppUrls.baseUrl}${AppUrls.carAcceleration}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(MediaQuery.of(context).size,
+                              context, 'Acceleration');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.accelerationController,
+                        hintText: 'acceleration',
+                        enable: false,
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "acceleration field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///driveTrain
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getDriveTrain(
+                                loginDetails: null,
+                                url:
+                                    '${AppUrls.baseUrl}${AppUrls.carDriveTrain}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(MediaQuery.of(context).size,
+                              context, 'Drivetrain');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.driveTrainController,
+                        hintText: 'Select drivetrain',
+                        enable: false,
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "drivetrain field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///Co2
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getCo2(
+                                loginDetails: null,
+                                url: '${AppUrls.baseUrl}${AppUrls.carCO2}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(
+                              MediaQuery.of(context).size, context, 'Co2');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.co2Controller,
+                        hintText: 'Select co2',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "co2 field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///registration Number
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => TextFieldWidget(
+                      controller: provider.registrationController,
+                      hintText: 'Enter your registration number',
+                      type: TextInputType.number,
+                      onTap: () {},
+                      onChanged: (value) {
+                        // provider.checkAuth(context);
+                        print(value);
+                      },
+                      onValidate: (value) {
+                        if (value.isEmpty) {
+                          return "name field can't empty";
+                        }
+                        return null;
+                      },
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(height * 0.034),
+                          borderSide: BorderSide(color: AppColors.white)),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///sellerType
+
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider
+                            .getSellerType(
+                                loginDetails: null,
+                                url:
+                                    '${AppUrls.baseUrl}${AppUrls.carSellerType}',
+                                context: context)
+                            .then((value) {
+                          provider.selectChoice(
+                              MediaQuery.of(context).size, context, 'Seller');
+                        });
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.sellerTypeController,
+                        hintText: 'Select seller type',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onChanged: (value) {
+                          return null;
+                        },
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "seller type field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///price
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => TextFieldWidget(
+                      controller: provider.priceController,
+                      hintText: 'Enter price',
+                      type: TextInputType.number,
+                      onTap: () {},
+                      onChanged: (value) {
+                        return null;
+                      },
+                      onValidate: (value) {
+                        if (value.isEmpty) {
+                          return "price field can't empty";
+                        }
+                        return null;
+                      },
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(height * 0.034),
+                          borderSide: BorderSide(color: AppColors.white)),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///description
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => TextFieldMultiWidget(
+                      controller: provider.descriptionController,
+                      hintText: 'Enter description',
+                      onTap: () {},
+                      onChanged: (value) {
+                        return null;
+                      },
+                      onValidate: (value) {
+                        if (value.isEmpty) {
+                          return "description field can't empty";
+                        }
+                        return null;
+                      },
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(height * 0.034),
+                          borderSide: BorderSide(color: AppColors.white)),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.04),
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => ButtonWidget(
+                        text: 'Continue',
+                        onTap: () {
+                          // if (_formKey.currentState!.validate()) {
+                          provider.navigateToAboutCar(context);
+                          // }
+                        }),
+                  ),
+                  SizedBox(
+                    height: height * 0.034,
+                  )
+                ],
               ),
-              SizedBox(height: height * 0.025),
-
-              ///Make
-              InkWell(
-                onTap: () {
-                  sellProvider.selectChoice(
-                      MediaQuery.of(context).size, context, 'Make');
-                },
-                child: TextFieldWidget(
-                  controller: sellProvider.makeController,
-                  hintText: 'Select Make',
-                  suffixIcon: Icons.keyboard_arrow_right,
-                  enable: false,
-                  onChanged: (value) {
-                    return null;
-                  },
-                  onValidate: (value) {
-                    if (value.isEmpty) {
-                      return "make field can't empty";
-                    }
-                    return null;
-                  },
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(height * 0.034),
-                      borderSide: BorderSide(
-                        color: AppColors.white,
-                      )),
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///model
-              InkWell(
-                onTap: () {
-                  sellProvider.selectChoice(
-                      MediaQuery.of(context).size, context, 'Model');
-                },
-                child: TextFieldWidget(
-                  controller: sellProvider.modelController,
-                  hintText: 'Select your car model',
-                  suffixIcon: Icons.keyboard_arrow_right,
-                  enable: false,
-                  onChanged: (value) {
-                    return null;
-                  },
-                  onValidate: (value) {
-                    if (value.isEmpty) {
-                      return "car model field can't empty";
-                    }
-                    return null;
-                  },
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(height * 0.034),
-                      borderSide: BorderSide(color: AppColors.white)),
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///bodyType
-              InkWell(
-                onTap: () {
-                  sellProvider.selectChoice(
-                      MediaQuery.of(context).size, context, 'body_type');
-                },
-                child: TextFieldWidget(
-                  controller: sellProvider.bodyTypeController,
-                  hintText: 'Select body_type',
-                  suffixIcon: Icons.keyboard_arrow_right,
-                  enable: false,
-                  onChanged: (value) {
-                    return null;
-                  },
-                  onValidate: (value) {
-                    if (value.isEmpty) {
-                      return "body_type field can't empty";
-                    }
-                    return null;
-                  },
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(height * 0.034),
-                      borderSide: BorderSide(color: AppColors.white)),
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///acceleration
-              InkWell(
-                onTap: () {
-                  sellProvider.selectChoice(
-                      MediaQuery.of(context).size, context, 'Acceleration');
-                },
-                child: TextFieldWidget(
-                  controller: sellProvider.accelerationController,
-                  hintText: 'acceleration',
-                  enable: false,
-                  suffixIcon: Icons.keyboard_arrow_right,
-                  onChanged: (value) {
-                    return null;
-                  },
-                  onValidate: (value) {
-                    if (value.isEmpty) {
-                      return "acceleration field can't empty";
-                    }
-                    return null;
-                  },
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(height * 0.034),
-                      borderSide: BorderSide(color: AppColors.white)),
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///driveTrain
-              InkWell(
-                onTap: () {
-                  sellProvider.selectChoice(
-                      MediaQuery.of(context).size, context, 'Drivetrain');
-                },
-                child: TextFieldWidget(
-                  controller: sellProvider.driveTrainController,
-                  hintText: 'Select drivetrain',
-                  enable: false,
-                  suffixIcon: Icons.keyboard_arrow_right,
-                  onChanged: (value) {
-                    return null;
-                  },
-                  onValidate: (value) {
-                    if (value.isEmpty) {
-                      return "drivetrain field can't empty";
-                    }
-                    return null;
-                  },
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(height * 0.034),
-                      borderSide: BorderSide(color: AppColors.white)),
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///Co2
-              InkWell(
-                onTap: () {
-                  sellProvider.selectChoice(
-                      MediaQuery.of(context).size, context, 'Co2');
-                },
-                child: TextFieldWidget(
-                  controller: sellProvider.co2Controller,
-                  hintText: 'Select co2',
-                  suffixIcon: Icons.keyboard_arrow_right,
-                  enable: false,
-                  onChanged: (value) {
-                    return null;
-                  },
-                  onValidate: (value) {
-                    if (value.isEmpty) {
-                      return "co2 field can't empty";
-                    }
-                    return null;
-                  },
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(height * 0.034),
-                      borderSide: BorderSide(color: AppColors.white)),
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///registration Number
-              TextFieldWidget(
-                controller: sellProvider.registrationController,
-                hintText: 'Enter Registration Number',
-                onTap: () {},
-                onChanged: (value) {
-                  return null;
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "Registration field can't empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///price
-              TextFieldWidget(
-                controller: sellProvider.priceController,
-                hintText: 'Enter price',
-                type: TextInputType.number,
-                onTap: () {},
-                onChanged: (value) {
-                  return null;
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "price field can't empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
-              ),
-              SizedBox(height: height * 0.025),
-
-              ///description
-              TextFieldMultiWidget(
-                controller: sellProvider.descriptionController,
-                hintText: 'Enter description',
-                onTap: () {},
-                onChanged: (value) {
-                  return null;
-                },
-                onValidate: (value) {
-                  if (value.isEmpty) {
-                    return "description field can't empty";
-                  }
-                  return null;
-                },
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(height * 0.034),
-                    borderSide: BorderSide(color: AppColors.white)),
-              ),
-              SizedBox(height: height * 0.04),
-              ButtonWidget(
-                  text: 'Continue',
-                  onTap: () {
-                    navigateToAboutCar();
-                  }),
-              SizedBox(
-                height: height * 0.034,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  navigateToAboutCar() {
-    Navigation().push(AboutYourCar(provider: getIt()), context);
+            )));
   }
 }

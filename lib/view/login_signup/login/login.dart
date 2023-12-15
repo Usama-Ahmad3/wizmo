@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wizmo/main.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/cashed_image.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
-import 'package:wizmo/view/home_screens/home_screen/home_initial_params.dart';
 import 'package:wizmo/view/login_signup/login/login_provider.dart';
 import 'package:wizmo/view/login_signup/widgets/text_data.dart';
 
@@ -123,15 +122,14 @@ class _LogInState extends State<LogIn> {
                             onTap: () {
                               if (formKey.currentState!.validate()) {
                                 print('Go To Home Screen');
-                                Map detail = {'name': 'Usama'};
-                                context
-                                    .read<LoginProvider>()
-                                    .navigateToHomeScreen(
-                                        context,
-                                        HomeInitialParams(
-                                            provider: getIt(),
-                                            detail: detail,
-                                            name: 'usama'));
+                                Map detail = {
+                                  'email': value.emailController.text,
+                                  'password': value.passwordController.text
+                                };
+                                context.read<LoginProvider>().login(
+                                    loginDetails: detail,
+                                    url: "${AppUrls.baseUrl}${AppUrls.login}",
+                                    context: context);
                               }
                             },
                             text: 'Log in',
@@ -141,11 +139,18 @@ class _LogInState extends State<LogIn> {
                 SizedBox(
                   height: height * 0.02,
                 ),
-                Center(
-                    child: Text(
-                  'Forget password',
-                  style: Theme.of(context).textTheme.headline4,
-                )),
+                Consumer<LoginProvider>(
+                  builder: (context, value, child) => InkWell(
+                    onTap: () {
+                      value.navigateToForgetPassword(context);
+                    },
+                    child: Center(
+                        child: Text(
+                      'Forget password',
+                      style: Theme.of(context).textTheme.headline4,
+                    )),
+                  ),
+                ),
                 SizedBox(
                   height: height * 0.04,
                 ),

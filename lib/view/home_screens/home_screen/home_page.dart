@@ -45,10 +45,7 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SafeArea(child: Image.asset('assets/images/wizmo.jpg')),
-                        Consumer<HomeProvider>(
-                          builder: (context, value, child) =>
-                              TopSearchBar(value: value),
-                        ),
+                        TopSearchBar(),
                         // Consumer<HomeProvider>(
                         //     builder: (context, value, child) {
                         //   return Row(

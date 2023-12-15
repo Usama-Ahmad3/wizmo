@@ -1,30 +1,198 @@
 import 'package:flutter/material.dart';
+import 'package:wizmo/domain/app_repository.dart';
+import 'package:wizmo/main.dart';
+import 'package:wizmo/models/body_typee.dart';
+import 'package:wizmo/models/car_acceleration.dart';
+import 'package:wizmo/models/car_co2.dart';
+import 'package:wizmo/models/car_model.dart';
+import 'package:wizmo/models/car_year.dart';
+import 'package:wizmo/models/drive_train.dart';
+import 'package:wizmo/models/make_model.dart';
+import 'package:wizmo/models/model_variation.dart';
+import 'package:wizmo/models/sell_car_model.dart';
+import 'package:wizmo/models/type_seller.dart';
+import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/utils/flushbar.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
+import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_car.dart';
 
 class SellScreenProvider extends ChangeNotifier {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController makeController = TextEditingController();
-  TextEditingController modelController = TextEditingController();
-  TextEditingController bodyTypeController = TextEditingController();
-  TextEditingController co2Controller = TextEditingController();
-  TextEditingController accelerationController = TextEditingController();
-  TextEditingController driveTrainController = TextEditingController();
-  TextEditingController registrationController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  List car = [
-    'Ye backend se ayegi is liye list names change ho jaye gey',
-    'BMI',
-    'Audi',
-    'Carola',
-    'Honda',
-    'Suzuki',
-    'Mercedes',
-    'Motorola',
-    'Ferrari',
-    'Sedan',
-    'Ford',
-  ];
+  AppRepository appRepository;
+  SellScreenProvider({required this.appRepository});
+  final nameController = TextEditingController();
+  final makeController = TextEditingController();
+  final modelController = TextEditingController();
+  final modelVariationController = TextEditingController();
+  final yearController = TextEditingController();
+  final sellerTypeController = TextEditingController();
+  final bodyTypeController = TextEditingController();
+  final co2Controller = TextEditingController();
+  final accelerationController = TextEditingController();
+  final driveTrainController = TextEditingController();
+  final registrationController = TextEditingController();
+  final priceController = TextEditingController();
+  final descriptionController = TextEditingController();
+  Authentication authentication = Authentication();
+  SellCarModel sellCarModel = SellCarModel();
+  @override
+  void dispose() {
+    nameController.dispose();
+    modelController.dispose();
+    modelVariationController.dispose();
+    yearController.dispose();
+    bodyTypeController.dispose();
+    accelerationController.dispose();
+    driveTrainController.dispose();
+    co2Controller.dispose();
+    sellerTypeController.dispose();
+    priceController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  bool _isLogIn = false;
+  bool _loading = false;
+  MakeModel makeModel = MakeModel();
+  CarModel carModel = CarModel();
+  ModelVariation modelVariation = ModelVariation();
+  CarYear carYear = CarYear();
+  BodyTypee bodyTypee = BodyTypee();
+  CarAcceleration acceleration = CarAcceleration();
+  DriveTrain driveTrain = DriveTrain();
+  CarCo2 carCo2 = CarCo2();
+  TypeSeller typeSeller = TypeSeller();
+
+  bool get loading => _loading;
+
+  bool get isLogIn => _isLogIn;
+  Future getMake(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      makeModel = MakeModel.fromJson(response);
+      print(makeModel.make![0].name);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getModel(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      carModel = CarModel.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getModelVariation(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      modelVariation = ModelVariation.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getYear(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      carYear = CarYear.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getBodyType(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      bodyTypee = BodyTypee.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getAcceleration(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      acceleration = CarAcceleration.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getDriveTrain(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      driveTrain = DriveTrain.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getCo2({required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      carCo2 = CarCo2.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future getSellerType(
+      {required loginDetails, required url, required context}) async {
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      typeSeller = TypeSeller.fromJson(response);
+    }
+    _loading = false;
+    notifyListeners();
+  }
+
   selectChoice(Size size, BuildContext context, String title) {
     showDialog(
       context: context,
@@ -47,23 +215,82 @@ class SellScreenProvider extends ChangeNotifier {
             child: Column(
               children: [
                 ...List.generate(
-                    car.length,
+                    title == 'Make'
+                        ? makeModel.make!.length
+                        : title == 'Model'
+                            ? carModel.model!.length
+                            : title == 'Variation'
+                                ? modelVariation.modelVarition!.length
+                                : title == 'Year'
+                                    ? carYear.year!.length
+                                    : title == 'body_type'
+                                        ? bodyTypee.bodyType!.length
+                                        : title == 'Acceleration'
+                                            ? acceleration.acceleration!.length
+                                            : title == 'Drivetrain'
+                                                ? driveTrain.drivetrain!.length
+                                                : title == 'Co2'
+                                                    ? carCo2.co2!.length
+                                                    : typeSeller
+                                                        .sellerType!.length,
                     (index) => InkWell(
                           onTap: () {
-                            title == 'Make'
-                                ? makeController.text = car[index]
-                                : title == 'Model'
-                                    ? modelController.text = car[index]
-                                    : title == 'body_type'
-                                        ? bodyTypeController.text = car[index]
-                                        : title == 'Acceleration'
-                                            ? accelerationController.text =
-                                                car[index]
-                                            : title == 'Drivetrain'
-                                                ? driveTrainController.text =
-                                                    car[index]
-                                                : co2Controller.text =
-                                                    car[index];
+                            if (title == 'Make') {
+                              makeController.text =
+                                  makeModel.make![index].name.toString();
+                              sellCarModel.make =
+                                  makeModel.make![index].name.toString();
+                            } else if (title == 'Model') {
+                              modelController.text =
+                                  carModel.model![index].model.toString();
+                              sellCarModel.model =
+                                  carModel.model![index].model.toString();
+                            } else if (title == 'body_type') {
+                              bodyTypeController.text = bodyTypee
+                                  .bodyType![index].bodyType
+                                  .toString();
+                              sellCarModel.bodyType = bodyTypee
+                                  .bodyType![index].bodyType
+                                  .toString();
+                            } else if (title == 'Acceleration') {
+                              accelerationController.text = acceleration
+                                  .acceleration![index].acceleration
+                                  .toString();
+                              sellCarModel.acceleration = acceleration
+                                  .acceleration![index].acceleration
+                                  .toString();
+                            } else if (title == 'Drivetrain') {
+                              driveTrainController.text = driveTrain
+                                  .drivetrain![index].drivetrain
+                                  .toString();
+                              sellCarModel.driveTrain = driveTrain
+                                  .drivetrain![index].drivetrain
+                                  .toString();
+                            } else if (title == 'Variation') {
+                              modelVariationController.text = modelVariation
+                                  .modelVarition![index].variationName
+                                  .toString();
+                              sellCarModel.variation = modelVariation
+                                  .modelVarition![index].variationName
+                                  .toString();
+                            } else if (title == 'Year') {
+                              yearController.text =
+                                  carYear.year![index].yearName.toString();
+                              sellCarModel.year =
+                                  carYear.year![index].yearName.toString();
+                            } else if (title == 'Seller') {
+                              sellerTypeController.text = typeSeller
+                                  .sellerType![index].sellerType
+                                  .toString();
+                              sellCarModel.sellerType = typeSeller
+                                  .sellerType![index].sellerType
+                                  .toString();
+                            } else {
+                              co2Controller.text =
+                                  carCo2.co2![index].co.toString();
+                              sellCarModel.co2 =
+                                  carCo2.co2![index].co.toString();
+                            }
                             Navigator.pop(context);
                           },
                           child: Padding(
@@ -97,7 +324,53 @@ class SellScreenProvider extends ChangeNotifier {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        car[index],
+                                        title == 'Make'
+                                            ? makeModel.make![index].name
+                                                .toString()
+                                            : title == "Model"
+                                                ? carModel.model![index].model
+                                                    .toString()
+                                                : title == 'Acceleration'
+                                                    ? acceleration
+                                                        .acceleration![index]
+                                                        .acceleration
+                                                        .toString()
+                                                    : title == 'Variation'
+                                                        ? modelVariation
+                                                            .modelVarition![
+                                                                index]
+                                                            .variationName
+                                                            .toString()
+                                                        : title == 'Year'
+                                                            ? carYear
+                                                                .year![index]
+                                                                .yearName
+                                                                .toString()
+                                                            : title ==
+                                                                    'body_type'
+                                                                ? bodyTypee
+                                                                    .bodyType![
+                                                                        index]
+                                                                    .bodyType
+                                                                    .toString()
+                                                                : title ==
+                                                                        'Drivetrain'
+                                                                    ? driveTrain
+                                                                        .drivetrain![
+                                                                            index]
+                                                                        .drivetrain
+                                                                        .toString()
+                                                                    : title ==
+                                                                            'Co2'
+                                                                        ? carCo2
+                                                                            .co2![
+                                                                                index]
+                                                                            .co
+                                                                            .toString()
+                                                                        : typeSeller
+                                                                            .sellerType![index]
+                                                                            .sellerType
+                                                                            .toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline3!
@@ -120,5 +393,38 @@ class SellScreenProvider extends ChangeNotifier {
         ),
       ),
     );
+  }
+
+  checkAuth(context) async {
+    print('working');
+    _loading = true;
+    // notifyListeners();
+    _isLogIn = await authentication.getAuth();
+    print(await authentication.getToken());
+    print("LAAAAAAAAAS$isLogIn");
+    if (isLogIn) {
+      _loading = false;
+      notifyListeners();
+    } else {
+      navigateToHome(context);
+    }
+  }
+
+  navigateToHome(context) async {
+    await FlushBarUtils.flushBar(
+        'Login required to add car for sale', context, 'Login Required');
+    Navigation().pushRep(MainBottomBar(provider: getIt(), index: 0), context);
+  }
+
+  navigateToAboutCar(context) {
+    sellCarModel.name = nameController.text;
+    sellCarModel.registration = registrationController.text;
+    sellCarModel.price = priceController.text;
+    sellCarModel.description = descriptionController.text;
+    print(sellCarModel.description);
+    print(sellCarModel.name);
+    print(descriptionController.text);
+    Navigation().push(
+        AboutYourCar(provider: getIt(), sellCarModel: sellCarModel), context);
   }
 }

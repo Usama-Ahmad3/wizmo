@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wizmo/main.dart';
+import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/login_signup/login/login.dart';
 
@@ -28,8 +30,11 @@ class OnBoardingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  navigateToLogin(BuildContext context) {
+  Authentication authentication = Authentication();
+  navigateToLogin(BuildContext context) async {
     if (currentPageValue == 2) {
+      authentication.saveWalk(true);
+      // ignore: use_build_context_synchronously
       Navigation().pushRep(LogIn(provider: getIt()), context);
     } else {
       _currentPageValue += 1;

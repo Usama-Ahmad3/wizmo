@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
-import 'package:wizmo/utils/camera_choice.dart';
 import 'package:wizmo/view/home_screens/account_screen/edit_profile/edit_profile_provider.dart';
 import 'package:wizmo/view/home_screens/account_screen/edit_profile/edit_profile_widget.dart';
 import 'package:wizmo/view/login_signup/widgets/text_data.dart';
