@@ -37,7 +37,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^1.1.2
   provider: ^6.1.1
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
   image_picker: ^1.0.5
+  google_maps_flutter: ^2.5.0
+  map_launcher: ^3.1.0
+  flutter_svg: ^2.0.9
   get_it: ^7.6.4
   another_flushbar: ^1.12.30
   cached_network_image: ^3.3.0

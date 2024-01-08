@@ -13,11 +13,13 @@ class CarContainer extends StatelessWidget {
   String model;
   String name;
   bool isFavourite;
+  bool admin;
   VoidCallback onTap;
   CarContainer(
       {super.key,
       required this.image,
       required this.price,
+      this.admin = false,
       required this.name,
       this.isFavourite = false,
       required this.onTap,
@@ -27,6 +29,7 @@ class CarContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    print(image.length);
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.05, vertical: height * 0.012),
@@ -44,119 +47,140 @@ class CarContainer extends StatelessWidget {
                   spreadRadius: 2)
             ],
             color: AppColors.white),
-        child: Stack(
-          children: [
-            Consumer<HomeProvider>(builder: (context, value, child) {
-              return CarouselSlider.builder(
-                  itemCount: image.length,
-                  itemBuilder: (context, index, realIndex) {
-                    return InkWell(
-                      onTap: onTap,
-                      child: Column(
-                        children: [
-                          SizedBox(
+        child: Consumer<CorouselProvider>(
+          builder: (context, value, child) {
+            return Stack(
+              children: [
+                CarouselSlider.builder(
+                    itemCount: image.length,
+                    itemBuilder: (context, index, realIndex) {
+                      return InkWell(
+                        onTap: onTap,
+                        child: Column(
+                          children: [
+                            SizedBox(
                               height: height * 0.23,
                               width: width,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(height * 0.01),
-                                child: cachedNetworkImage(
-                                    height: height * 0.23,
-                                    width: width,
-                                    cuisineImageUrl: image[index],
-                                    imageFit: BoxFit.fill,
-                                    errorFit: BoxFit.contain),
-                              )),
-                        ],
+                              child: admin
+                                  ? Banner(
+                                      location: BannerLocation.topStart,
+                                      layoutDirection: TextDirection.rtl,
+                                      message: 'Approved By Admin',
+                                      color: Colors.red,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            height * 0.01),
+                                        child: cachedNetworkImage(
+                                            height: height * 0.23,
+                                            width: width,
+                                            cuisineImageUrl: image[index] ?? '',
+                                            imageFit: BoxFit.fill,
+                                            errorFit: BoxFit.contain),
+                                      ),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(height * 0.01),
+                                      child: cachedNetworkImage(
+                                          height: height * 0.23,
+                                          width: width,
+                                          cuisineImageUrl: image[index] ?? '',
+                                          imageFit: BoxFit.fill,
+                                          errorFit: BoxFit.fill),
+                                    ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    carouselController: value.nextPageController,
+                    options: CarouselOptions(
+                        autoPlay: true,
+                        autoPlayCurve: Curves.easeInOut,
+                        onPageChanged: (index, reason) {
+                          context
+                              .read<CorouselProvider>()
+                              .onChangeCorousel(index);
+                        },
+                        height: height,
+                        viewportFraction: 1,
+                        animateToClosest: true,
+                        initialPage: value.initialPage,
+                        scrollDirection: Axis.horizontal,
+                        scrollPhysics: const AlwaysScrollableScrollPhysics())),
+                Positioned(
+                  top: height * 0.2,
+                  left: 0.0,
+                  right: 0.0,
+                  child: DotsIndicator(
+                    dotsCount: image.length,
+                    position: 0,
+                    decorator: DotsDecorator(
+                      activeSize: Size(width * 0.05, height * 0.01),
+                      color: AppColors.grey,
+                      activeColor: AppColors.buttonColor,
+                      activeShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0)),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: height * 0.02,
+                  left: height * 0.009,
+                  right: height * 0.009,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        name.substring(0, 10),
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
-                  carouselController: value.nextPageController,
-                  options: CarouselOptions(
-                      autoPlay: true,
-                      autoPlayCurve: Curves.easeInOut,
-                      onPageChanged: (index, reason) {
-                        context.read<HomeProvider>().onChangeCorousel(index);
-                      },
-                      height: height,
-                      viewportFraction: 1,
-                      animateToClosest: true,
-                      initialPage: value.initialPage,
-                      scrollDirection: Axis.horizontal,
-                      scrollPhysics: const AlwaysScrollableScrollPhysics()));
-            }),
-            Positioned(
-              top: height * 0.2,
-              left: 0.0,
-              right: 0.0,
-              child: Consumer<HomeProvider>(builder: (context, value, child) {
-                return DotsIndicator(
-                  dotsCount: image.length,
-                  position: value.initialPage.toInt(),
-                  decorator: DotsDecorator(
-                    activeSize: Size(width * 0.05, height * 0.01),
-                    color: AppColors.grey,
-                    activeColor: AppColors.buttonColor,
-                    activeShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
+                      Text(
+                        '$price \$',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3!
+                            .copyWith(color: AppColors.red),
+                      ),
+                    ],
                   ),
-                );
-              }),
-            ),
-            Positioned(
-              bottom: height * 0.02,
-              left: height * 0.009,
-              right: height * 0.009,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    name,
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                        color: AppColors.black, fontWeight: FontWeight.bold),
+                ),
+                Positioned(
+                  top: height * 0.01,
+                  left: width * 0.03,
+                  child: Container(
+                    height: height * 0.03,
+                    width: width * 0.17,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(height * 0.008),
+                        color: AppColors.grey.withOpacity(0.65),
+                        shape: BoxShape.rectangle),
+                    child: Center(
+                        child: Text(
+                      model,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(color: AppColors.white),
+                    )),
                   ),
-                  Text(
-                    price,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline3!
-                        .copyWith(color: AppColors.red),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: height * 0.01,
-              left: width * 0.03,
-              child: Container(
-                height: height * 0.03,
-                width: width * 0.17,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(height * 0.008),
-                    color: AppColors.grey.withOpacity(0.65),
-                    shape: BoxShape.rectangle),
-                child: Center(
-                    child: Text(
-                  model,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(color: AppColors.white),
-                )),
-              ),
-            ),
-            Positioned(
-                right: width * 0.02,
-                top: height * 0.009,
-                child: CircleAvatar(
-                  backgroundColor: AppColors.grey.withOpacity(0.65),
-                  radius: height * 0.021,
-                  child: Icon(
-                    Icons.star,
-                    color: isFavourite ? AppColors.blue : AppColors.white,
-                  ),
-                )),
-          ],
+                ),
+                Positioned(
+                    right: width * 0.02,
+                    top: height * 0.009,
+                    child: CircleAvatar(
+                      backgroundColor: AppColors.grey.withOpacity(0.65),
+                      radius: height * 0.021,
+                      child: Icon(
+                        Icons.star,
+                        color: isFavourite ? AppColors.blue : AppColors.white,
+                      ),
+                    )),
+              ],
+            );
+          },
         ),
       ),
     );

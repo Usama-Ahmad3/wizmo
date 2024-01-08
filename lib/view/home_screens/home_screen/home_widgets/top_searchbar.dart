@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/res/exception/error_widget.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
 
 class TopSearchBar extends StatelessWidget {

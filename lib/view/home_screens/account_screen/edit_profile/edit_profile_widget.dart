@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/cashed_image.dart';
@@ -7,9 +9,11 @@ class EditProfileWidget extends StatelessWidget {
   String location;
   String image;
   VoidCallback onTap;
+  File? pickedImage;
   EditProfileWidget(
       {super.key,
       required this.name,
+      this.pickedImage,
       required this.onTap,
       required this.image,
       required this.location});
@@ -73,13 +77,15 @@ class EditProfileWidget extends StatelessWidget {
             left: width * 0.3,
             child: Container(
               height: height * 0.15,
-              width: width * 0.3,
+              width: width * 0.33,
               decoration: BoxDecoration(
                   color: AppColors.deepPurple, shape: BoxShape.circle),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(height * 0.55),
-                child: cachedNetworkImage(
-                    imageFit: BoxFit.fill, cuisineImageUrl: image),
+                child: pickedImage != null
+                    ? Image.file(pickedImage!, fit: BoxFit.cover)
+                    : cachedNetworkImage(
+                        imageFit: BoxFit.fill, cuisineImageUrl: image),
               ),
             ),
           ),
@@ -87,7 +93,7 @@ class EditProfileWidget extends StatelessWidget {
           ///Camera Icon
           Positioned(
             top: height * 0.1,
-            right: width * 0.28,
+            right: width * 0.25,
             child: CircleAvatar(
               radius: height * 0.027,
               backgroundColor: AppColors.buttonColor,

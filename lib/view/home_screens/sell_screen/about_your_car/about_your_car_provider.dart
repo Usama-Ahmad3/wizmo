@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
-import 'package:wizmo/models/car_engine_power.dart';
-import 'package:wizmo/models/car_engine_size.dart';
-import 'package:wizmo/models/car_fuel_consumption.dart';
-import 'package:wizmo/models/car_gearbox.dart';
-import 'package:wizmo/models/doors.dart';
-import 'package:wizmo/models/insurance.dart';
-import 'package:wizmo/models/mileage.dart';
-import 'package:wizmo/models/seats.dart';
+import 'package:wizmo/models/selling_models/car_color.dart';
+import 'package:wizmo/models/selling_models/car_engine_power.dart';
+import 'package:wizmo/models/selling_models/car_engine_power.dart';
+import 'package:wizmo/models/selling_models/car_engine_size.dart';
+import 'package:wizmo/models/selling_models/car_fuel_consumption.dart';
+import 'package:wizmo/models/selling_models/car_gearbox.dart';
+import 'package:wizmo/models/selling_models/doors.dart';
+import 'package:wizmo/models/get_profile.dart';
+import 'package:wizmo/models/selling_models/car_fuel_consumption.dart';
+import 'package:wizmo/models/selling_models/insurance.dart';
+import 'package:wizmo/models/selling_models/mileage.dart';
+import 'package:wizmo/models/selling_models/seats.dart';
 import 'package:wizmo/models/sell_car_model.dart';
-import 'package:wizmo/models/tax.dart';
-import 'package:wizmo/models/type_fuel.dart';
+import 'package:wizmo/models/selling_models/tax.dart';
+import 'package:wizmo/models/selling_models/type_fuel.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo.dart';
@@ -41,6 +45,7 @@ class AboutYourCarProvider with ChangeNotifier {
   CarGearbox gearbox = CarGearbox();
   Doors doors = Doors();
   Seats seats = Seats();
+  CarColor carColor = CarColor();
   Tax tax = Tax();
   Insurance insurance = Insurance();
   Future fuelType(
@@ -80,6 +85,15 @@ class AboutYourCarProvider with ChangeNotifier {
     print("response$response");
     if (response != null) {
       carEnginePower = CarEnginePower.fromJson(response);
+    }
+  }
+
+  Future color({required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("response$response");
+    if (response != null) {
+      carColor = CarColor.fromJson(response);
     }
   }
 
@@ -181,9 +195,12 @@ class AboutYourCarProvider with ChangeNotifier {
                                                     ? seats.totalSeats!.length
                                                     : title == 'Tax'
                                                         ? tax.totalTax!.length
-                                                        : insurance
-                                                            .insuranceGroup!
-                                                            .length,
+                                                        : title == 'Colour'
+                                                            ? carColor
+                                                                .color!.length
+                                                            : insurance
+                                                                .insuranceGroup!
+                                                                .length,
                     (index) => InkWell(
                           onTap: () {
                             if (title == 'Fuel Type') {
@@ -229,6 +246,11 @@ class AboutYourCarProvider with ChangeNotifier {
                                   doors.totalDoors![index].doors.toString();
                               sellCarModel.doors =
                                   doors.totalDoors![index].doors.toString();
+                            } else if (title == "Colour") {
+                              colorController.text =
+                                  carColor.color![index].name.toString();
+                              sellCarModel.colour =
+                                  carColor.color![index].name.toString();
                             } else if (title == 'Seats') {
                               seatsController.text = seats
                                   .totalSeats![index].totalSeats
@@ -322,14 +344,14 @@ class AboutYourCarProvider with ChangeNotifier {
                                                                     : title ==
                                                                             'Seats'
                                                                         ? seats
-                                                                            .totalSeats![
-                                                                                index]
+                                                                            .totalSeats![index]
                                                                             .totalSeats
                                                                             .toString()
-                                                                        : title ==
-                                                                                'Tax'
+                                                                        : title == 'Tax'
                                                                             ? tax.totalTax![index].tax.toString()
-                                                                            : insurance.insuranceGroup![index].insuranceGroup.toString(),
+                                                                            : title == 'Colour'
+                                                                                ? carColor.color![index].name.toString()
+                                                                                : insurance.insuranceGroup![index].insuranceGroup.toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline3!

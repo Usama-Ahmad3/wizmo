@@ -6,6 +6,7 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
 import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_car_provider.dart';
+import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
 
 class AboutYourCar extends StatefulWidget {
   AboutYourCarProvider provider;
@@ -30,47 +31,15 @@ class _AboutYourCarState extends State<AboutYourCar> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            'About your car',
-            style: Theme.of(context)
-                .textTheme
-                .headline2!
-                .copyWith(color: AppColors.black),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size(width * 0.9, height * 0.005),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: width * 0.05,
-                ),
-                Container(
-                  height: height * 0.005,
-                  width: width * 0.2,
-                  color: AppColors.buttonColor,
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                Container(
-                  height: height * 0.005,
-                  width: width * 0.2,
-                  color: AppColors.buttonColor,
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                Container(
-                  height: height * 0.005,
-                  width: width * 0.2,
-                  color: AppColors.grey,
-                ),
-              ],
-            ),
-          )),
+      appBar: PreferredSize(
+        preferredSize: Size(width, height * 0.08),
+        child: AppBarWidget(
+          title: 'About your car',
+          color1: AppColors.buttonColor,
+          color2: AppColors.grey,
+          size: MediaQuery.sizeOf(context),
+        ),
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -80,34 +49,6 @@ class _AboutYourCarState extends State<AboutYourCar> {
                 SizedBox(
                   height: height * 0.05,
                 ),
-
-                // ///transmission
-                // InkWell(
-                //   onTap: () {
-                //     aboutCarProvider.selectChoice(MediaQuery.of(context).size,
-                //         context, 'Transmission', widget.sellCarModel);
-                //   },
-                //   child: TextFieldWidget(
-                //     controller: aboutCarProvider.transmissionController,
-                //     hintText: 'Select transmission',
-                //     suffixIconColor: AppColors.grey,
-                //     suffixIcon: Icons.keyboard_arrow_right,
-                //     enable: false,
-                //     onChanged: (value) {
-                //       return null;
-                //     },
-                //     onValidate: (value) {
-                //       if (value.isEmpty) {
-                //         return "transmission field can't empty";
-                //       }
-                //       return null;
-                //     },
-                //     border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(height * 0.034),
-                //         borderSide: BorderSide(color: AppColors.white)),
-                //   ),
-                // ),
-                // SizedBox(height: height * 0.025),
 
                 ///FuelType
                 InkWell(
@@ -125,12 +66,8 @@ class _AboutYourCarState extends State<AboutYourCar> {
                   child: TextFieldWidget(
                     controller: provider.fuelController,
                     hintText: 'Select fuel type',
-                    suffixIconColor: AppColors.grey,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "fuel type field can't empty";
@@ -160,12 +97,8 @@ class _AboutYourCarState extends State<AboutYourCar> {
                   child: TextFieldWidget(
                     controller: provider.fuelConsumptionController,
                     hintText: 'Select fuel consumption',
-                    suffixIconColor: AppColors.grey,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "fuel consumption field can't empty";
@@ -195,12 +128,8 @@ class _AboutYourCarState extends State<AboutYourCar> {
                   child: TextFieldWidget(
                     controller: provider.engineController,
                     hintText: 'Select engine size',
-                    suffixIconColor: AppColors.grey,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "engine size field can't empty";
@@ -230,12 +159,8 @@ class _AboutYourCarState extends State<AboutYourCar> {
                   child: TextFieldWidget(
                     controller: provider.powerController,
                     hintText: 'Select engine power',
-                    suffixIconColor: AppColors.grey,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "engine power field can't empty";
@@ -268,9 +193,6 @@ class _AboutYourCarState extends State<AboutYourCar> {
                     type: TextInputType.number,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "mileage field can't empty";
@@ -302,12 +224,8 @@ class _AboutYourCarState extends State<AboutYourCar> {
                   child: TextFieldWidget(
                     controller: provider.gearBoxController,
                     hintText: 'Select gearbox',
-                    suffixIconColor: AppColors.grey,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "gearbox field can't empty";
@@ -324,18 +242,21 @@ class _AboutYourCarState extends State<AboutYourCar> {
                 ///color
                 InkWell(
                   onTap: () {
-                    aboutCarProvider.selectChoice(MediaQuery.of(context).size,
-                        context, 'Colour', widget.sellCarModel);
+                    provider
+                        .color(
+                            loginDetails: null,
+                            url: '${AppUrls.baseUrl}${AppUrls.color}',
+                            context: context)
+                        .then((value) {
+                      provider.selectChoice(MediaQuery.of(context).size,
+                          context, 'Colour', widget.sellCarModel);
+                    });
                   },
                   child: TextFieldWidget(
-                    controller: aboutCarProvider.colorController,
+                    controller: provider.colorController,
                     hintText: 'Select colour',
-                    suffixIconColor: AppColors.grey,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "colour field can't empty";
@@ -368,9 +289,6 @@ class _AboutYourCarState extends State<AboutYourCar> {
                     type: TextInputType.number,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "doors field can't empty";
@@ -405,9 +323,6 @@ class _AboutYourCarState extends State<AboutYourCar> {
                     type: TextInputType.number,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "seats field can't empty";
@@ -442,9 +357,6 @@ class _AboutYourCarState extends State<AboutYourCar> {
                     type: TextInputType.number,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "tax field can't empty";
@@ -479,9 +391,6 @@ class _AboutYourCarState extends State<AboutYourCar> {
                     type: TextInputType.number,
                     suffixIcon: Icons.keyboard_arrow_right,
                     enable: false,
-                    onChanged: (value) {
-                      return null;
-                    },
                     onValidate: (value) {
                       if (value.isEmpty) {
                         return "insurance field can't empty";

@@ -4,6 +4,9 @@ import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
+import 'package:wizmo/view/home_screens/sell_screen/sell_screen/map_screen/map_screen.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen_provider.dart';
 
 class SellScreen extends StatefulWidget {
@@ -23,8 +26,6 @@ class _SellScreenState extends State<SellScreen> {
     super.initState();
   }
 
-  final nameController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -32,46 +33,15 @@ class _SellScreenState extends State<SellScreen> {
     var authProvider = Provider.of<SellScreenProvider>(context, listen: false);
     authProvider.checkAuth(context);
     return Scaffold(
-        appBar: AppBar(
-            title: Text(
-              'Create a new ad',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(color: AppColors.black),
-            ),
-            bottom: PreferredSize(
-              preferredSize: Size(width * 0.9, height * 0.005),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: width * 0.05,
-                  ),
-                  Container(
-                    height: height * 0.005,
-                    width: width * 0.2,
-                    color: AppColors.buttonColor,
-                  ),
-                  SizedBox(
-                    width: width * 0.01,
-                  ),
-                  Container(
-                    height: height * 0.005,
-                    width: width * 0.2,
-                    color: AppColors.grey,
-                  ),
-                  SizedBox(
-                    width: width * 0.01,
-                  ),
-                  Container(
-                    height: height * 0.005,
-                    width: width * 0.2,
-                    color: AppColors.grey,
-                  ),
-                ],
-              ),
-            )),
+        appBar: PreferredSize(
+          preferredSize: Size(width, height * 0.08),
+          child: AppBarWidget(
+            size: MediaQuery.sizeOf(context),
+            color1: AppColors.grey,
+            color2: AppColors.grey,
+            title: 'Create a new ad',
+          ),
+        ),
         body: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -86,13 +56,7 @@ class _SellScreenState extends State<SellScreen> {
                   Consumer<SellScreenProvider>(
                     builder: (context, provider, child) => TextFieldWidget(
                       controller: provider.nameController,
-                      hintText: 'Enter your name',
-                      type: TextInputType.text,
-                      onTap: () {},
-                      onChanged: (value) {
-                        // provider.checkAuth(context);
-                        print(value);
-                      },
+                      hintText: 'Enter your car name',
                       onValidate: (value) {
                         if (value.isEmpty) {
                           return "name field can't empty";
@@ -125,9 +89,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select Make',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "make field can't empty";
@@ -163,9 +124,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select your car model',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "car model field can't empty";
@@ -200,9 +158,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select your car model variation',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "car model variation field can't empty";
@@ -236,9 +191,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select your car year',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "car year field can't empty";
@@ -272,9 +224,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select body_type',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "body_type field can't empty";
@@ -309,9 +258,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'acceleration',
                         enable: false,
                         suffixIcon: Icons.keyboard_arrow_right,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "acceleration field can't empty";
@@ -346,9 +292,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select drivetrain',
                         enable: false,
                         suffixIcon: Icons.keyboard_arrow_right,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "drivetrain field can't empty";
@@ -382,9 +325,6 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select co2',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "co2 field can't empty";
@@ -405,11 +345,6 @@ class _SellScreenState extends State<SellScreen> {
                       controller: provider.registrationController,
                       hintText: 'Enter your registration number',
                       type: TextInputType.number,
-                      onTap: () {},
-                      onChanged: (value) {
-                        // provider.checkAuth(context);
-                        print(value);
-                      },
                       onValidate: (value) {
                         if (value.isEmpty) {
                           return "name field can't empty";
@@ -444,12 +379,34 @@ class _SellScreenState extends State<SellScreen> {
                         hintText: 'Select seller type',
                         suffixIcon: Icons.keyboard_arrow_right,
                         enable: false,
-                        onChanged: (value) {
-                          return null;
-                        },
                         onValidate: (value) {
                           if (value.isEmpty) {
                             return "seller type field can't empty";
+                          }
+                          return null;
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.025),
+
+                  ///location
+                  Consumer<SellScreenProvider>(
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider.navigateToMap(context);
+                      },
+                      child: TextFieldWidget(
+                        controller: provider.locationController,
+                        hintText: 'Select your location',
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        enable: false,
+                        onValidate: (value) {
+                          if (value.isEmpty) {
+                            return "location field can't empty";
                           }
                           return null;
                         },
@@ -467,10 +424,6 @@ class _SellScreenState extends State<SellScreen> {
                       controller: provider.priceController,
                       hintText: 'Enter price',
                       type: TextInputType.number,
-                      onTap: () {},
-                      onChanged: (value) {
-                        return null;
-                      },
                       onValidate: (value) {
                         if (value.isEmpty) {
                           return "price field can't empty";
@@ -489,10 +442,6 @@ class _SellScreenState extends State<SellScreen> {
                     builder: (context, provider, child) => TextFieldMultiWidget(
                       controller: provider.descriptionController,
                       hintText: 'Enter description',
-                      onTap: () {},
-                      onChanged: (value) {
-                        return null;
-                      },
                       onValidate: (value) {
                         if (value.isEmpty) {
                           return "description field can't empty";

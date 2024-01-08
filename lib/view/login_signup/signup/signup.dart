@@ -347,6 +347,7 @@ class _SignUpState extends State<SignUp> {
                             'driver_license': value.licenseController.text,
                             'id_card': value.idCardController.text,
                             'profile_image': value.image,
+                            'listFile': false
                           };
                           print(signUpDetails);
                           value.signup(

@@ -1,9 +1,12 @@
 class SellCarModel {
-  String? name;
+  String? carName;
   String? make;
   String? model;
   String? variation;
   String? year;
+  String? location;
+  String? longitude;
+  String? latitude;
   String? bodyType;
   String? acceleration;
   String? driveTrain;
@@ -26,10 +29,13 @@ class SellCarModel {
   String? insurance;
 
   SellCarModel(
-      {this.name,
+      {this.carName,
       this.make,
       this.sellerType,
       this.model,
+      this.location,
+      this.longitude,
+      this.latitude,
       this.variation,
       this.year,
       this.bodyType,

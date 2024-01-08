@@ -1,7 +1,9 @@
 class AppUrls {
-  static const String baseUrl = 'https://wzmo.theazsoft.com';
+  static const String baseUrl = 'https://wizmo.quika.uk';
   static const String login = '/api/login';
   static const String signup = '/api/register';
+  static const String updateProfile = '/api/update_profile';
+  static const String deleteAccount = '/api/delete_user';
   static const String make = '/api/make';
   static const String logout = '/api/logout';
   static const String carModel = '/api/view-models';
@@ -23,5 +25,11 @@ class AppUrls {
   static const String seats = '/api/total-seats';
   static const String tax = '/api/tax';
   static const String insurance = '/api/insurance-group';
+  static const String color = '/api/color';
   static const String forget = '/api/forgot-password';
+  static const String profile = '/api/viewprofile';
+  static const String seller = '/api/seller';
+  static const String myAllCars = '/api/get-seller';
+  static const String allCarsHome = '/api/view-car';
+  static const String allCars = '/api/all-sellers-cars';
 }

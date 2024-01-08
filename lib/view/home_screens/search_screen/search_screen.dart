@@ -46,42 +46,54 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
           ...List.generate(abc.length, (mainIndex) {
-            return LayoutBuilder(
-              builder: (context, constraints) => ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.03, vertical: height * 0.01),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          abc[mainIndex],
-                          style: Theme.of(context).textTheme.headline2,
-                        ),
+            List ab = [];
+            for (int i = 0; i < models.length; i++) {
+              abc.forEach((element) {
+                if (element == models[i][0]) {
+                  ab.add(element);
+                }
+              });
+              print(ab);
+            }
+            return ab.contains(abc[mainIndex])
+                ? LayoutBuilder(
+                    builder: (context, constraints) => ConstrainedBox(
+                      constraints:
+                          BoxConstraints(maxHeight: constraints.maxHeight),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.03,
+                                vertical: height * 0.01),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                abc[mainIndex],
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                            ),
+                          ),
+                          ListView.builder(
+                            itemCount: models.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return models[index]
+                                      .toString()
+                                      .toLowerCase()
+                                      .startsWith(abc[mainIndex].toString())
+                                  ? modelList(width, height, models[index],
+                                      '301', context)
+                                  : SizedBox.shrink();
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    ListView.builder(
-                      itemCount: models.length,
-                      shrinkWrap: true,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return models[index]
-                                .toString()
-                                .toLowerCase()
-                                .startsWith(
-                                    abc[mainIndex].toString().toLowerCase())
-                            ? modelList(width, height, models[index],
-                                abc[mainIndex], '301', context)
-                            : const SizedBox.shrink();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
+                  )
+                : SizedBox.shrink();
           }),
           // ...List.generate(models.length, (index) {
           //   return models[index]

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/navigator_class.dart';
-import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
+import 'package:wizmo/view/home_screens/account_screen/empty.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
 import 'package:wizmo/view/home_screens/save_screen/save_provider.dart';
 import 'package:wizmo/view/login_signup/login/login.dart';
@@ -27,6 +27,8 @@ class _SaveScreenState extends State<SaveScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    final provider = Provider.of<SaveProvider>(context, listen: false);
+    provider.checkAuth(context);
     return Consumer<SaveProvider>(builder: (context, value, child) {
       return RefreshIndicator(
         displacement: 200,
@@ -47,32 +49,41 @@ class _SaveScreenState extends State<SaveScreen> {
                   centerTitle: true,
                   automaticallyImplyLeading: false,
                 ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ...List.generate(
-                          4,
-                          (index) => Consumer<HomeProvider>(
-                                builder: (context, value, child) =>
-                                    CarContainer(
-                                  image: image,
-                                  price: '3.599 \$',
-                                  name: 'BMW 3 Series 320',
-                                  model: '2007',
-                                  onTap: () {},
-                                ),
-                              )),
-                      // Empty(
-                      //   login: () {
-                      //     navigateToLogin();
-                      //   },
-                      //   signup: () {
-                      //     navigateToSignup();
-                      //   },
-                      // ),
-                    ],
-                  ),
-                ),
+                body: value.isLogIn
+                    ? SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                                4,
+                                (index) => Consumer<SaveProvider>(
+                                      builder: (context, value, child) =>
+                                          CarContainer(
+                                        image: image,
+                                        price: '3.599 \$',
+                                        name: 'BMW 3 Series 320',
+                                        model: '2007',
+                                        onTap: () {
+                                          value.navigateToCarDetailScreen(
+                                            context: context,
+                                            image: image,
+                                            price: '3.599 \$',
+                                            name: 'BMW 3 Series 320',
+                                            model: '2007',
+                                          );
+                                        },
+                                      ),
+                                    )),
+                          ],
+                        ),
+                      )
+                    : Empty(
+                        login: () {
+                          navigateToLogin();
+                        },
+                        signup: () {
+                          navigateToSignup();
+                        },
+                      ),
               ),
       );
     });

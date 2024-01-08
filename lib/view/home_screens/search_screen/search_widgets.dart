@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 
-Widget modelList(width, height, modelName, text, number, context) {
+Widget modelList(width, height, modelName, number, context) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: width * 0.03),
     child: Column(

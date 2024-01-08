@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
+import 'package:wizmo/models/dynamic_car_detail_model.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
+import 'package:wizmo/view/login_signup/widgets/constants.dart';
 
 import 'home_initial_params.dart';
 import 'home_widgets/top_searchbar.dart';
@@ -37,81 +40,151 @@ class _HomePageState extends State<HomePage> {
           child: value.loading
               ? const Center(child: CircularProgressIndicator())
               : Scaffold(
-                  // appBar: AppBar(
-                  //   title: Text(widget.initialParams.name),
-                  // ),
                   body: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SafeArea(child: Image.asset('assets/images/wizmo.jpg')),
-                        TopSearchBar(),
-                        // Consumer<HomeProvider>(
-                        //     builder: (context, value, child) {
-                        //   return Row(
-                        //     children: [
-                        //       SizedBox(
-                        //         width: width * 0.85,
-                        //         height: height * 0.065,
-                        //         child: TextFieldWidget(
-                        //           controller: homeProvider.searchController,
-                        //           hintText: 'Search',
-                        //           suffixIcon: Icons.search,
-                        //           onTap: () {},
-                        //           onChanged: (value) {
-                        //             return null;
-                        //           },
-                        //           border: OutlineInputBorder(
-                        //               borderRadius:
-                        //                   BorderRadius.circular(height * 0.034),
-                        //               borderSide:
-                        //                   BorderSide(color: AppColors.white)),
-                        //         ),
-                        //       ),
-                        //       GestureDetector(
-                        //         onTap: () {},
-                        //         child: Container(
-                        //           width: width * 0.13,
-                        //           height: height * 0.075,
-                        //           decoration: BoxDecoration(
-                        //               shape: BoxShape.circle,
-                        //               color: AppColors.buttonColor),
-                        //           child: Icon(
-                        //             Icons.filter_list_alt,
-                        //             color: AppColors.white,
-                        //           ),
-                        //         ),
-                        //       )
-                        //     ],
-                        //   );
-                        // }),
-                        // SizedBox(
-                        //   height: height * 0.01,
-                        // ),
-                        ...List.generate(
-                            image.length,
-                            (index) => Consumer<HomeProvider>(
-                                  builder: (context, value, child) =>
-                                      CarContainer(
-                                    image: image,
-                                    price: '3.599 \$',
-                                    name: 'BMW 3 Series 320',
-                                    model: '2007',
-                                    onTap: () {
-                                      var detail = CarDetailInitials(
-                                          name: 'BMW 3 Series 320',
-                                          price: '3.599 \$',
-                                          model: '2007',
-                                          image: image,
-                                          onTap: () {},
-                                          provider: getIt());
-                                      value.navigateToCarDetail(
-                                          detail, context);
-                                    },
+                        const TopSearchBar(),
+                        FutureBuilder(
+                          future: context
+                              .read<CorouselProvider>()
+                              .getAllCarsHome(
+                                  details: null,
+                                  url:
+                                      '${AppUrls.baseUrl}${AppUrls.allCarsHome}',
+                                  context: context),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator(
+                                        color: Colors.black));
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator(
+                                        color: Colors.red));
+                              } else {
+                                return Consumer<CorouselProvider>(
+                                  builder: (context, provider, child) => Column(
+                                    children: [
+                                      ...List.generate(
+                                          provider.allCarsHome.cars != null
+                                              ? provider
+                                                  .allCarsHome.cars!.length
+                                              : 1,
+                                          (index) => Consumer<HomeProvider>(
+                                                builder:
+                                                    (context, value, child) =>
+                                                        CarContainer(
+                                                  image: provider.allCarsHome
+                                                      .cars![index].carImages!
+                                                      .toList(),
+                                                  price:
+                                                      '${provider.allCarsHome.cars![index].price} \$',
+                                                  admin: provider
+                                                              .allCarsHome
+                                                              .cars![index]
+                                                              .role ==
+                                                          'admin'
+                                                      ? true
+                                                      : false,
+                                                  name: provider.allCarsHome
+                                                      .cars![index].carName
+                                                      .toString(),
+                                                  model: provider.allCarsHome
+                                                      .cars![index].make!
+                                                      .toString(),
+                                                  onTap: () {
+                                                    DynamicCarDetailModel
+                                                        imageDetail =
+                                                        DynamicCarDetailModel(
+                                                            model: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .make!,
+                                                            images: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .carImages,
+                                                            name: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .carName,
+                                                            description:
+                                                                provider
+                                                                    .allCarsHome
+                                                                    .cars![
+                                                                        index]
+                                                                    .description,
+                                                            location: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .location,
+                                                            sellerType: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .sellerType,
+                                                            longitude: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .longitude,
+                                                            latitude: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .latitude,
+                                                            email: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .userEmail,
+                                                            number: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .userPhoneNumber,
+                                                            sellerName: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .userName,
+                                                            price: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .price);
+                                                    print(
+                                                        imageDetail.sellerType);
+                                                    print(provider
+                                                        .allCarsHome
+                                                        .cars![index]
+                                                        .sellerType);
+                                                    var detail =
+                                                        CarDetailInitials(
+                                                            carDetails:
+                                                                imageDetail,
+                                                            featureName:
+                                                                featureNames,
+                                                            features: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .features,
+                                                            onTap: () {},
+                                                            provider: getIt());
+                                                    value.navigateToCarDetail(
+                                                        detail, context);
+                                                  },
+                                                ),
+                                              )),
+                                    ],
                                   ),
-                                )),
-                        SizedBox(
-                          height: height * 0.025,
+                                );
+                              }
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -119,14 +192,4 @@ class _HomePageState extends State<HomePage> {
                 ));
     });
   }
-
-  List image = [
-    'https://tse1.mm.bing.net/th?id=OIP.xQpJ3XdZ19bbWIGlx4x20AHaE7&pid=Api&rs=1&c=1&qlt=95&w=181&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.KMosWYXn4e6Q9UTEKWvbFwHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.UJxK0oNqZiJQrUqiLNy__AHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.UCxthHissS16WQb5jc2RGQHaE8&pid=Api&rs=1&c=1&qlt=95&w=147&h=98',
-    'https://tse1.mm.bing.net/th?id=OIP.A6x7GTTriQdrKNO4QFi4pgHaEK&pid=Api&rs=1&c=1&qlt=95&w=222&h=124',
-    'https://tse2.mm.bing.net/th?id=OIP.UxHug9E96H7jy8bItL-v3wHaEK&pid=Api&P=0&h=220',
-    'https://tse3.mm.bing.net/th?id=OIP.waTDNYaeJXfimOooT3-3HQHaED&pid=Api&P=0&h=220'
-  ];
 }

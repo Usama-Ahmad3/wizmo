@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
-import 'package:wizmo/models/body_typee.dart';
-import 'package:wizmo/models/car_acceleration.dart';
-import 'package:wizmo/models/car_co2.dart';
-import 'package:wizmo/models/car_model.dart';
-import 'package:wizmo/models/car_year.dart';
-import 'package:wizmo/models/drive_train.dart';
-import 'package:wizmo/models/make_model.dart';
-import 'package:wizmo/models/model_variation.dart';
+import 'package:wizmo/models/selling_models/body_typee.dart';
+import 'package:wizmo/models/selling_models/car_acceleration.dart';
+import 'package:wizmo/models/selling_models/car_co2.dart';
+import 'package:wizmo/models/selling_models/car_model.dart';
+import 'package:wizmo/models/selling_models/car_year.dart';
+import 'package:wizmo/models/selling_models/drive_train.dart';
+import 'package:wizmo/models/selling_models/make_model.dart';
+import 'package:wizmo/models/selling_models/model_variation.dart';
 import 'package:wizmo/models/sell_car_model.dart';
-import 'package:wizmo/models/type_seller.dart';
+import 'package:wizmo/models/selling_models/type_seller.dart';
 import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
 import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_car.dart';
+
+import 'map_screen/map_screen.dart';
 
 class SellScreenProvider extends ChangeNotifier {
   AppRepository appRepository;
@@ -33,6 +35,7 @@ class SellScreenProvider extends ChangeNotifier {
   final driveTrainController = TextEditingController();
   final registrationController = TextEditingController();
   final priceController = TextEditingController();
+  final locationController = TextEditingController();
   final descriptionController = TextEditingController();
   Authentication authentication = Authentication();
   SellCarModel sellCarModel = SellCarModel();
@@ -396,12 +399,9 @@ class SellScreenProvider extends ChangeNotifier {
   }
 
   checkAuth(context) async {
-    print('working');
     _loading = true;
-    // notifyListeners();
     _isLogIn = await authentication.getAuth();
     print(await authentication.getToken());
-    print("LAAAAAAAAAS$isLogIn");
     if (isLogIn) {
       _loading = false;
       notifyListeners();
@@ -411,20 +411,27 @@ class SellScreenProvider extends ChangeNotifier {
   }
 
   navigateToHome(context) async {
+    Navigation().pushRep(MainBottomBar(provider: getIt(), index: 0), context);
     await FlushBarUtils.flushBar(
         'Login required to add car for sale', context, 'Login Required');
-    Navigation().pushRep(MainBottomBar(provider: getIt(), index: 0), context);
   }
 
   navigateToAboutCar(context) {
-    sellCarModel.name = nameController.text;
+    sellCarModel.carName = nameController.text;
     sellCarModel.registration = registrationController.text;
     sellCarModel.price = priceController.text;
     sellCarModel.description = descriptionController.text;
+    sellCarModel.location = locationController.text;
     print(sellCarModel.description);
-    print(sellCarModel.name);
+    print(sellCarModel.carName);
     print(descriptionController.text);
     Navigation().push(
         AboutYourCar(provider: getIt(), sellCarModel: sellCarModel), context);
+  }
+
+  navigateToMap(BuildContext context) {
+    Navigation().push(
+        MapScreen(location: locationController, sellCarModel: sellCarModel),
+        context);
   }
 }

@@ -1,17 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
-import 'package:wizmo/res/common_widgets/cashed_image.dart';
-import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/models/dynamic_car_detail_model.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
+import 'package:wizmo/res/exception/error_widget.dart';
 import 'package:wizmo/view/home_screens/account_screen/view_my_cars/view_my_cars_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
-import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_screen.dart';
-import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/story_page.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
-
-import '../../../../res/colors/app_colors.dart';
 
 class ViewMyCars extends StatelessWidget {
   ViewMyCars({super.key});
@@ -20,37 +15,111 @@ class ViewMyCars extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('My Cars'),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ...List.generate(
-                  image.length,
-                  (index) => Consumer<ViewMyCarsProvider>(
-                        builder: (context, value, child) => CarContainer(
-                          image: image,
-                          price: '3.599 \$',
-                          name: 'BMW 3 Series 320',
-                          model: '2007',
-                          onTap: () {
-                            var detail = CarDetailInitials(
-                                name: 'BMW 3 Series 320',
-                                price: '3.599 \$',
-                                model: '2007',
-                                image: image,
-                                onTap: () {},
-                                provider: getIt());
-                            value.navigateToCarDetail(
-                                detail: detail, context: context);
-                          },
+    final provider = Provider.of<ViewMyCarsProvider>(context, listen: false);
+    return FutureBuilder(
+      future: provider.viewMyAllCars(
+          context: context,
+          url: '${AppUrls.baseUrl}${AppUrls.myAllCars}',
+          details: null),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return SizedBox(
+            height: height * 0.9,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: height * 0.9,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+              appBar: AppBar(
+                title: const Text('My Cars'),
+              ),
+              body: SingleChildScrollView(child: Consumer<ViewMyCarsProvider>(
+                  builder: (context, value, child) {
+                return value.myAllCarModel.sellerCars!.isNotEmpty
+                    ? Column(
+                        children: [
+                          ...List.generate(
+                              provider.myAllCarModel.sellerCars!.length,
+                              (index) {
+                            return CarContainer(
+                              image: value
+                                  .myAllCarModel.sellerCars![index].carImages!
+                                  .toList(),
+                              price: value
+                                  .myAllCarModel.sellerCars![index].price
+                                  .toString(),
+                              name: value
+                                  .myAllCarModel.sellerCars![index].carName
+                                  .toString(),
+                              model: value
+                                  .myAllCarModel.sellerCars![index].model
+                                  .toString(),
+                              onTap: () {
+                                DynamicCarDetailModel carDetails =
+                                    DynamicCarDetailModel(
+                                        model: value.myAllCarModel
+                                            .sellerCars![index].model,
+                                        sellerType: value.myAllCarModel
+                                            .sellerCars![index].sellerType,
+                                        price: value.myAllCarModel
+                                            .sellerCars![index].price,
+                                        name: value.myAllCarModel
+                                            .sellerCars![index].carName,
+                                        description: value.myAllCarModel
+                                            .sellerCars![index].description,
+                                        images: value.myAllCarModel
+                                            .sellerCars![index].carImages,
+                                        latitude: value.myAllCarModel
+                                            .sellerCars![index].latitude,
+                                        longitude: value.myAllCarModel
+                                            .sellerCars![index].longitude,
+                                        location: value.myAllCarModel
+                                            .sellerCars![index].location);
+                                var detail = CarDetailInitials(
+                                    carDetails: carDetails,
+                                    myCars: true,
+                                    provider: getIt(),
+                                    features: value.myAllCarModel
+                                        .sellerCars![index].features,
+                                    featureName: value.myAllCarModel
+                                        .sellerCars![index].featuresName,
+                                    onTap: () {});
+                                value.navigateToCarDetail(
+                                    detail: detail, context: context);
+                              },
+                            );
+                          }),
+                        ],
+                      )
+                    : SizedBox(
+                        height: height * 0.8,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                                height: height * 0.2,
+                                width: width,
+                                child: Image.asset('assets/images/icon.png')),
+                            SizedBox(
+                              height: height * 0.01,
+                            ),
+                            Text('Nothing in your cars'),
+                            Text(
+                                'Add a car then come here to see your added cars'),
+                          ],
                         ),
-                      )),
-            ],
-          ),
-        ));
+                      );
+              })));
+        } else {
+          return ErrorWidgetScreen(error: snapshot.error.toString());
+        }
+      },
+    );
   }
 
   List image = [

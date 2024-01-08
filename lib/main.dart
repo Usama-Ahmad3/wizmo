@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/res/exception/error_widget.dart';
 import 'package:wizmo/view/home_screens/account_screen/edit_profile/edit_profile_provider.dart';
 import 'package:wizmo/view/home_screens/account_screen/view_my_cars/view_my_cars_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_provider.dart';
@@ -13,6 +14,7 @@ import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar_provider
 import 'package:wizmo/view/home_screens/save_screen/save_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_car_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo_provider.dart';
+import 'package:wizmo/view/home_screens/sell_screen/sell_screen/map_screen/map_screen_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen_provider.dart';
 import 'package:wizmo/view/login_signup/forget_password/forget_password_provider.dart';
 import 'package:wizmo/view/login_signup/login/login_provider.dart';
@@ -24,8 +26,10 @@ import 'view/onboarding/main_onboarding.dart';
 
 GetIt getIt = GetIt.instance;
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // ErrorWidget.builder = (FlutterErrorDetails detail) {
+  //   return ErrorWidgetScreen(error: detail.exception.toString());
+  // };
   getIt.registerLazySingleton<AppRepository>(() => GetRepository());
   getIt.registerSingleton<AccountScreenProvider>(
       AccountScreenProvider(appRepository: getIt()));
@@ -36,6 +40,7 @@ void main() async {
   getIt.registerSingleton<SellScreenProvider>(
       SellScreenProvider(appRepository: getIt()));
   getIt.registerSingleton<MainBottomBarProvider>(MainBottomBarProvider());
+  getIt.registerSingleton<MapScreenProvider>(MapScreenProvider());
   getIt.registerSingleton<AboutYourCarProvider>(
       AboutYourCarProvider(appRepository: getIt()));
   getIt.registerSingleton<AddPhotoProvider>(
@@ -43,8 +48,10 @@ void main() async {
   getIt.registerSingleton<SaveProvider>(SaveProvider());
   getIt.registerSingleton<ViewMyCarsProvider>(
       ViewMyCarsProvider(appRepository: getIt()));
-  getIt.registerSingleton<CarDetailProvider>(CarDetailProvider());
-  getIt.registerSingleton<EditProfileProvider>(EditProfileProvider());
+  getIt.registerSingleton<CarDetailProvider>(
+      CarDetailProvider(appRepository: getIt()));
+  getIt.registerSingleton<EditProfileProvider>(
+      EditProfileProvider(appRepository: getIt()));
   runApp(const App());
 }
 
@@ -101,7 +108,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MainBottomBarProvider()),
         ChangeNotifierProvider(
             create: (context) => SellScreenProvider(appRepository: getIt())),
-        ChangeNotifierProvider(create: (context) => EditProfileProvider()),
+        ChangeNotifierProvider(
+            create: (context) => EditProfileProvider(appRepository: getIt())),
         ChangeNotifierProvider(
             create: (context) => AboutYourCarProvider(appRepository: getIt())),
         ChangeNotifierProvider(
@@ -113,10 +121,14 @@ class MyApp extends StatelessWidget {
                 ForgetPasswordProvider(appRepository: getIt())),
         ChangeNotifierProvider(create: (context) => SaveProvider()),
         ChangeNotifierProvider(
+            create: (context) => CorouselProvider(appRepository: getIt())),
+        ChangeNotifierProvider(
             create: (context) => AccountScreenProvider(appRepository: getIt())),
         ChangeNotifierProvider(
             create: (context) => HomeProvider(appRepository: getIt())),
-        ChangeNotifierProvider(create: (context) => CarDetailProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CarDetailProvider(appRepository: getIt())),
+        ChangeNotifierProvider(create: (context) => MapScreenProvider()),
       ],
       child: MaterialApp(
         title: 'Wizmo',

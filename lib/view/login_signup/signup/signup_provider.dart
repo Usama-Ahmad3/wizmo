@@ -61,19 +61,10 @@ class SignUpProvider extends ChangeNotifier {
   signup({required signupDetails, required url, required context}) async {
     _loading = true;
     notifyListeners();
-    var response = await appRepository.signup(
+    var response = await appRepository.postWithImage(
         url: url, context: context, details: signupDetails);
     print("SignUpResponse$response");
     print('ssjsj');
-    // SignupModel parsedResponse = SignupModel.fromJson(json.decode(response));
-    // print('SSSSSSSSSSSSSS');
-    // print(parsedResponse.token);
-    // if (parsedResponse.token != null) {
-    //   print('sjsjs');
-    //   await authentication.saveToken(token: parsedResponse.token.toString());
-    //   navigateToHomeScreen(context, HomeInitialParams(provider: getIt()));
-    //   _loading = false;
-    // }
     if (response != null) {
       await FlushBarUtils.flushBar(
           'Wait to approve from admin, it will take up to maximum 24 hours',

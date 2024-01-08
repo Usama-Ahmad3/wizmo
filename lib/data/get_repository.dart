@@ -11,10 +11,12 @@ import 'package:wizmo/utils/flushbar.dart';
 
 class GetRepository implements AppRepository {
   @override
-  Future signup(
+  Future postWithImage(
       {required String url,
       required BuildContext context,
       required Map details}) async {
+    print('Post With Image');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var apiUrl = Uri.parse(url);
       var client = http.Client();
@@ -26,23 +28,38 @@ class GetRepository implements AppRepository {
         }
       });
 
-      if (details['profile_image'] is File) {
-        print('file');
-        var file = http.MultipartFile(
-          'profile_image',
-          details['profile_image'].readAsBytes().asStream(),
-          details['profile_image'].lengthSync(),
-          filename: 'profile_image.jpg',
-          contentType:
-              MediaType('image', 'jpeg'), // Adjust content type as needed
-        );
-        request.files.add(file);
-        print(request.files);
+      if (details['listFile'] == false) {
+        if (details['profile_image'] is File) {
+          print('file');
+          var file = http.MultipartFile(
+            'profile_image',
+            details['profile_image'].readAsBytes().asStream(),
+            details['profile_image'].lengthSync(),
+            filename: 'profile_image.jpg',
+            contentType:
+                MediaType('image', 'jpeg'), // Adjust content type as needed
+          );
+          request.files.add(file);
+          print(request.files);
+        }
+      } else {
+        request.headers['Authorization'] = "Bearer ${prefs.getString('token')}";
+        for (int i = 0; i < details['car_images'].length; i++) {
+          var file = http.MultipartFile(
+            'car_images[$i]',
+            details['car_images'][i].readAsBytes().asStream(),
+            details['car_images'][i].lengthSync(),
+            filename: 'car_image_$i.jpg',
+            contentType: MediaType('image', 'jpeg'),
+          );
+          request.files.add(file);
+        }
       }
       var response = await client.send(request);
       print("response ${response.stream.isBroadcast}");
       print(response.statusCode);
       print(url);
+      // print(await response.stream.bytesToString());
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         return responseBody;
@@ -69,18 +86,20 @@ class GetRepository implements AppRepository {
       required BuildContext context,
       Map? details}) async {
     print(details);
+    print('Post Without Image');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response;
       if (details != null) {
+        print(prefs.getString('token'));
         response = await http.post(Uri.parse(url), body: details, headers: {
           "Authorization": "Bearer ${prefs.getString('token')}",
         });
       } else {
         print(prefs.getString('token'));
+        print(url);
         response = await http.post(Uri.parse(url), headers: {
           "Authorization": "Bearer ${prefs.getString('token')}",
-          'Content-Type': 'application/json',
         });
       }
       print(response.statusCode);

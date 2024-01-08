@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:wizmo/models/all_cars_home.dart';
+import 'package:wizmo/models/all_cars_model.dart';
+import 'package:wizmo/models/selling_models/car_model.dart';
+import 'package:wizmo/models/selling_models/make_model.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
-import 'package:wizmo/models/car_model.dart';
-import 'package:wizmo/models/make_model.dart';
+import 'package:wizmo/models/my_all_car_model.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
@@ -13,15 +16,12 @@ import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
 class HomeProvider extends ChangeNotifier {
   AppRepository appRepository;
   HomeProvider({required this.appRepository});
-  final nextPageController = CarouselController();
   var searchController = TextEditingController();
-  int _initialPage = 0;
   int countCars = 23138;
   String _make = '';
   String get make => _make;
   String _model = '';
   String get model => _model;
-  int get initialPage => _initialPage;
   bool _loading = false;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -30,6 +30,8 @@ class HomeProvider extends ChangeNotifier {
   bool get makeLoading => _makeLoading;
   MakeModel makeModel = MakeModel();
   CarModel carModel = CarModel();
+  AllCarsModel allCarsModel = AllCarsModel();
+  MyAllCarModel myAllCarModel = MyAllCarModel();
   OverlayEntry? overlayEntry;
   onRefresh() {
     _make = '';
@@ -46,11 +48,6 @@ class HomeProvider extends ChangeNotifier {
     FlushBarUtils.flushBar(msg, context, title);
   }
 
-  onChangeCorousel(int index) {
-    _initialPage = index;
-    notifyListeners();
-  }
-
   Future getMake(
       {required loginDetails, required url, required context}) async {
     _makeLoading = true;
@@ -60,10 +57,36 @@ class HomeProvider extends ChangeNotifier {
     print("response$response");
     if (response != null) {
       makeModel = MakeModel.fromJson(response);
-      print(makeModel.make![0].name);
     }
     _makeLoading = false;
     notifyListeners();
+  }
+
+  Future getAllAdminCars(
+      {required loginDetails, required url, required context}) async {
+    var response = await appRepository.post(
+        url: url, context: context, details: loginDetails);
+    print("responzse$response");
+    if (response != null) {
+      allCarsModel = AllCarsModel.fromJson(response);
+    }
+    return response;
+  }
+
+  Future getAllCars(
+      {required BuildContext context,
+      required String url,
+      Map? details}) async {
+    var response =
+        await appRepository.post(url: url, context: context, details: details);
+    print(response);
+    if (response != null) {
+      myAllCarModel = MyAllCarModel.fromJson(response);
+    } else {
+      _loading = false;
+      notifyListeners();
+    }
+    return myAllCarModel;
   }
 
   Future getModel(
@@ -193,5 +216,34 @@ class HomeProvider extends ChangeNotifier {
   navigateToCarDetail(var carDetailInitials, context) {
     Navigation()
         .push(CarDetailScreen(carDetailInitials: carDetailInitials), context);
+  }
+}
+
+class CorouselProvider with ChangeNotifier {
+  AppRepository appRepository;
+  CorouselProvider({required this.appRepository});
+  final nextPageController = CarouselController();
+  AllCarsHome allCarsHome = AllCarsHome();
+  int _initialPage = 0;
+  int get initialPage => _initialPage;
+  onChangeCorousel(int index) {
+    _initialPage = index;
+    notifyListeners();
+  }
+
+  Future getAllCarsHome(
+      {required BuildContext context,
+      required String url,
+      Map? details}) async {
+    var response =
+        await appRepository.post(url: url, context: context, details: details);
+    print(response);
+    if (response != null) {
+      allCarsHome = AllCarsHome.fromJson(response);
+    } else {
+      // _loading = false;
+      notifyListeners();
+    }
+    return allCarsHome;
   }
 }

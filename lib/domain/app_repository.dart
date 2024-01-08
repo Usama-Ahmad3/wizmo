@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class AppRepository {
-  Future<dynamic> signup(
+  Future<dynamic> postWithImage(
       {required String url,
       required BuildContext context,
       required Map details});
