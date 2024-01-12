@@ -1,12 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:wizmo/models/all_cars_home.dart';
-import 'package:wizmo/models/all_cars_model.dart';
 import 'package:wizmo/models/selling_models/car_model.dart';
 import 'package:wizmo/models/selling_models/make_model.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
-import 'package:wizmo/models/my_all_car_model.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
@@ -30,8 +28,6 @@ class HomeProvider extends ChangeNotifier {
   bool get makeLoading => _makeLoading;
   MakeModel makeModel = MakeModel();
   CarModel carModel = CarModel();
-  AllCarsModel allCarsModel = AllCarsModel();
-  MyAllCarModel myAllCarModel = MyAllCarModel();
   OverlayEntry? overlayEntry;
   onRefresh() {
     _make = '';
@@ -60,33 +56,6 @@ class HomeProvider extends ChangeNotifier {
     }
     _makeLoading = false;
     notifyListeners();
-  }
-
-  Future getAllAdminCars(
-      {required loginDetails, required url, required context}) async {
-    var response = await appRepository.post(
-        url: url, context: context, details: loginDetails);
-    print("responzse$response");
-    if (response != null) {
-      allCarsModel = AllCarsModel.fromJson(response);
-    }
-    return response;
-  }
-
-  Future getAllCars(
-      {required BuildContext context,
-      required String url,
-      Map? details}) async {
-    var response =
-        await appRepository.post(url: url, context: context, details: details);
-    print(response);
-    if (response != null) {
-      myAllCarModel = MyAllCarModel.fromJson(response);
-    } else {
-      _loading = false;
-      notifyListeners();
-    }
-    return myAllCarModel;
   }
 
   Future getModel(

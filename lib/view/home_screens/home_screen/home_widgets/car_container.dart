@@ -29,7 +29,6 @@ class CarContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(image.length);
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.05, vertical: height * 0.012),
@@ -98,9 +97,7 @@ class CarContainer extends StatelessWidget {
                         autoPlay: true,
                         autoPlayCurve: Curves.easeInOut,
                         onPageChanged: (index, reason) {
-                          context
-                              .read<CorouselProvider>()
-                              .onChangeCorousel(index);
+                          value.onChangeCorousel(index);
                         },
                         height: height,
                         viewportFraction: 1,
@@ -108,22 +105,23 @@ class CarContainer extends StatelessWidget {
                         initialPage: value.initialPage,
                         scrollDirection: Axis.horizontal,
                         scrollPhysics: const AlwaysScrollableScrollPhysics())),
-                Positioned(
-                  top: height * 0.2,
-                  left: 0.0,
-                  right: 0.0,
-                  child: DotsIndicator(
-                    dotsCount: image.length,
-                    position: 0,
-                    decorator: DotsDecorator(
-                      activeSize: Size(width * 0.05, height * 0.01),
-                      color: AppColors.grey,
-                      activeColor: AppColors.buttonColor,
-                      activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //     top: height * 0.2,
+                //     left: 0.0,
+                //     right: 0.0,
+                //     child: Consumer<CorouselProvider>(
+                //       builder: (context, element, child) => DotsIndicator(
+                //         dotsCount: image.length ?? 1,
+                //         position: element.initialPage ?? 0,
+                //         decorator: DotsDecorator(
+                //           activeSize: Size(width * 0.05, height * 0.01),
+                //           color: AppColors.grey,
+                //           activeColor: AppColors.buttonColor,
+                //           activeShape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(5.0)),
+                //         ),
+                //       ),
+                //     )),
                 Positioned(
                   bottom: height * 0.02,
                   left: height * 0.009,
@@ -132,7 +130,7 @@ class CarContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        name.substring(0, 10),
+                        name.length > 10 ? name.substring(0, 10) : name,
                         style: Theme.of(context).textTheme.headline3!.copyWith(
                             color: AppColors.black,
                             fontWeight: FontWeight.bold),

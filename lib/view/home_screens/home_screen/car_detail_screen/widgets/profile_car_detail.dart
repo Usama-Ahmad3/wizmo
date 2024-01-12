@@ -35,7 +35,7 @@ class ProfileCarDetail extends StatelessWidget {
               backgroundImage: AssetImage('assets/images/profile.jpeg'),
             ),
             title: Text(
-              profile.name.toString(),
+              profile.sellerName.toString(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             subtitle: Text(
