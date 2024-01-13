@@ -9,17 +9,17 @@ import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.d
 import '../home_provider.dart';
 
 class CarContainer extends StatelessWidget {
- final List image;
- final String price;
- final String model;
- final String name;
- final bool isFavourite;
- final bool admin;
- final String carId;
- final VoidCallback onTap;
- const CarContainer(
+  final List image;
+  final String price;
+  final String model;
+  final String name;
+  final bool isFavourite;
+  final bool admin;
+  final String carId;
+  final VoidCallback onTap;
+  const CarContainer(
       {super.key,
-     required this.carId,
+      required this.carId,
       required this.image,
       required this.price,
       this.admin = false,
@@ -32,8 +32,6 @@ class CarContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    // final provider = Provider.of<CarFavouritesProvider>(context,listen: false);
-    // provider.favouriteCarsGet(context: context,url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.05, vertical: height * 0.012),
@@ -174,27 +172,41 @@ class CarContainer extends StatelessWidget {
                     right: width * 0.02,
                     top: height * 0.009,
                     child: CircleAvatar(
-                      backgroundColor: AppColors.grey.withOpacity(0.65),
-                      radius: height * 0.021,
-                      child: Consumer<CarFavouritesProvider>(builder: (context, value, child) => value.loading?Center(
-                        child: CircularProgressIndicator(),
-                      ):InkWell(
-                        onTap:(){
-                          value.getCarFavourites.cars!.contains(carId)?
-                          value.favouriteCarsRemove(context: context, url: "${AppUrls.baseUrl}${AppUrls.removeSavedCars}", id: carId)
-                          :value.favouriteCarsPost(context,
-                            details: {
-                              'car_id':carId
-                            },
-                            url: '${AppUrls.baseUrl}${AppUrls.postSavedCars}'
-                          );
-                        },
-                        child: Icon(
-                          value.getCarFavourites.cars!.contains(carId)?Icons.star:Icons.star_border,
-                          color: value.getCarFavourites.cars!.contains(carId)?AppColors.blue : AppColors.white,
-                        ),
-                      ),)
-                    )),
+                        backgroundColor: AppColors.grey.withOpacity(0.65),
+                        radius: height * 0.021,
+                        child: Consumer<CarFavouritesProvider>(
+                          builder: (context, value, child) => value.loading
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    value.getSavedIdsToRemove(carId);
+                                    value.favoriteCarIds.contains(
+                                            int.parse(carId.toString()))
+                                        ? value.favouriteCarsRemove(
+                                            carId: carId,
+                                            context: context,
+                                            url:
+                                                "${AppUrls.baseUrl}${AppUrls.removeSavedCars}",
+                                            id: value.id.toString())
+                                        : value.favouriteCarsPost(context,
+                                            details: {'car_id': carId},
+                                            url:
+                                                '${AppUrls.baseUrl}${AppUrls.postSavedCars}');
+                                  },
+                                  child: Icon(
+                                    value.favoriteCarIds
+                                            .contains(int.parse(carId))
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: value.favoriteCarIds
+                                            .contains(int.parse(carId))
+                                        ? AppColors.blue
+                                        : AppColors.white,
+                                  ),
+                                ),
+                        ))),
               ],
             );
           },

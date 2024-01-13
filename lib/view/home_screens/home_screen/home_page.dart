@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/models/dynamic_car_detail_model.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
+import 'package:wizmo/res/common_widgets/empty_screen.dart';
 import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
@@ -13,8 +14,8 @@ import 'home_initial_params.dart';
 import 'home_widgets/top_searchbar.dart';
 
 class HomePage extends StatefulWidget {
- final HomeInitialParams initialParams;
- const HomePage({super.key, required this.initialParams});
+  final HomeInitialParams initialParams;
+  const HomePage({super.key, required this.initialParams});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,10 +31,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
-    final provider = Provider.of<CarFavouritesProvider>(context,listen: false);
-    provider.favouriteCarsGet(context: context,url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    final provider = Provider.of<CarFavouritesProvider>(context, listen: false);
+    provider.favouriteCarsGet(
+        context: context, url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
     return Consumer<HomeProvider>(builder: (context, value, child) {
       return RefreshIndicator(
           displacement: 200,
@@ -61,15 +63,22 @@ class _HomePageState extends State<HomePage> {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (!snapshot.hasData) {
-                                return const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Colors.black));
+                                return Padding(
+                                  padding: EdgeInsets.only(top: height * 0.02),
+                                  child: EmptyScreen(
+                                      text: 'No cars found',
+                                      text2:
+                                          'Go to sell tab and add your first car'),
+                                );
                               }
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Colors.red));
+                                return SizedBox(
+                                  height: height * 0.4,
+                                  child: const Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.red)),
+                                );
                               } else {
                                 return Consumer<CorouselProvider>(
                                   builder: (context, provider, child) => Column(
@@ -83,7 +92,9 @@ class _HomePageState extends State<HomePage> {
                                                 builder:
                                                     (context, value, child) =>
                                                         CarContainer(
-                                                          carId: provider.allCarsHome.cars![index].id.toString(),
+                                                  carId: provider.allCarsHome
+                                                      .cars![index].id
+                                                      .toString(),
                                                   image: provider.allCarsHome
                                                       .cars![index].carImages!
                                                       .toList(),
@@ -103,8 +114,7 @@ class _HomePageState extends State<HomePage> {
                                                       .cars![index].make!
                                                       .toString(),
                                                   onTap: () {
-                                                    DynamicCarDetailModel
-                                                        imageDetail =
+                                                    DynamicCarDetailModel imageDetail =
                                                         DynamicCarDetailModel(
                                                             model: provider
                                                                 .allCarsHome
@@ -118,17 +128,19 @@ class _HomePageState extends State<HomePage> {
                                                                 .allCarsHome
                                                                 .cars![index]
                                                                 .carName,
-                                                            description:
-                                                                provider
-                                                                    .allCarsHome
-                                                                    .cars![
-                                                                        index]
-                                                                    .description,
+                                                            description: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .description,
                                                             location: provider
                                                                 .allCarsHome
                                                                 .cars![index]
                                                                 .location,
-                                                                carId: provider.allCarsHome.cars![index].id.toString(),
+                                                            carId: provider
+                                                                .allCarsHome
+                                                                .cars![index]
+                                                                .id
+                                                                .toString(),
                                                             sellerType: provider
                                                                 .allCarsHome
                                                                 .cars![index]
@@ -185,8 +197,11 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }
                             } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
+                              return SizedBox(
+                                height: height * 0.4,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               );
                             }
                           },

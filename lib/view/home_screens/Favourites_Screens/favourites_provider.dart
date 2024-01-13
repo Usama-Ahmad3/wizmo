@@ -11,9 +11,14 @@ class CarFavouritesProvider with ChangeNotifier {
   GetCarFavourites getCarFavourites = GetCarFavourites();
   bool _loading = true;
   bool get loading => _loading;
+  List<int> favoriteCarIds = [];
+  int _id = 0;
+  int get id => _id;
   CarFavouritesProvider({required this.appRepository});
 
   favouriteCarsPost(context, {String? url, Map? details}) async {
+    _loading = true;
+    notifyListeners();
     var response =
         await appRepository.post(url: url!, context: context, details: details);
     if (kDebugMode) {
@@ -21,10 +26,12 @@ class CarFavouritesProvider with ChangeNotifier {
     }
     if (response != null) {
       try {
-        FlushBarUtils.flushBar('Successfully Saved', context, "Success");
-      //  postCarFavourites = PostCarFavourites.fromJson(response);
+        favoriteCarIds.add(int.parse(details!['car_id']));
         _loading = false;
         notifyListeners();
+        print(favoriteCarIds);
+        FlushBarUtils.flushBar('Successfully Saved', context, "Success");
+        //  postCarFavourites = PostCarFavourites.fromJson(response);
       } catch (e) {
         if (kDebugMode) {
           print("Here is car's error $e");
@@ -38,22 +45,25 @@ class CarFavouritesProvider with ChangeNotifier {
   }
 //
 
-  favouriteCarsGet({required BuildContext context,required String url }) async {
+  favouriteCarsGet({required BuildContext context, required String url}) async {
     var response =
-        await appRepository.get(url: url, context: context,id: null);
+        await appRepository.get(url: url, context: context, id: null);
     if (kDebugMode) {
       print(response);
     }
     if (response != null) {
       try {
         getCarFavourites = GetCarFavourites.fromJson(response);
+        favoriteCarIds.clear();
+        for (int i = 0; i < getCarFavourites.cars!.length; i++) {
+          favoriteCarIds.add(getCarFavourites.cars![i].carId!.toInt());
+        }
         _loading = false;
         notifyListeners();
       } catch (e) {
         _loading = false;
         notifyListeners();
-      if (kDebugMode) {
-        
+        if (kDebugMode) {
           print("Here is car's error $e");
         }
       }
@@ -64,28 +74,45 @@ class CarFavouritesProvider with ChangeNotifier {
   }
 //
 
-favouriteCarsRemove({required BuildContext context,required String url,required String id}) async {
-    var response =
-        await appRepository.get(url: url, context: context,id: id);
+  favouriteCarsRemove(
+      {required BuildContext context,
+      required String url,
+      required String carId,
+      required String id}) async {
+    print('remove');
+    _loading = true;
+    notifyListeners();
+    var response = await appRepository.get(url: url, context: context, id: id);
     if (kDebugMode) {
       print(response);
     }
     if (response != null) {
       try {
-        getCarFavourites = GetCarFavourites.fromJson(response);
+        // getCarFavourites = GetCarFavourites.fromJson(response);
+        favoriteCarIds.remove(int.parse(carId));
         _loading = false;
         notifyListeners();
       } catch (e) {
         _loading = false;
         notifyListeners();
-      if (kDebugMode) {
-        
+        if (kDebugMode) {
           print("Here is car's error $e");
         }
       }
     } else {
       _loading = false;
       notifyListeners();
+    }
+  }
+
+  getSavedIdsToRemove(String carId) {
+    if (getCarFavourites.cars != null) {
+      for (int i = 0; i < getCarFavourites.cars!.length; i++) {
+        int current = getCarFavourites.cars![i].carId!.toInt();
+        if (carId.toString() == current.toString()) {
+          _id = getCarFavourites.cars![i].id!.toInt();
+        }
+      }
     }
   }
 }

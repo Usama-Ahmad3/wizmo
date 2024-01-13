@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/models/dynamic_car_detail_model.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/res/common_widgets/empty_screen.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/account_screen/empty.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
@@ -53,79 +54,129 @@ class _SaveScreenState extends State<SaveScreen> {
                   automaticallyImplyLeading: false,
                 ),
                 body: value.isLogIn
-                    ? SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            ...List.generate(
-                                value.getCarFavourites.cars!.length,
-                                (index) => Consumer<SaveProvider>(
-                                      builder: (context, provider, child) =>
-                                         CarContainer(
-                                                          carId: provider.getCarFavourites.cars![index].car!.id.toString(),
-                                                  image: provider.getCarFavourites.cars![index].car!.carImages!
-                                                      .toList(),
-                                                  price:
-                                                      '${provider.getCarFavourites.cars![index].car!.price} \$',
-                                                  admin: provider.getCarFavourites.cars![index].car!.role ==
-                                                          'admin'
-                                                      ? true
-                                                      : false,
-                                                  name: provider.getCarFavourites.cars![index].car!.carName
-                                                      .toString(),
-                                                  model: provider.getCarFavourites.cars![index].car!.make!
-                                                      .toString(),
-                                                  onTap: () {
-                                                    DynamicCarDetailModel
-                                                        imageDetail =
-                                                        DynamicCarDetailModel(
-                                                            model: provider.getCarFavourites.cars![index].car!
-                                                                .make!,
-                                                            images:provider.getCarFavourites.cars![index].car!
-                                                                .carImages,
-                                                            name: provider.getCarFavourites.cars![index].car!
-                                                                .carName,
-                                                            description:
-                                                                provider.getCarFavourites.cars![index].car!
-                                                                    .description,
-                                                            location: provider.getCarFavourites.cars![index].car!
-                                                                .location,
-                                                                carId: provider.getCarFavourites.cars![index].car!.id.toString(),
-                                                            sellerType: provider.getCarFavourites.cars![index].car!
-                                                            .sellertype,
-                                                            longitude:provider.getCarFavourites.cars![index].car!
-                                                                .longitude,
-                                                            latitude: provider.getCarFavourites.cars![index].car!
-                                                                .latitude,
-                                                            email: provider.getCarFavourites.cars![index].car!
-                                                                .userEmail,
-                                                            number: provider.getCarFavourites.cars![index].car!
-                                                                .userPhoneNumber,
-                                                            sellerName:provider.getCarFavourites.cars![index].car!
-                                                                .userName,
-                                                            price: provider.getCarFavourites.cars![index].car!
-                                                                .price);
-                                                    print(
-                                                        imageDetail.sellerType);
-                                                    print(provider.getCarFavourites.cars![index].car!
-                                                        .sellertype);
-                                                    var detail =
-                                                        CarDetailInitials(
-                                                            carDetails:
-                                                                imageDetail,
-                                                            featureName:
-                                                                featureNames,
-                                                            features: provider.getCarFavourites.cars![index].car!
-                                                                .features,
-                                                            onTap: () {},
-                                                            provider: getIt());
-                                                    value.navigateToCarDetail(
-                                                        detail, context);
-                                                  },
-                                                ),
-                                    )),
-                          ],
-                        ),
-                      )
+                    ? value.getCarFavourites.cars == null
+                        ? EmptyScreen(
+                            text: 'Nothing found in saved cars',
+                            text2: 'First go and save your favorite cars')
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                ...List.generate(
+                                    value.getCarFavourites.cars!.length,
+                                    (index) => Consumer<SaveProvider>(
+                                          builder: (context, provider, child) =>
+                                              CarContainer(
+                                            carId: provider.getCarFavourites
+                                                .cars![index].car!.id
+                                                .toString(),
+                                            image: provider.getCarFavourites
+                                                .cars![index].car!.carImages!
+                                                .toList(),
+                                            price:
+                                                '${provider.getCarFavourites.cars![index].car!.price} \$',
+                                            admin: provider
+                                                        .getCarFavourites
+                                                        .cars![index]
+                                                        .car!
+                                                        .role ==
+                                                    'admin'
+                                                ? true
+                                                : false,
+                                            name: provider.getCarFavourites
+                                                .cars![index].car!.carName
+                                                .toString(),
+                                            model: provider.getCarFavourites
+                                                .cars![index].car!.make!
+                                                .toString(),
+                                            onTap: () {
+                                              DynamicCarDetailModel imageDetail =
+                                                  DynamicCarDetailModel(
+                                                      model: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .make!,
+                                                      images: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .carImages,
+                                                      name: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .carName,
+                                                      description: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .description,
+                                                      location: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .location,
+                                                      carId: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .id
+                                                          .toString(),
+                                                      sellerType: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .sellertype,
+                                                      longitude: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .longitude,
+                                                      latitude: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .latitude,
+                                                      email: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .userEmail,
+                                                      number: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .userPhoneNumber,
+                                                      sellerName: provider
+                                                          .getCarFavourites
+                                                          .cars![index]
+                                                          .car!
+                                                          .userName,
+                                                      price: provider.getCarFavourites.cars![index].car!.price);
+                                              print(imageDetail.sellerType);
+                                              print(provider
+                                                  .getCarFavourites
+                                                  .cars![index]
+                                                  .car!
+                                                  .sellertype);
+                                              var detail = CarDetailInitials(
+                                                  carDetails: imageDetail,
+                                                  featureName: featureNames,
+                                                  features: provider
+                                                      .getCarFavourites
+                                                      .cars![index]
+                                                      .car!
+                                                      .features,
+                                                  onTap: () {},
+                                                  provider: getIt());
+                                              value.navigateToCarDetail(
+                                                  detail, context);
+                                            },
+                                          ),
+                                        )),
+                              ],
+                            ),
+                          )
                     : Empty(
                         login: () {
                           navigateToLogin();
@@ -138,16 +189,6 @@ class _SaveScreenState extends State<SaveScreen> {
       );
     });
   }
-
-  List image = [
-    'https://tse1.mm.bing.net/th?id=OIP.xQpJ3XdZ19bbWIGlx4x20AHaE7&pid=Api&rs=1&c=1&qlt=95&w=181&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.KMosWYXn4e6Q9UTEKWvbFwHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.UJxK0oNqZiJQrUqiLNy__AHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.UCxthHissS16WQb5jc2RGQHaE8&pid=Api&rs=1&c=1&qlt=95&w=147&h=98',
-    'https://tse1.mm.bing.net/th?id=OIP.A6x7GTTriQdrKNO4QFi4pgHaEK&pid=Api&rs=1&c=1&qlt=95&w=222&h=124',
-    'https://tse2.mm.bing.net/th?id=OIP.UxHug9E96H7jy8bItL-v3wHaEK&pid=Api&P=0&h=220',
-    'https://tse3.mm.bing.net/th?id=OIP.waTDNYaeJXfimOooT3-3HQHaED&pid=Api&P=0&h=220'
-  ];
 
   navigateToSignup() {
     Navigation().push(SignUp(provider: getIt()), context);

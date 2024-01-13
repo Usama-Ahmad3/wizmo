@@ -117,20 +117,19 @@ class GetRepository implements AppRepository {
       print('Error Hai Bro:$e');
     }
   }
-  
+
   @override
-  Future get({required url, required BuildContext context,String? id}) async{
-     SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future get({required url, required BuildContext context, String? id}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      
-        print(prefs.getString('token'));
-        print(url);
-        if(id != null){
-          url = '$url/$id';
-        }
-        final response = await http.get(Uri.parse(url), headers: {
-          "Authorization": "Bearer ${prefs.getString('token')}",
-        });
+      print(prefs.getString('token'));
+      print(url);
+      if (id != null) {
+        url = '$url/$id';
+      }
+      final response = await http.get(Uri.parse(url), headers: {
+        "Authorization": "Bearer ${prefs.getString('token')}",
+      });
       print(response.statusCode);
       print(response.body);
       print(url);
@@ -138,6 +137,8 @@ class GetRepository implements AppRepository {
         var body = jsonDecode(response.body);
         print("object$body");
         return body;
+      } else if (response.statusCode == 404) {
+        return null;
       } else {
         // ignore: use_build_context_synchronously
         Exceptions().exceptionsMessages(response.statusCode, context);

@@ -40,7 +40,8 @@ class ViewMyCars extends StatelessWidget {
                         ...List.generate(value.myAllCarModel.cars!.length,
                             (index) {
                           return CarContainer(
-                            carId: value.myAllCarModel.cars![index].id.toString(),
+                            carId:
+                                value.myAllCarModel.cars![index].id.toString(),
                             image: value.myAllCarModel.cars![index].carImages!
                                 .toList(),
                             price: value.myAllCarModel.cars![index].price
@@ -70,6 +71,8 @@ class ViewMyCars extends StatelessWidget {
                                           .myAllCarModel.cars![index].longitude,
                                       location: value
                                           .myAllCarModel.cars![index].location,
+                                      carId: value.myAllCarModel.cars![index].id
+                                          .toString(),
                                       sellerName: value
                                           .myAllCarModel.cars![index].userName,
                                       number: value.myAllCarModel.cars![index]
@@ -111,36 +114,5 @@ class ViewMyCars extends StatelessWidget {
                       ),
                     );
         })));
-
-    //   FutureBuilder(
-    //   future:
-    //   builder: (context, snapshot) {
-    //     if (!snapshot.hasData) {
-    //       return SizedBox(
-    //         height: height * 0.9,
-    //         child: const Center(child: CircularProgressIndicator()),
-    //       );
-    //     } else if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return SizedBox(
-    //         height: height * 0.9,
-    //         child: const Center(child: CircularProgressIndicator()),
-    //       );
-    //     } else if (snapshot.connectionState == ConnectionState.done) {
-    //       return
-    //     } else {
-    //       return ErrorWidgetScreen(error: snapshot.error.toString());
-    //     }
-    //   },
-    // );
   }
-
-  List image = [
-    'https://tse1.mm.bing.net/th?id=OIP.xQpJ3XdZ19bbWIGlx4x20AHaE7&pid=Api&rs=1&c=1&qlt=95&w=181&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.KMosWYXn4e6Q9UTEKWvbFwHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.UJxK0oNqZiJQrUqiLNy__AHaEK&pid=Api&rs=1&c=1&qlt=95&w=215&h=120',
-    'https://tse1.mm.bing.net/th?id=OIP.UCxthHissS16WQb5jc2RGQHaE8&pid=Api&rs=1&c=1&qlt=95&w=147&h=98',
-    'https://tse1.mm.bing.net/th?id=OIP.A6x7GTTriQdrKNO4QFi4pgHaEK&pid=Api&rs=1&c=1&qlt=95&w=222&h=124',
-    'https://tse2.mm.bing.net/th?id=OIP.UxHug9E96H7jy8bItL-v3wHaEK&pid=Api&P=0&h=220',
-    'https://tse3.mm.bing.net/th?id=OIP.waTDNYaeJXfimOooT3-3HQHaED&pid=Api&P=0&h=220'
-  ];
 }

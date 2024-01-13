@@ -53,7 +53,8 @@ class SaveProvider with ChangeNotifier {
     _isLogIn = await authentication.getAuth();
     print(await authentication.getToken());
     if (isLogIn) {
-      favouriteCarsGet(context: context, url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
+      favouriteCarsGet(
+          context: context, url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
     } else {
       navigateToHome(context);
     }
@@ -64,9 +65,10 @@ class SaveProvider with ChangeNotifier {
     await FlushBarUtils.flushBar(
         'Login required to see the saved cars', context, 'Login Required');
   }
-  favouriteCarsGet({required BuildContext context,required String url }) async {
+
+  favouriteCarsGet({required BuildContext context, required String url}) async {
     var response =
-        await appRepository.get(url: url, context: context,id: null);
+        await appRepository.get(url: url, context: context, id: null);
     if (kDebugMode) {
       print(response);
     }
@@ -78,17 +80,18 @@ class SaveProvider with ChangeNotifier {
       } catch (e) {
         _loading = false;
         notifyListeners();
-      if (kDebugMode) {
-        
+        if (kDebugMode) {
           print("Here is car's error $e");
         }
       }
     } else {
+      print(getCarFavourites.cars);
       _loading = false;
       notifyListeners();
     }
   }
-   navigateToCarDetail(var carDetailInitials, context) {
+
+  navigateToCarDetail(var carDetailInitials, context) {
     Navigation()
         .push(CarDetailScreen(carDetailInitials: carDetailInitials), context);
   }
