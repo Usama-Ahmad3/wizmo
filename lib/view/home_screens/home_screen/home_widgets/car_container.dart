@@ -1,22 +1,25 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/cashed_image.dart';
+import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.dart';
 
 import '../home_provider.dart';
 
 class CarContainer extends StatelessWidget {
-  List image;
-  String price;
-  String model;
-  String name;
-  bool isFavourite;
-  bool admin;
-  VoidCallback onTap;
-  CarContainer(
+ final List image;
+ final String price;
+ final String model;
+ final String name;
+ final bool isFavourite;
+ final bool admin;
+ final String carId;
+ final VoidCallback onTap;
+ const CarContainer(
       {super.key,
+     required this.carId,
       required this.image,
       required this.price,
       this.admin = false,
@@ -29,6 +32,8 @@ class CarContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    // final provider = Provider.of<CarFavouritesProvider>(context,listen: false);
+    // provider.favouriteCarsGet(context: context,url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.05, vertical: height * 0.012),
@@ -171,10 +176,24 @@ class CarContainer extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: AppColors.grey.withOpacity(0.65),
                       radius: height * 0.021,
-                      child: Icon(
-                        Icons.star,
-                        color: isFavourite ? AppColors.blue : AppColors.white,
-                      ),
+                      child: Consumer<CarFavouritesProvider>(builder: (context, value, child) => value.loading?Center(
+                        child: CircularProgressIndicator(),
+                      ):InkWell(
+                        onTap:(){
+                          value.getCarFavourites.cars!.contains(carId)?
+                          value.favouriteCarsRemove(context: context, url: "${AppUrls.baseUrl}${AppUrls.removeSavedCars}", id: carId)
+                          :value.favouriteCarsPost(context,
+                            details: {
+                              'car_id':carId
+                            },
+                            url: '${AppUrls.baseUrl}${AppUrls.postSavedCars}'
+                          );
+                        },
+                        child: Icon(
+                          value.getCarFavourites.cars!.contains(carId)?Icons.star:Icons.star_border,
+                          color: value.getCarFavourites.cars!.contains(carId)?AppColors.blue : AppColors.white,
+                        ),
+                      ),)
                     )),
               ],
             );

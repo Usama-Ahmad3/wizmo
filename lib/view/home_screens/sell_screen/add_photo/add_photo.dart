@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,9 +11,9 @@ import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo_provider
 import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
 
 class AddPhoto extends StatefulWidget {
-  AddPhotoProvider provider;
-  SellCarModel sellCarModel;
-  AddPhoto({super.key, required this.provider, required this.sellCarModel});
+ final AddPhotoProvider provider;
+ final SellCarModel sellCarModel;
+ const AddPhoto({super.key, required this.provider, required this.sellCarModel});
 
   @override
   State<AddPhoto> createState() => _AddPhotoState();
@@ -22,7 +23,9 @@ class _AddPhotoState extends State<AddPhoto> {
   AddPhotoProvider get photoProvider => widget.provider;
   @override
   void initState() {
+    if(kDebugMode){
     print('In The Add Photo');
+    }
     super.initState();
   }
 
@@ -258,7 +261,9 @@ class _AddPhotoState extends State<AddPhoto> {
                                     "color": widget.sellCarModel.colour,
                                     'listFile': true
                                   };
+                                  if(kDebugMode){
                                   print(detail);
+                                  }
                                   value.addCarForSell(
                                       context: context,
                                       url:

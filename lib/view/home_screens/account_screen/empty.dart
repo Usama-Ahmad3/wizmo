@@ -3,9 +3,9 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 
 class Empty extends StatelessWidget {
-  VoidCallback login;
-  VoidCallback signup;
-  Empty({super.key, required this.login, required this.signup});
+ final  VoidCallback login;
+ final VoidCallback signup;
+ const  Empty({super.key, required this.login, required this.signup});
 
   @override
   Widget build(BuildContext context) {

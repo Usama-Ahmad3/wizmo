@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 
 class ErrorWidgetScreen extends StatelessWidget {
-  String error;
-  ErrorWidgetScreen({super.key, required this.error});
+ final String error;
+ const ErrorWidgetScreen({super.key, required this.error});
 
   @override
   Widget build(BuildContext context) {

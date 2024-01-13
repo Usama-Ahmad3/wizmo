@@ -2,6 +2,7 @@ class DynamicCarDetailModel {
   String? description;
   String? model;
   String? name;
+  String? carId;
   String? price;
   String? sellerImage;
   String? sellerType;
@@ -18,6 +19,7 @@ class DynamicCarDetailModel {
       this.model,
       this.name,
       this.price,
+      this.carId,
       this.sellerType,
       this.sellerName,
       this.location,

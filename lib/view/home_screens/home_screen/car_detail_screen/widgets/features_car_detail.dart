@@ -4,9 +4,9 @@ import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_provider.dart';
 
 class FeaturesCarDetail extends StatelessWidget {
-  CarDetailInitials carDetailInitials;
-  CarDetailProvider provider;
-  FeaturesCarDetail(
+ final CarDetailInitials carDetailInitials;
+ final CarDetailProvider provider;
+ const  FeaturesCarDetail(
       {super.key, required this.carDetailInitials, required this.provider});
 
   @override
@@ -49,6 +49,7 @@ class FeaturesCarDetail extends StatelessWidget {
                                         BorderRadius.circular(height * 0.01)),
                                 child: Center(
                                   child: Text(
+                                    
                                     carDetailInitials.features![index],
                                     style: Theme.of(context)
                                         .textTheme

@@ -15,8 +15,8 @@ import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/widgets/pr
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
 
 class CarDetailScreen extends StatefulWidget {
-  CarDetailInitials carDetailInitials;
-  CarDetailScreen({super.key, required this.carDetailInitials});
+  final CarDetailInitials carDetailInitials;
+  const CarDetailScreen({super.key, required this.carDetailInitials});
 
   @override
   State<CarDetailScreen> createState() => _DetailScreenState();
@@ -134,6 +134,7 @@ class _DetailScreenState extends State<CarDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CarContainer(
+                    carId: widget.carDetailInitials.carDetails.carId.toString(),
                     onTap: () {
                       navigateToStory();
                     },

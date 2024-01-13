@@ -10,8 +10,8 @@ import 'package:wizmo/view/home_screens/account_screen/edit_profile/edit_profile
 import 'package:wizmo/view/login_signup/widgets/text_data.dart';
 
 class EditProfile extends StatefulWidget {
-  UserProfil profile;
-  EditProfile({super.key, required this.profile});
+ final UserProfil profile;
+  const EditProfile({super.key, required this.profile});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -21,7 +21,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double width = MediaQuery.of(context).size.width;
     final getProfile = Provider.of<EditProfileProvider>(context, listen: false);
     getProfile.profile(profile: widget.profile);
     return Scaffold(

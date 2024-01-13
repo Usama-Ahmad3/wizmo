@@ -7,8 +7,8 @@ import 'package:wizmo/view/home_screens/account_screen/account_screen_provider.d
 import 'package:wizmo/view/home_screens/account_screen/empty.dart';
 
 class AccountScreen extends StatefulWidget {
-  AccountScreenProvider provider;
-  AccountScreen({super.key, required this.provider});
+  final AccountScreenProvider provider;
+  const AccountScreen({super.key, required this.provider});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/utils/navigator_class.dart';

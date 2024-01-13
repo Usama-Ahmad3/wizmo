@@ -5,12 +5,12 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/cashed_image.dart';
 
 class EditProfileWidget extends StatelessWidget {
-  String name;
-  String location;
-  String image;
-  VoidCallback onTap;
-  File? pickedImage;
-  EditProfileWidget(
+ final String name;
+ final String location;
+ final String image;
+  final VoidCallback onTap;
+ final File? pickedImage;
+  const EditProfileWidget(
       {super.key,
       required this.name,
       this.pickedImage,

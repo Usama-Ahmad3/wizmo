@@ -8,13 +8,14 @@ import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
 import 'package:wizmo/view/login_signup/widgets/constants.dart';
 
+// ignore: must_be_immutable
 class ViewMyCars extends StatelessWidget {
   ViewMyCars({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.sizeOf(context).height;
-    double width = MediaQuery.sizeOf(context).width;
+    final double height = MediaQuery.sizeOf(context).height;
+    final double width = MediaQuery.sizeOf(context).width;
     final provider = Provider.of<ViewMyCarsProvider>(context, listen: false);
     provider.viewMyAllCars(
         context: context,
@@ -39,6 +40,7 @@ class ViewMyCars extends StatelessWidget {
                         ...List.generate(value.myAllCarModel.cars!.length,
                             (index) {
                           return CarContainer(
+                            carId: value.myAllCarModel.cars![index].id.toString(),
                             image: value.myAllCarModel.cars![index].carImages!
                                 .toList(),
                             price: value.myAllCarModel.cars![index].price

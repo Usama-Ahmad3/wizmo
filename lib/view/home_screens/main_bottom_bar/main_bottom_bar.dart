@@ -11,9 +11,10 @@ import 'package:wizmo/view/home_screens/save_screen/save_screen.dart';
 import 'package:wizmo/view/home_screens/search_screen/search_screen.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen.dart';
 
+// ignore: must_be_immutable
 class MainBottomBar extends StatefulWidget {
   int index;
-  MainBottomBarProvider provider;
+ final MainBottomBarProvider provider;
   MainBottomBar({super.key, this.index = 0, required this.provider});
 
   @override

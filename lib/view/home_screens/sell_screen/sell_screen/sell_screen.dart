@@ -1,17 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/res/common_widgets/text_field_widget.dart';
-import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
-import 'package:wizmo/view/home_screens/sell_screen/sell_screen/map_screen/map_screen.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen_provider.dart';
 
 class SellScreen extends StatefulWidget {
-  SellScreenProvider provider;
-  SellScreen({super.key, required this.provider});
+  final SellScreenProvider provider;
+  const SellScreen({super.key, required this.provider});
 
   @override
   State<SellScreen> createState() => _SellScreenState();
@@ -22,7 +21,9 @@ class _SellScreenState extends State<SellScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    if(kDebugMode){
     print('In the Sell Screen');
+    }
     super.initState();
   }
 

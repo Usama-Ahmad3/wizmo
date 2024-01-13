@@ -9,8 +9,8 @@ import 'package:wizmo/view/login_signup/login/login_provider.dart';
 import 'package:wizmo/view/login_signup/widgets/text_data.dart';
 
 class LogIn extends StatefulWidget {
-  LoginProvider provider;
-  LogIn({super.key, required this.provider});
+  final LoginProvider provider;
+  const LogIn({super.key, required this.provider});
 
   @override
   State<LogIn> createState() => _LogInState();

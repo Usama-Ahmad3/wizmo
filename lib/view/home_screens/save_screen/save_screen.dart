@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
+import 'package:wizmo/models/dynamic_car_detail_model.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/account_screen/empty.dart';
+import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
 import 'package:wizmo/view/home_screens/save_screen/save_provider.dart';
 import 'package:wizmo/view/login_signup/login/login.dart';
 import 'package:wizmo/view/login_signup/signup/signup.dart';
+import 'package:wizmo/view/login_signup/widgets/constants.dart';
 
 class SaveScreen extends StatefulWidget {
   const SaveScreen({super.key});
@@ -25,8 +28,8 @@ class _SaveScreenState extends State<SaveScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double height = MediaQuery.of(context).size.height;
+    // double width = MediaQuery.of(context).size.width;
     final provider = Provider.of<SaveProvider>(context, listen: false);
     provider.checkAuth(context);
     return Consumer<SaveProvider>(builder: (context, value, child) {
@@ -54,24 +57,71 @@ class _SaveScreenState extends State<SaveScreen> {
                         child: Column(
                           children: [
                             ...List.generate(
-                                4,
+                                value.getCarFavourites.cars!.length,
                                 (index) => Consumer<SaveProvider>(
-                                      builder: (context, value, child) =>
-                                          CarContainer(
-                                        image: image,
-                                        price: '3.599 \$',
-                                        name: 'BMW 3 Series 320',
-                                        model: '2007',
-                                        onTap: () {
-                                          value.navigateToCarDetailScreen(
-                                            context: context,
-                                            image: image,
-                                            price: '3.599 \$',
-                                            name: 'BMW 3 Series 320',
-                                            model: '2007',
-                                          );
-                                        },
-                                      ),
+                                      builder: (context, provider, child) =>
+                                         CarContainer(
+                                                          carId: provider.getCarFavourites.cars![index].car!.id.toString(),
+                                                  image: provider.getCarFavourites.cars![index].car!.carImages!
+                                                      .toList(),
+                                                  price:
+                                                      '${provider.getCarFavourites.cars![index].car!.price} \$',
+                                                  admin: provider.getCarFavourites.cars![index].car!.role ==
+                                                          'admin'
+                                                      ? true
+                                                      : false,
+                                                  name: provider.getCarFavourites.cars![index].car!.carName
+                                                      .toString(),
+                                                  model: provider.getCarFavourites.cars![index].car!.make!
+                                                      .toString(),
+                                                  onTap: () {
+                                                    DynamicCarDetailModel
+                                                        imageDetail =
+                                                        DynamicCarDetailModel(
+                                                            model: provider.getCarFavourites.cars![index].car!
+                                                                .make!,
+                                                            images:provider.getCarFavourites.cars![index].car!
+                                                                .carImages,
+                                                            name: provider.getCarFavourites.cars![index].car!
+                                                                .carName,
+                                                            description:
+                                                                provider.getCarFavourites.cars![index].car!
+                                                                    .description,
+                                                            location: provider.getCarFavourites.cars![index].car!
+                                                                .location,
+                                                                carId: provider.getCarFavourites.cars![index].car!.id.toString(),
+                                                            sellerType: provider.getCarFavourites.cars![index].car!
+                                                            .sellertype,
+                                                            longitude:provider.getCarFavourites.cars![index].car!
+                                                                .longitude,
+                                                            latitude: provider.getCarFavourites.cars![index].car!
+                                                                .latitude,
+                                                            email: provider.getCarFavourites.cars![index].car!
+                                                                .userEmail,
+                                                            number: provider.getCarFavourites.cars![index].car!
+                                                                .userPhoneNumber,
+                                                            sellerName:provider.getCarFavourites.cars![index].car!
+                                                                .userName,
+                                                            price: provider.getCarFavourites.cars![index].car!
+                                                                .price);
+                                                    print(
+                                                        imageDetail.sellerType);
+                                                    print(provider.getCarFavourites.cars![index].car!
+                                                        .sellertype);
+                                                    var detail =
+                                                        CarDetailInitials(
+                                                            carDetails:
+                                                                imageDetail,
+                                                            featureName:
+                                                                featureNames,
+                                                            features: provider.getCarFavourites.cars![index].car!
+                                                                .features,
+                                                            onTap: () {},
+                                                            provider: getIt());
+                                                    value.navigateToCarDetail(
+                                                        detail, context);
+                                                  },
+                                                ),
                                     )),
                           ],
                         ),

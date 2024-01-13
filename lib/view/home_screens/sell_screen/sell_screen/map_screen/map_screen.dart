@@ -7,13 +7,12 @@ import 'package:wizmo/res/common_widgets/button_widget.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/map_screen/map_screen_provider.dart';
 
 class MapScreen extends StatelessWidget {
-  TextEditingController location;
-  SellCarModel sellCarModel;
-  MapScreen({super.key, required this.location, required this.sellCarModel});
+ final TextEditingController location;
+ final SellCarModel sellCarModel;
+ const MapScreen({super.key, required this.location, required this.sellCarModel});
 
   @override
   Widget build(BuildContext context) {
-    print('In The Map Screen');
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     var map = Provider.of<MapScreenProvider>(context, listen: false);

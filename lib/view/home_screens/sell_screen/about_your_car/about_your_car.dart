@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/models/sell_car_model.dart';
@@ -9,9 +10,9 @@ import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_ca
 import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
 
 class AboutYourCar extends StatefulWidget {
-  AboutYourCarProvider provider;
-  SellCarModel sellCarModel;
-  AboutYourCar({super.key, required this.provider, required this.sellCarModel});
+ final AboutYourCarProvider provider;
+ final SellCarModel sellCarModel;
+ const AboutYourCar({super.key, required this.provider, required this.sellCarModel});
 
   @override
   State<AboutYourCar> createState() => _AboutYourCarState();
@@ -22,7 +23,9 @@ class _AboutYourCarState extends State<AboutYourCar> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    if(kDebugMode){
     print('In The About Your Car');
+    }
     super.initState();
   }
 

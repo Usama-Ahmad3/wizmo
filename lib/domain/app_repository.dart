@@ -7,4 +7,5 @@ abstract class AppRepository {
       required Map details});
   Future post(
       {required String url, required BuildContext context, Map? details});
+      Future get({required url, required BuildContext context,String? id});
 }

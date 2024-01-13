@@ -14,8 +14,8 @@ import 'package:wizmo/view/login_signup/widgets/text_data.dart';
 import '../../../res/colors/app_colors.dart';
 
 class SignUp extends StatefulWidget {
-  SignUpProvider provider;
-  SignUp({super.key, required this.provider});
+ final SignUpProvider provider;
+ const SignUp({super.key, required this.provider});
 
   @override
   State<SignUp> createState() => _SignUpState();

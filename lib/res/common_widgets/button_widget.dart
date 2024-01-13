@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 
 class ButtonWidget extends StatefulWidget {
-  VoidCallback onTap;
-  String text;
-  bool loading;
-  ButtonWidget(
+ final VoidCallback onTap;
+ final String text;
+ final bool loading;
+  const ButtonWidget(
       {super.key,
       required this.text,
       required this.onTap,

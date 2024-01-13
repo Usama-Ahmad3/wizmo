@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
+import 'package:wizmo/models/Car%20Favourites%20models/get_car_favourites.dart';
 import 'package:wizmo/models/dynamic_car_detail_model.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
@@ -10,6 +14,9 @@ import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/story_page
 import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
 
 class SaveProvider with ChangeNotifier {
+  AppRepository appRepository;
+  SaveProvider({required this.appRepository});
+  GetCarFavourites getCarFavourites = GetCarFavourites();
   bool _loading = false;
   bool _isLogIn = false;
   bool get isLogIn => _isLogIn;
@@ -46,8 +53,7 @@ class SaveProvider with ChangeNotifier {
     _isLogIn = await authentication.getAuth();
     print(await authentication.getToken());
     if (isLogIn) {
-      _loading = false;
-      notifyListeners();
+      favouriteCarsGet(context: context, url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
     } else {
       navigateToHome(context);
     }
@@ -57,5 +63,33 @@ class SaveProvider with ChangeNotifier {
     Navigation().pushRep(MainBottomBar(provider: getIt()), context);
     await FlushBarUtils.flushBar(
         'Login required to see the saved cars', context, 'Login Required');
+  }
+  favouriteCarsGet({required BuildContext context,required String url }) async {
+    var response =
+        await appRepository.get(url: url, context: context,id: null);
+    if (kDebugMode) {
+      print(response);
+    }
+    if (response != null) {
+      try {
+        getCarFavourites = GetCarFavourites.fromJson(response);
+        _loading = false;
+        notifyListeners();
+      } catch (e) {
+        _loading = false;
+        notifyListeners();
+      if (kDebugMode) {
+        
+          print("Here is car's error $e");
+        }
+      }
+    } else {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+   navigateToCarDetail(var carDetailInitials, context) {
+    Navigation()
+        .push(CarDetailScreen(carDetailInitials: carDetailInitials), context);
   }
 }

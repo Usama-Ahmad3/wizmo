@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
-import 'package:wizmo/res/exception/error_widget.dart';
+import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.dart';
 import 'package:wizmo/view/home_screens/account_screen/edit_profile/edit_profile_provider.dart';
 import 'package:wizmo/view/home_screens/account_screen/view_my_cars/view_my_cars_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_provider.dart';
@@ -45,7 +45,8 @@ void main() async {
       AboutYourCarProvider(appRepository: getIt()));
   getIt.registerSingleton<AddPhotoProvider>(
       AddPhotoProvider(appRepository: getIt()));
-  getIt.registerSingleton<SaveProvider>(SaveProvider());
+  getIt.registerSingleton<CarFavouritesProvider>(CarFavouritesProvider(appRepository: getIt()));    
+  getIt.registerSingleton<SaveProvider>(SaveProvider(appRepository: getIt()));
   getIt.registerSingleton<ViewMyCarsProvider>(
       ViewMyCarsProvider(appRepository: getIt()));
   getIt.registerSingleton<CarDetailProvider>(
@@ -90,10 +91,11 @@ class _AppState extends State<App> {
   }
 }
 
+
 class MyApp extends StatelessWidget {
-  bool walk;
-  bool isLogin;
-  MyApp({super.key, required this.walk, required this.isLogin});
+ final bool walk;
+ final  bool isLogin;
+  const MyApp({super.key, required this.walk, required this.isLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +117,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => ViewMyCarsProvider(appRepository: getIt())),
         ChangeNotifierProvider(
+            create: (context) => CarFavouritesProvider(appRepository: getIt())),
+        ChangeNotifierProvider(
             create: (context) => AddPhotoProvider(appRepository: getIt())),
         ChangeNotifierProvider(
             create: (context) =>
                 ForgetPasswordProvider(appRepository: getIt())),
-        ChangeNotifierProvider(create: (context) => SaveProvider()),
+        ChangeNotifierProvider(create: (context) => SaveProvider(appRepository: getIt())),
         ChangeNotifierProvider(
             create: (context) => CorouselProvider(appRepository: getIt())),
         ChangeNotifierProvider(

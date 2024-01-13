@@ -126,6 +126,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   }
 }
 
+// ignore: must_be_immutable
 class TextFieldMultiWidget extends StatefulWidget {
   TextEditingController controller;
   String hintText;

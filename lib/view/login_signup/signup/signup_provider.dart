@@ -30,6 +30,7 @@ class SignUpProvider extends ChangeNotifier {
   File? _image;
   final DateFormat formatter = DateFormat('dd-MM-yyyy', 'en_US');
   File? get image => _image;
+  
   imagePicker(
       {required BuildContext context, required SignUpProvider provider}) async {
     CameraChoice()

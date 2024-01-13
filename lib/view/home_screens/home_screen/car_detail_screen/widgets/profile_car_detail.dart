@@ -4,9 +4,9 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_provider.dart';
 
 class ProfileCarDetail extends StatelessWidget {
-  DynamicCarDetailModel profile;
-  CarDetailProvider provider;
-  ProfileCarDetail({super.key, required this.profile, required this.provider});
+ final DynamicCarDetailModel profile;
+ final CarDetailProvider provider;
+ const ProfileCarDetail({super.key, required this.profile, required this.provider});
 
   @override
   Widget build(BuildContext context) {

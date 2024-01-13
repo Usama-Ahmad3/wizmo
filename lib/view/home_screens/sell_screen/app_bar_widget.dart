@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 
 class AppBarWidget extends StatelessWidget {
-  Size size;
-  String title;
-  Color color1;
-  Color color2;
-  AppBarWidget(
+  final Size size;
+  final String title;
+  final Color color1;
+  final Color color2;
+  const AppBarWidget(
       {super.key,
       required this.size,
       required this.color1,

@@ -32,4 +32,7 @@ class AppUrls {
   static const String myAllCars = '/api/get-seller';
   static const String allCarsHome = '/api/view-car';
   static const String allCars = '/api/all-sellers-cars';
+  static const String postSavedCars = '/api/user/save/car/store';
+  static const String getSavedCars = '/api/user/save/car/get';
+  static const String removeSavedCars = '/api/user/save/car/delete';
 }
