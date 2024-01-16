@@ -7,15 +7,14 @@ import 'package:wizmo/utils/flushbar.dart';
 
 class CarFavouritesProvider with ChangeNotifier {
   AppRepository appRepository;
-  PostCarFavourites postCarFavourites = PostCarFavourites();
-  GetCarFavourites getCarFavourites = GetCarFavourites();
+  PostCarFavourites postCarFavourites;
+  GetCarFavourites getCarFavourites;
+  CarFavouritesProvider({required this.appRepository,required this.postCarFavourites,required this.getCarFavourites});
   bool _loading = true;
   bool get loading => _loading;
   List<int> favoriteCarIds = [];
   int _id = 0;
   int get id => _id;
-  CarFavouritesProvider({required this.appRepository});
-
   favouriteCarsPost(context, {String? url, Map? details}) async {
     _loading = true;
     notifyListeners();

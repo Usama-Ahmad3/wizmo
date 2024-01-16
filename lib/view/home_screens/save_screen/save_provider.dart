@@ -15,13 +15,13 @@ import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
 
 class SaveProvider with ChangeNotifier {
   AppRepository appRepository;
-  SaveProvider({required this.appRepository});
-  GetCarFavourites getCarFavourites = GetCarFavourites();
+  Authentication authentication;
+  GetCarFavourites getCarFavourites;
+  SaveProvider({required this.appRepository,required this.getCarFavourites,required this.authentication});
   bool _loading = false;
   bool _isLogIn = false;
   bool get isLogIn => _isLogIn;
   bool get loading => _loading;
-  Authentication authentication = Authentication();
   onRefresh() {
     _loading = true;
     notifyListeners();

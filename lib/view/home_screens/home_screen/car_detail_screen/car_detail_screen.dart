@@ -34,12 +34,14 @@ class _DetailScreenState extends State<CarDetailScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var authProvider = Provider.of<CarDetailProvider>(context, listen: false);
+    authProvider.checkAuth(context);
     widget.carDetailInitials.myCars
         ? authProvider.getProfile(
             details: null,
             context: context,
             url: '${AppUrls.baseUrl}${AppUrls.profile}')
         : null;
+    // authProvider.checkAuth(context);
     return authProvider.loading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -65,7 +67,7 @@ class _DetailScreenState extends State<CarDetailScreen> {
                 animationDuration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOutBack,
                 mini: false,
-                closeManually: true,
+                closeManually: false,
                 isOpenOnStart: false,
                 onPress: () {
                   value.onTapSpeed();
@@ -82,7 +84,12 @@ class _DetailScreenState extends State<CarDetailScreen> {
                             text: 'hi! how are you',
                             phoneNumber:
                                 widget.carDetailInitials.carDetails.number);
-                        value.launchInBrowser("$link", context);
+                        value.isLogIn
+                            ? value.launchInBrowser("$link", context)
+                            : value.popupDialog(
+                                context: context,
+                                text: 'Login required',
+                                buttonText: 'Login');
                       },
                       child: const Icon(
                         FontAwesomeIcons.whatsapp,
@@ -93,9 +100,14 @@ class _DetailScreenState extends State<CarDetailScreen> {
                   SpeedDialChild(
                       onTap: () {
                         print("Email");
-                        value.launchInBrowser(
-                            'mailto:${widget.carDetailInitials.carDetails.email}',
-                            context);
+                        value.isLogIn
+                            ? value.launchInBrowser(
+                                'mailto:${widget.carDetailInitials.carDetails.email}',
+                                context)
+                            : value.popupDialog(
+                                context: context,
+                                text: 'Login required',
+                                buttonText: 'Login');
                       },
                       child: const Icon(
                         Icons.email_outlined,
@@ -106,9 +118,14 @@ class _DetailScreenState extends State<CarDetailScreen> {
                   SpeedDialChild(
                       onTap: () {
                         print('phone');
-                        value.makePhoneCall(
-                            'tel:${widget.carDetailInitials.carDetails.number}',
-                            context);
+                        value.isLogIn
+                            ? value.makePhoneCall(
+                                'tel:${widget.carDetailInitials.carDetails.number}',
+                                context)
+                            : value.popupDialog(
+                                context: context,
+                                text: 'Login required',
+                                buttonText: 'Login');
                       },
                       child: const Icon(
                         Icons.phone,
@@ -246,6 +263,7 @@ class _DetailScreenState extends State<CarDetailScreen> {
                       builder: (context, value, child) => ProfileCarDetail(
                             profile: widget.carDetailInitials.carDetails,
                             provider: widget.carDetailInitials.provider,
+                            auth: value.isLogIn,
                           )),
                   SizedBox(
                     height: height * 0.07,

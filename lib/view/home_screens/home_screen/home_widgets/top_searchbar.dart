@@ -5,7 +5,9 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
 
 class TopSearchBar extends StatelessWidget {
-  const TopSearchBar({super.key});
+  String? make;
+  String? model;
+  TopSearchBar({super.key, this.make, this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,7 @@ class TopSearchBar extends StatelessWidget {
                               value.selectChoice(
                                   MediaQuery.of(context).size, context, 'Make');
                             });
+                            make = value.make;
                           },
                           child: Container(
                             height: height * 0.052,

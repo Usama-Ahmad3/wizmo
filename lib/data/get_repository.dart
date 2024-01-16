@@ -21,7 +21,8 @@ class GetRepository implements AppRepository {
       var apiUrl = Uri.parse(url);
       var client = http.Client();
       var request = http.MultipartRequest('POST', apiUrl);
-
+      details.removeWhere((key, value) => key == 'listFile');
+      print(details);
       details.forEach((key, value) {
         if (value is String) {
           request.fields[key] = value;
@@ -44,12 +45,12 @@ class GetRepository implements AppRepository {
         }
       } else {
         request.headers['Authorization'] = "Bearer ${prefs.getString('token')}";
-        for (int i = 0; i < details['car_images'].length; i++) {
+        for (int i = 0; i < details['image'].length; i++) {
           var file = http.MultipartFile(
-            'car_images[$i]',
-            details['car_images'][i].readAsBytes().asStream(),
-            details['car_images'][i].lengthSync(),
-            filename: 'car_image_$i.jpg',
+            'image[$i]',
+            details['image'][i].readAsBytes().asStream(),
+            details['image'][i].lengthSync(),
+            filename: 'image$i.jpg',
             contentType: MediaType('image', 'jpeg'),
           );
           request.files.add(file);
@@ -58,6 +59,7 @@ class GetRepository implements AppRepository {
       var response = await client.send(request);
       print("response ${response.stream.isBroadcast}");
       print(response.statusCode);
+      print(response.persistentConnection);
       print(url);
       // print(await response.stream.bytesToString());
       if (response.statusCode == 200) {
@@ -107,7 +109,6 @@ class GetRepository implements AppRepository {
       print(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
-        print("object$body");
         return body;
       } else {
         // ignore: use_build_context_synchronously
@@ -127,15 +128,17 @@ class GetRepository implements AppRepository {
       if (id != null) {
         url = '$url/$id';
       }
-      final response = await http.get(Uri.parse(url), headers: {
-        "Authorization": "Bearer ${prefs.getString('token')}",
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Authorization": "Bearer ${prefs.getString('token')}",
+        },
+      );
       print(response.statusCode);
       print(response.body);
       print(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
-        print("object$body");
         return body;
       } else if (response.statusCode == 404) {
         return null;

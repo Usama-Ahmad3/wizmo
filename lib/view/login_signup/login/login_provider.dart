@@ -14,9 +14,9 @@ class LoginProvider extends ChangeNotifier {
   AppRepository appRepository;
   LoginProvider({required this.appRepository});
   var passwordController =
-      TextEditingController(text: kDebugMode ? '12345678' : null);
+      TextEditingController(text: kDebugMode ? 'qwerty123' : null);
   var emailController =
-      TextEditingController(text: kDebugMode ? 'usama1@gmail.com' : null);
+      TextEditingController(text: kDebugMode ? 'ahmadniazi@gmail.com' : null);
   bool _loading = false;
   bool get loading => _loading;
   bool _obscure = true;

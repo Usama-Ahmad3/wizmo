@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/view/home_screens/search_screen/search_widgets.dart';
+
+import 'search_provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -10,15 +14,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  late int modelIndex;
-  @override
-  void initState() {
-    print('In the Search Screen');
-    modelIndex = models.length;
-    print(modelIndex);
-    super.initState();
-  }
-
   final String apiUrl =
       'http://54.173.21.116:8000/api/v1/acadmies/documents/'; // Replace with your API URL
   final String authToken = 'fd0adfe9f9c26869c3e21e5810f3afbaa6540248';
@@ -27,6 +22,11 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    final provider = Provider.of<SearchProvider>(context, listen: false);
+    provider.getModel(
+        loginDetails: null,
+        url: '${AppUrls.baseUrl}${AppUrls.carModel}',
+        context: context);
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -45,114 +45,94 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-          ...List.generate(abc.length, (mainIndex) {
-            List ab = [];
-            for (int i = 0; i < models.length; i++) {
-              abc.forEach((element) {
-                if (element == models[i][0]) {
-                  ab.add(element);
-                }
-              });
-              print(ab);
-            }
-            return ab.contains(abc[mainIndex])
-                ? LayoutBuilder(
-                    builder: (context, constraints) => ConstrainedBox(
-                      constraints:
-                          BoxConstraints(maxHeight: constraints.maxHeight),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: width * 0.03,
-                                vertical: height * 0.01),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                abc[mainIndex],
-                                style: Theme.of(context).textTheme.headline2,
-                              ),
-                            ),
-                          ),
-                          ListView.builder(
-                            itemCount: models.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return models[index]
-                                      .toString()
-                                      .toLowerCase()
-                                      .startsWith(abc[mainIndex].toString())
-                                  ? modelList(width, height, models[index],
-                                      '301', context)
-                                  : SizedBox.shrink();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+          Consumer<SearchProvider>(
+            builder: (context, value, child) => value.loading
+                ? SizedBox(
+                    height: height * 0.4,
+                    child: const Center(
+                        child: CircularProgressIndicator(color: Colors.red)),
                   )
-                : SizedBox.shrink();
-          }),
-          // ...List.generate(models.length, (index) {
-          //   return models[index]
-          //           .toString()
-          //           .toLowerCase()
-          //           .startsWith('a'.toLowerCase())
-          //       ? modelList(
-          //           width, height, models[index], "A, a", '301', context)
-          //       : const SizedBox.shrink();
-          // }),
-          // ...List.generate(models.length, (index) {
-          //   return models[index]
-          //           .toString()
-          //           .toLowerCase()
-          //           .startsWith('b'.toLowerCase())
-          //       ? modelList(
-          //           width, height, models[index], "B, b", '303', context)
-          //       : const SizedBox.shrink();
-          // }),
-          // ...List.generate(models.length, (index) {
-          //   return models[index]
-          //           .toString()
-          //           .toLowerCase()
-          //           .startsWith('c'.toLowerCase())
-          //       ? modelList(
-          //           width, height, models[index], "C, c", '303', context)
-          //       : const SizedBox.shrink();
-          // }),
+                : Column(
+                    children: [
+                      ...List.generate(value.abc.length, (mainIndex) {
+                        value.searchTitles();
+                        return value.ab.toString().toLowerCase().contains(
+                                value.abc[mainIndex].toString().toLowerCase())
+                            ? LayoutBuilder(
+                                builder: (context, constraints) =>
+                                    ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      maxHeight: constraints.maxHeight),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: width * 0.03,
+                                            vertical: height * 0.01),
+                                        child: Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            value.abc[mainIndex],
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2,
+                                          ),
+                                        ),
+                                      ),
+                                      ListView.builder(
+                                        itemCount: value.carModel.model!.length,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return value
+                                                  .carModel.model![index].model
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .startsWith(value
+                                                      .abc[mainIndex]
+                                                      .toString()
+                                                      .toLowerCase())
+                                              ? modelList(
+                                                  width: width,
+                                                  height: height,
+                                                  modelName: value.carModel
+                                                      .model![index].model
+                                                      .toString(),
+                                                  number: value
+                                                      .carModel.model![index].id
+                                                      .toString(),
+                                                  context: context,
+                                                  onTap: () {
+                                                    value
+                                                        .navigateToFilterScreen(
+                                                            model: value
+                                                                .carModel
+                                                                .model![index]
+                                                                .model
+                                                                .toString(),
+                                                            context: context,
+                                                            title: value
+                                                                .carModel
+                                                                .model![index]
+                                                                .model
+                                                                .toString());
+                                                  })
+                                              : SizedBox.shrink();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink();
+                      }),
+                    ],
+                  ),
+          )
         ]),
       ),
     ));
   }
-
-  List models = ['car', 'boo', 'model', 'a5', 'w2', 'e4', 'a6', 'h6', 'high'];
-  List abc = [
-    'a',
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-    'g',
-    'h',
-    'i',
-    'j',
-    'k',
-    'l',
-    'm',
-    'n',
-    'o',
-    'p',
-    'q',
-    'r',
-    's',
-    't',
-    'u',
-    'v',
-    'x',
-    'y',
-    'z'
-  ];
 }

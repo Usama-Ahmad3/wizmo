@@ -1,6 +1,7 @@
 class SellCarModel {
   String? carName;
   String? make;
+  String? range;
   String? model;
   String? variation;
   String? year;
@@ -31,6 +32,7 @@ class SellCarModel {
   SellCarModel(
       {this.carName,
       this.make,
+      this.range,
       this.sellerType,
       this.model,
       this.location,

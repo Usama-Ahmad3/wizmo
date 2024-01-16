@@ -4,9 +4,14 @@ import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_provider.dart';
 
 class ProfileCarDetail extends StatelessWidget {
- final DynamicCarDetailModel profile;
- final CarDetailProvider provider;
- const ProfileCarDetail({super.key, required this.profile, required this.provider});
+  final DynamicCarDetailModel profile;
+  final CarDetailProvider provider;
+  bool auth;
+  ProfileCarDetail(
+      {super.key,
+      required this.profile,
+      required this.provider,
+      this.auth = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class ProfileCarDetail extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.05),
       child: Container(
-        height: height * 0.08,
+        height: height * 0.09,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           boxShadow: [
@@ -32,20 +37,27 @@ class ProfileCarDetail extends StatelessWidget {
         child: ListTile(
             leading: CircleAvatar(
               radius: height * 0.023,
-              backgroundImage: AssetImage('assets/images/profile.jpeg'),
+              backgroundImage: const AssetImage('assets/images/profile.jpeg'),
             ),
             title: Text(
               profile.sellerName.toString(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             subtitle: Text(
-              profile.location.toString(),
-              style: Theme.of(context).textTheme.bodyMedium,
+              profile.location.toString().length > 40
+                  ? profile.location.toString().substring(0, 40)
+                  : profile.location.toString(),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             trailing: InkWell(
               onTap: () {
-                provider.openMapSheet(context, profile.longitude,
-                    profile.latitude, profile.location);
+                auth
+                    ? provider.openMapSheet(context, profile.longitude,
+                        profile.latitude, profile.location)
+                    : provider.popupDialog(
+                        context: context,
+                        text: 'Login required',
+                        buttonText: 'Login');
               },
               child: Text(
                 "Direction",

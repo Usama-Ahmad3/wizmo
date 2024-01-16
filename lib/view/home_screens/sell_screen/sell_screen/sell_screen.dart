@@ -21,8 +21,8 @@ class _SellScreenState extends State<SellScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    if(kDebugMode){
-    print('In the Sell Screen');
+    if (kDebugMode) {
+      print('In the Sell Screen');
     }
     super.initState();
   }
@@ -459,9 +459,9 @@ class _SellScreenState extends State<SellScreen> {
                     builder: (context, provider, child) => ButtonWidget(
                         text: 'Continue',
                         onTap: () {
-                          // if (_formKey.currentState!.validate()) {
-                          provider.navigateToAboutCar(context);
-                          // }
+                          if (_formKey.currentState!.validate()) {
+                            provider.navigateToAboutCar(context);
+                          }
                         }),
                   ),
                   SizedBox(

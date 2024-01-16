@@ -3,30 +3,30 @@ import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/models/dynamic_car_detail_model.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
-import 'package:wizmo/view/home_screens/account_screen/view_my_cars/view_my_cars_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
+import 'package:wizmo/view/home_screens/search_screen/filter_cars/filter_car_provider.dart';
 import 'package:wizmo/view/login_signup/widgets/constants.dart';
 
-// ignore: must_be_immutable
-class ViewMyCars extends StatelessWidget {
-  ViewMyCars({super.key});
+class FilterCars extends StatelessWidget {
+  String title;
+  String? model;
+  FilterCars({super.key, required this.title, this.model});
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
-    final provider = Provider.of<ViewMyCarsProvider>(context, listen: false);
+    double height = MediaQuery.sizeOf(context).height;
+    double width = MediaQuery.sizeOf(context).width;
+    final provider = Provider.of<FilterCarProvider>(context, listen: false);
+    String? url = model != null ? 'model=$model' : null;
     provider.viewMyAllCars(
-        context: context,
-        url: '${AppUrls.baseUrl}${AppUrls.myAllCars}',
-        details: null);
+        context: context, url: '${AppUrls.baseUrl}${AppUrls.filterCars}$url');
     return Scaffold(
         appBar: AppBar(
-          title: const Text('My Cars'),
+          title: Text(title),
         ),
         body: SingleChildScrollView(child:
-            Consumer<ViewMyCarsProvider>(builder: (context, value, child) {
+            Consumer<FilterCarProvider>(builder: (context, value, child) {
           return value.loading
               ? SizedBox(
                   height: height * 0.9,
@@ -107,9 +107,8 @@ class ViewMyCars extends StatelessWidget {
                           SizedBox(
                             height: height * 0.01,
                           ),
-                          const Text('Nothing in your cars'),
-                          const Text(
-                              'Add a car then come here to see your added cars'),
+                          const Text('Nothing in cars'),
+                          Text('No cars found for this filter $model'),
                         ],
                       ),
                     );

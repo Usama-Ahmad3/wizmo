@@ -19,7 +19,32 @@ import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo.dart';
 
 class AboutYourCarProvider with ChangeNotifier {
   AppRepository appRepository;
-  AboutYourCarProvider({required this.appRepository});
+  TypeFuel typeFuel;
+  CarFuelConsumption fuelConsumption;
+  CarEngineSize carEngineSize;
+  CarEnginePower carEnginePower;
+  Mileage mileage;
+  CarGearbox gearbox;
+  Doors doors;
+  Seats seats;
+  CarColor carColor;
+  Tax tax;
+  Insurance insurance;
+
+  AboutYourCarProvider({
+    required this.appRepository,
+    required this.typeFuel,
+    required this.fuelConsumption,
+    required this.carEngineSize,
+    required this.carEnginePower,
+    required this.mileage,
+    required this.gearbox,
+    required this.doors,
+    required this.seats,
+    required this.carColor,
+    required this.tax,
+    required this.insurance,
+  });
 
   ///aboutCarDetail
   TextEditingController engineController = TextEditingController();
@@ -33,18 +58,8 @@ class AboutYourCarProvider with ChangeNotifier {
   TextEditingController colorController = TextEditingController();
   TextEditingController doorsController = TextEditingController();
   TextEditingController seatsController = TextEditingController();
+  TextEditingController rangeController = TextEditingController();
   // TextEditingController transmissionController = TextEditingController();
-  TypeFuel typeFuel = TypeFuel();
-  CarFuelConsumption fuelConsumption = CarFuelConsumption();
-  CarEngineSize carEngineSize = CarEngineSize();
-  CarEnginePower carEnginePower = CarEnginePower();
-  Mileage mileage = Mileage();
-  CarGearbox gearbox = CarGearbox();
-  Doors doors = Doors();
-  Seats seats = Seats();
-  CarColor carColor = CarColor();
-  Tax tax = Tax();
-  Insurance insurance = Insurance();
   Future fuelType(
       {required loginDetails, required url, required context}) async {
     var response = await appRepository.post(
@@ -375,6 +390,7 @@ class AboutYourCarProvider with ChangeNotifier {
 
   navigateToPhoto(SellCarModel sellCarModel, context) {
     sellCarModel.colour = colorController.text;
+    sellCarModel.range = rangeController.text;
     Navigation().push(
       AddPhoto(provider: getIt(), sellCarModel: sellCarModel),
       context,

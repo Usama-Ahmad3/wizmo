@@ -35,4 +35,5 @@ class AppUrls {
   static const String postSavedCars = '/api/user/save/car/store';
   static const String getSavedCars = '/api/user/save/car/get';
   static const String removeSavedCars = '/api/user/save/car/delete';
+  static const String filterCars = '/api/filter-car?';
 }

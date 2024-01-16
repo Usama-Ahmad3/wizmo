@@ -1,44 +1,32 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wizmo/domain/app_repository.dart';
+import 'package:wizmo/main.dart';
 import 'package:wizmo/models/get_profile.dart';
+import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
+import 'package:wizmo/res/common_widgets/popup.dart';
 import 'package:wizmo/utils/flushbar.dart';
+import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/login_signup/login/login.dart';
 
 class CarDetailProvider with ChangeNotifier {
   AppRepository appRepository;
-  CarDetailProvider({required this.appRepository});
-  GetProfile profile = GetProfile();
+  GetProfile profile;
+  Authentication authentication;
+  CarDetailProvider(
+      {required this.appRepository,
+      required this.profile,
+      required this.authentication});
   bool _loading = false;
   bool get loading => _loading;
+  bool _isLogIn = false;
+  bool get isLogIn => _isLogIn;
   bool _viewMore = false;
   bool get viewMore => _viewMore;
 
-  ///TODO later
-  String location = "London, UK";
-  String name = "Brian P.Berry";
-  String image = "assets/images/profile.jpeg";
-  List featureNames = [
-    'Model',
-    'body_type',
-    'acceleration',
-    'drivetrain',
-    'co2',
-    'transmission',
-    'fuel type',
-    'fuel consumption',
-    'engine size',
-    'engine power',
-    'mileage',
-    'gearbox',
-    'colour',
-    'doors',
-    'seats'
-  ];
   onClick() {
     _viewMore = !_viewMore;
     notifyListeners();
@@ -48,6 +36,19 @@ class CarDetailProvider with ChangeNotifier {
   onTapSpeed() {
     isDialOpen.value = !isDialOpen.value;
     notifyListeners();
+  }
+
+  popupDialog(
+      {required BuildContext context,
+      required String text,
+      required String buttonText}) {
+    popup(
+        context: context,
+        text: text,
+        onTap: () {
+          navigateToLogin(context);
+        },
+        buttonText: buttonText);
   }
 
   Future<void> launchInBrowser(String url, context) async {
@@ -131,7 +132,7 @@ class CarDetailProvider with ChangeNotifier {
         await appRepository.post(url: url, context: context, details: details);
     print(response);
     if (response != null) {
-      profile = await GetProfile.fromJson(response);
+      profile = GetProfile.fromJson(response);
     } else {
       _loading = false;
       // ignore: use_build_context_synchronously
@@ -139,5 +140,14 @@ class CarDetailProvider with ChangeNotifier {
     }
     _loading = false;
     notifyListeners();
+  }
+
+  Future checkAuth(context) async {
+    _isLogIn = await authentication.getAuth();
+    print(await authentication.getToken());
+  }
+
+  navigateToLogin(context) {
+    Navigation().pushRep(LogIn(provider: getIt()), context);
   }
 }

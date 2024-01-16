@@ -11,9 +11,10 @@ import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo_provider
 import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
 
 class AddPhoto extends StatefulWidget {
- final AddPhotoProvider provider;
- final SellCarModel sellCarModel;
- const AddPhoto({super.key, required this.provider, required this.sellCarModel});
+  final AddPhotoProvider provider;
+  final SellCarModel sellCarModel;
+  const AddPhoto(
+      {super.key, required this.provider, required this.sellCarModel});
 
   @override
   State<AddPhoto> createState() => _AddPhotoState();
@@ -23,8 +24,8 @@ class _AddPhotoState extends State<AddPhoto> {
   AddPhotoProvider get photoProvider => widget.provider;
   @override
   void initState() {
-    if(kDebugMode){
-    print('In The Add Photo');
+    if (kDebugMode) {
+      print('In The Add Photo');
     }
     super.initState();
   }
@@ -224,10 +225,8 @@ class _AddPhotoState extends State<AddPhoto> {
                                     'email':
                                         value.profile.userProfile![0].email ??
                                             '',
-                                    'car_name': widget.sellCarModel.carName,
-                                    'price': widget.sellCarModel.price,
                                     'insurance': widget.sellCarModel.insurance,
-                                    'co': widget.sellCarModel.co2,
+                                    'co2': widget.sellCarModel.co2,
                                     'make': widget.sellCarModel.make,
                                     'model': widget.sellCarModel.model,
                                     'modelvariation':
@@ -238,14 +237,13 @@ class _AddPhotoState extends State<AddPhoto> {
                                     'fuletype': widget.sellCarModel.fuelType,
                                     'enginesize':
                                         widget.sellCarModel.engineSize,
+                                    'co': widget.sellCarModel.co2,
                                     'enginepower':
                                         widget.sellCarModel.enginePower,
                                     'fuelconsumption':
                                         widget.sellCarModel.consumption,
                                     'acceleration':
                                         widget.sellCarModel.acceleration,
-                                    'latitude': widget.sellCarModel.latitude,
-                                    'longitude': widget.sellCarModel.longitude,
                                     'gearboxe': widget.sellCarModel.gearBox,
                                     'drivetrain':
                                         widget.sellCarModel.driveTrain,
@@ -256,13 +254,22 @@ class _AddPhotoState extends State<AddPhoto> {
                                     'sellertype':
                                         widget.sellCarModel.sellerType,
                                     'tax': widget.sellCarModel.tax,
-                                    'car_images': value.image,
                                     'location': widget.sellCarModel.location,
                                     "color": widget.sellCarModel.colour,
+                                    'longitude': widget.sellCarModel.longitude,
+                                    'latitude': widget.sellCarModel.latitude,
+                                    'car_name': widget.sellCarModel.carName,
+                                    'image': value.image,
+                                    'price': widget.sellCarModel.price,
+                                    'rgistraion':
+                                        widget.sellCarModel.registration,
+                                    'insurancegroup':
+                                        widget.sellCarModel.insurance,
+                                    'range': widget.sellCarModel.range,
                                     'listFile': true
                                   };
-                                  if(kDebugMode){
-                                  print(detail);
+                                  if (kDebugMode) {
+                                    print(detail);
                                   }
                                   value.addCarForSell(
                                       context: context,

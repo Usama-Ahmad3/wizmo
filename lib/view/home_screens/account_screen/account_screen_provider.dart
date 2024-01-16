@@ -5,6 +5,7 @@ import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/authentication/authentication.dart';
+import 'package:wizmo/res/common_widgets/popup.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/account_screen/edit_profile/edit_profile.dart';
@@ -16,21 +17,18 @@ import 'view_my_cars/view_my_cars.dart';
 
 class AccountScreenProvider with ChangeNotifier {
   AppRepository appRepository;
-  AccountScreenProvider({required this.appRepository});
-  UserProfile userProfile = UserProfile();
-  GetProfile profile = GetProfile();
-  Authentication authentication = Authentication();
+  UserProfile userProfile;
+  GetProfile profile;
+  Authentication authentication;
+  AccountScreenProvider(
+      {required this.appRepository,
+      required this.profile,
+      required this.authentication,
+      required this.userProfile});
   bool _isLogIn = false;
   bool _loading = true;
   bool get loading => _loading;
   bool get isLogIn => _isLogIn;
-  navigateToSignup(context) {
-    Navigation().push(SignUp(provider: getIt()), context);
-  }
-
-  navigateToLogin(context) {
-    Navigation().pushRep(LogIn(provider: getIt()), context);
-  }
 
   Future checkAuth(BuildContext context) async {
     print('working');
@@ -50,34 +48,42 @@ class AccountScreenProvider with ChangeNotifier {
     return profile;
   }
 
-  navigateToHomeScreen(context) {
-    Navigation().pushRep(MainBottomBar(provider: getIt(), index: 0), context);
-  }
-
   logout(
       {required BuildContext context,
       required String url,
       Map? details}) async {
-    await appRepository
-        .post(url: url, context: context, details: details)
-        .then((value) async {
-      authentication.logout();
-      await FlushBarUtils.flushBar(value['message'], context, 'Logout');
-      navigateToHomeScreen(context);
-    });
+    popup(
+        context: context,
+        text: 'Are you sure',
+        onTap: () async {
+          await appRepository
+              .post(url: url, context: context, details: details)
+              .then((value) async {
+            authentication.logout();
+            await FlushBarUtils.flushBar(value['message'], context, 'Logout');
+            navigateToHomeScreen(context);
+          });
+        },
+        buttonText: 'Logout');
   }
 
   deleteAccount(
       {required BuildContext context,
       required String url,
       Map? details}) async {
-    await appRepository
-        .post(url: url, context: context, details: details)
-        .then((value) async {
-      authentication.logout();
-      // await FlushBarUtils.flushBar(value['message'], context, 'Logout');
-      navigateToHomeScreen(context);
-    });
+    popup(
+        context: context,
+        text: 'Are you sure',
+        onTap: () async {
+          await appRepository
+              .post(url: url, context: context, details: details)
+              .then((value) async {
+            authentication.logout();
+            // await FlushBarUtils.flushBar(value['message'], context, 'Logout');
+            navigateToHomeScreen(context);
+          });
+        },
+        buttonText: 'Delete');
   }
 
   Future getProfile(
@@ -109,5 +115,17 @@ class AccountScreenProvider with ChangeNotifier {
 
   navigateToSavedCars(context) {
     Navigation().pushRep(MainBottomBar(provider: getIt(), index: 3), context);
+  }
+
+  navigateToSignup(context) {
+    Navigation().push(SignUp(provider: getIt()), context);
+  }
+
+  navigateToLogin(context) {
+    Navigation().pushRep(LogIn(provider: getIt()), context);
+  }
+
+  navigateToHomeScreen(context) {
+    Navigation().pushRep(MainBottomBar(provider: getIt(), index: 0), context);
   }
 }

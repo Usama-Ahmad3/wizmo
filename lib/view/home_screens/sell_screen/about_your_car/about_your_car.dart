@@ -10,9 +10,10 @@ import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_ca
 import 'package:wizmo/view/home_screens/sell_screen/app_bar_widget.dart';
 
 class AboutYourCar extends StatefulWidget {
- final AboutYourCarProvider provider;
- final SellCarModel sellCarModel;
- const AboutYourCar({super.key, required this.provider, required this.sellCarModel});
+  final AboutYourCarProvider provider;
+  final SellCarModel sellCarModel;
+  const AboutYourCar(
+      {super.key, required this.provider, required this.sellCarModel});
 
   @override
   State<AboutYourCar> createState() => _AboutYourCarState();
@@ -20,11 +21,11 @@ class AboutYourCar extends StatefulWidget {
 
 class _AboutYourCarState extends State<AboutYourCar> {
   AboutYourCarProvider get aboutCarProvider => widget.provider;
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    if(kDebugMode){
-    print('In The About Your Car');
+    if (kDebugMode) {
+      print('In The About Your Car');
     }
     super.initState();
   }
@@ -408,11 +409,29 @@ class _AboutYourCarState extends State<AboutYourCar> {
                 SizedBox(
                   height: height * 0.025,
                 ),
+                Consumer<AboutYourCarProvider>(
+                  builder: (context, provider, child) => TextFieldWidget(
+                    controller: provider.rangeController,
+                    hintText: 'Enter your car range',
+                    onValidate: (value) {
+                      if (value.isEmpty) {
+                        return "range field can't empty";
+                      }
+                      return null;
+                    },
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(height * 0.034),
+                        borderSide: BorderSide(color: AppColors.white)),
+                  ),
+                ),
+                SizedBox(height: height * 0.025),
 
                 ButtonWidget(
                     text: 'Continue',
                     onTap: () {
-                      provider.navigateToPhoto(widget.sellCarModel, context);
+                      if (_formKey.currentState!.validate()) {
+                        provider.navigateToPhoto(widget.sellCarModel, context);
+                      }
                     }),
                 SizedBox(
                   height: height * 0.012,

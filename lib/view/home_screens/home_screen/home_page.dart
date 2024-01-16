@@ -50,15 +50,16 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SafeArea(child: Image.asset('assets/images/wizmo.jpg')),
-                        const TopSearchBar(),
+                        Consumer<CorouselProvider>(
+                            builder: (context, value, child) => TopSearchBar(
+                                  model: value.model,
+                                  make: value.make,
+                                )),
                         FutureBuilder(
-                          future: context
-                              .read<CorouselProvider>()
-                              .getAllCarsHome(
-                                  details: null,
-                                  url:
-                                      '${AppUrls.baseUrl}${AppUrls.allCarsHome}',
-                                  context: context),
+                          future: context.read<HomeProvider>().getAllCarsHome(
+                              details: null,
+                              url: '${AppUrls.baseUrl}${AppUrls.allCarsHome}',
+                              context: context),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
@@ -80,8 +81,9 @@ class _HomePageState extends State<HomePage> {
                                           color: Colors.red)),
                                 );
                               } else {
-                                return Consumer<CorouselProvider>(
-                                  builder: (context, provider, child) => Column(
+                                return Consumer<HomeProvider>(
+                                    builder: (context, provider, child) {
+                                  return Column(
                                     children: [
                                       ...List.generate(
                                           provider.allCarsHome.cars != null
@@ -89,9 +91,9 @@ class _HomePageState extends State<HomePage> {
                                                   .allCarsHome.cars!.length
                                               : 1,
                                           (index) => Consumer<HomeProvider>(
-                                                builder:
-                                                    (context, value, child) =>
-                                                        CarContainer(
+                                                  builder:
+                                                      (context, value, child) {
+                                                return CarContainer(
                                                   carId: provider.allCarsHome
                                                       .cars![index].id
                                                       .toString(),
@@ -190,11 +192,11 @@ class _HomePageState extends State<HomePage> {
                                                     value.navigateToCarDetail(
                                                         detail, context);
                                                   },
-                                                ),
-                                              )),
+                                                );
+                                              })),
                                     ],
-                                  ),
-                                );
+                                  );
+                                });
                               }
                             } else {
                               return SizedBox(

@@ -22,7 +22,32 @@ import 'map_screen/map_screen.dart';
 
 class SellScreenProvider extends ChangeNotifier {
   AppRepository appRepository;
-  SellScreenProvider({required this.appRepository});
+  Authentication authentication;
+  SellCarModel sellCarModel;
+  MakeModel makeModel;
+  CarModel carModel;
+  CarYear carYear;
+  ModelVariation modelVariation;
+  CarAcceleration acceleration;
+  BodyTypee bodyTypee;
+  DriveTrain driveTrain;
+  CarCo2 carCo2;
+  TypeSeller typeSeller;
+
+  SellScreenProvider(
+      {required this.appRepository,
+      required this.authentication,
+      required this.sellCarModel,
+      required this.makeModel,
+      required this.carModel,
+      required this.carYear,
+      required this.modelVariation,
+      required this.acceleration,
+      required this.bodyTypee,
+      required this.driveTrain,
+      required this.carCo2,
+      required this.typeSeller});
+
   final nameController = TextEditingController();
   final makeController = TextEditingController();
   final modelController = TextEditingController();
@@ -37,8 +62,6 @@ class SellScreenProvider extends ChangeNotifier {
   final priceController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
-  Authentication authentication = Authentication();
-  SellCarModel sellCarModel = SellCarModel();
   @override
   void dispose() {
     nameController.dispose();
@@ -57,16 +80,6 @@ class SellScreenProvider extends ChangeNotifier {
 
   bool _isLogIn = false;
   bool _loading = false;
-  MakeModel makeModel = MakeModel();
-  CarModel carModel = CarModel();
-  ModelVariation modelVariation = ModelVariation();
-  CarYear carYear = CarYear();
-  BodyTypee bodyTypee = BodyTypee();
-  CarAcceleration acceleration = CarAcceleration();
-  DriveTrain driveTrain = DriveTrain();
-  CarCo2 carCo2 = CarCo2();
-  TypeSeller typeSeller = TypeSeller();
-
   bool get loading => _loading;
 
   bool get isLogIn => _isLogIn;
@@ -422,9 +435,6 @@ class SellScreenProvider extends ChangeNotifier {
     sellCarModel.price = priceController.text;
     sellCarModel.description = descriptionController.text;
     sellCarModel.location = locationController.text;
-    print(sellCarModel.description);
-    print(sellCarModel.carName);
-    print(descriptionController.text);
     Navigation().push(
         AboutYourCar(provider: getIt(), sellCarModel: sellCarModel), context);
   }

@@ -5,6 +5,7 @@ import 'package:wizmo/models/selling_models/car_model.dart';
 import 'package:wizmo/models/selling_models/make_model.dart';
 import 'package:wizmo/domain/app_repository.dart';
 import 'package:wizmo/main.dart';
+import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
@@ -13,7 +14,14 @@ import 'package:wizmo/view/home_screens/main_bottom_bar/main_bottom_bar.dart';
 
 class HomeProvider extends ChangeNotifier {
   AppRepository appRepository;
-  HomeProvider({required this.appRepository});
+  MakeModel makeModel;
+  CarModel carModel;
+  AllCarsHome allCarsHome;
+  HomeProvider(
+      {required this.appRepository,
+      required this.makeModel,
+      required this.allCarsHome,
+      required this.carModel});
   var searchController = TextEditingController();
   int countCars = 23138;
   String _make = '';
@@ -26,8 +34,6 @@ class HomeProvider extends ChangeNotifier {
   bool get loading => _loading;
   bool _makeLoading = false;
   bool get makeLoading => _makeLoading;
-  MakeModel makeModel = MakeModel();
-  CarModel carModel = CarModel();
   OverlayEntry? overlayEntry;
   onRefresh() {
     _make = '';
@@ -70,6 +76,37 @@ class HomeProvider extends ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future getAllCarsHome(
+      {required BuildContext context,
+      required String url,
+      Map? details}) async {
+    print('object');
+    var response;
+    if (make == '') {
+      response = await appRepository.post(
+          url: url, context: context, details: details);
+    } else if (make != '') {
+      response = await appRepository.get(
+          url: '${AppUrls.baseUrl}${AppUrls.filterCars}make=$make',
+          context: context,
+          id: null);
+    } else if (model != '') {
+      response = await appRepository.get(
+          url:
+              '${AppUrls.baseUrl}${AppUrls.filterCars}?make=$make&model=$model',
+          context: context,
+          id: null);
+    }
+    print(response);
+    if (response != null) {
+      allCarsHome = AllCarsHome.fromJson(response);
+    } else {
+      // _loading = false;
+      notifyListeners();
+    }
+    return allCarsHome;
   }
 
   selectChoice(Size size, BuildContext context, String title) {
@@ -188,13 +225,15 @@ class HomeProvider extends ChangeNotifier {
   }
 }
 
-class CorouselProvider with ChangeNotifier {
+class CorouselProvider extends ChangeNotifier {
   AppRepository appRepository;
-  CorouselProvider({required this.appRepository});
+  AllCarsHome allCarsHome;
+  CorouselProvider({required this.appRepository, required this.allCarsHome});
   final nextPageController = CarouselController();
-  AllCarsHome allCarsHome = AllCarsHome();
   int _initialPage = 0;
   int get initialPage => _initialPage;
+  String? make;
+  String? model;
   onChangeCorousel(int index) {
     _initialPage = index;
     notifyListeners();
@@ -204,9 +243,27 @@ class CorouselProvider with ChangeNotifier {
       {required BuildContext context,
       required String url,
       Map? details}) async {
+    print('object');
     var response =
         await appRepository.post(url: url, context: context, details: details);
     print(response);
+    if (response != null) {
+      allCarsHome = AllCarsHome.fromJson(response);
+    } else {
+      // _loading = false;
+      notifyListeners();
+    }
+    return allCarsHome;
+  }
+
+  Future getAllCarsFilter(
+      {required BuildContext context,
+      required String url,
+      Map? details}) async {
+    print('Filter');
+    var response =
+        await appRepository.get(url: url, context: context, id: null);
+    // print(response);
     if (response != null) {
       allCarsHome = AllCarsHome.fromJson(response);
     } else {
