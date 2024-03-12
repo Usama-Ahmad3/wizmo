@@ -49,8 +49,9 @@ class _SearchScreenState extends State<SearchScreen> {
             builder: (context, value, child) => value.loading
                 ? SizedBox(
                     height: height * 0.4,
-                    child: const Center(
-                        child: CircularProgressIndicator(color: Colors.red)),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                            color: AppColors.buttonColor)),
                   )
                 : Column(
                     children: [
@@ -94,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       .abc[mainIndex]
                                                       .toString()
                                                       .toLowerCase())
-                                              ? modelList(
+                                              ? searchWidget(
                                                   width: width,
                                                   height: height,
                                                   modelName: value.carModel

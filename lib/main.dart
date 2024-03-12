@@ -17,6 +17,7 @@ import 'package:wizmo/view/home_screens/search_screen/filter_cars/filter_car_pro
 import 'package:wizmo/view/home_screens/search_screen/search_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/about_your_car/about_your_car_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo_provider.dart';
+import 'package:wizmo/view/home_screens/sell_screen/description_screen/description_screen_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/map_screen/map_screen_provider.dart';
 import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen_provider.dart';
 import 'package:wizmo/view/login_signup/forget_password/forget_password_provider.dart';
@@ -67,6 +68,8 @@ void main() async {
   getIt.registerLazySingleton<GetCarFavourites>(() => GetCarFavourites());
   getIt.registerLazySingleton<AllCarsHome>(() => AllCarsHome());
   getIt.registerLazySingleton<MakeModel>(() => MakeModel());
+  getIt.registerLazySingleton<DescriptionScreenProvider>(
+      () => DescriptionScreenProvider());
   getIt.registerLazySingleton<CarModel>(() => CarModel());
   getIt.registerLazySingleton<TypeFuel>(() => TypeFuel());
   getIt.registerLazySingleton<CarFuelConsumption>(() => CarFuelConsumption());
@@ -140,6 +143,7 @@ void main() async {
       getCarFavourites: getIt(),
       postCarFavourites: getIt()));
   getIt.registerSingleton<SaveProvider>(SaveProvider(
+      carFavouritesProvider: getIt(),
       appRepository: getIt(),
       authentication: getIt(),
       getCarFavourites: getIt()));
@@ -203,6 +207,8 @@ class MyApp extends StatelessWidget {
             create: (context) => SignUpProvider(appRepository: getIt())),
         ChangeNotifierProvider(create: (context) => OnBoardingProvider()),
         ChangeNotifierProvider(
+            create: (context) => DescriptionScreenProvider()),
+        ChangeNotifierProvider(
             create: (context) => FilterCarProvider(
                 myAllCarModel: getIt(), appRepository: getIt())),
         ChangeNotifierProvider(
@@ -255,6 +261,7 @@ class MyApp extends StatelessWidget {
                 ForgetPasswordProvider(appRepository: getIt())),
         ChangeNotifierProvider(
             create: (context) => SaveProvider(
+                carFavouritesProvider: getIt(),
                 appRepository: getIt(),
                 getCarFavourites: getIt(),
                 authentication: getIt())),

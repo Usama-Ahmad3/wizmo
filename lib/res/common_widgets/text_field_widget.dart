@@ -147,6 +147,7 @@ class TextFieldMultiWidget extends StatefulWidget {
   Color? suffixIconColor;
   Color? fillColor;
   Color? textColor;
+  int maxLine;
   FormFieldValidator? onValidate;
   FormFieldValidator? onChanged;
   VoidCallback? onTap;
@@ -158,6 +159,7 @@ class TextFieldMultiWidget extends StatefulWidget {
       required this.hintText,
       this.onValidate,
       this.onTap,
+      this.maxLine = 3,
       this.passTap,
       this.enable = true,
       this.textColor,
@@ -209,10 +211,11 @@ class _TextFieldMultiWidgetState extends State<TextFieldMultiWidget> {
           enabled: widget.enable,
           onTap: widget.onTap,
           keyboardType: widget.type,
-          maxLines: 3,
-          style: Theme.of(context).textTheme.headline2!.copyWith(
-              fontSize: widget.controller.text.length > 8 ? 14 : 16,
-              color: AppColors.black),
+          maxLines: widget.maxLine,
+          style: Theme.of(context)
+              .textTheme
+              .headline2!
+              .copyWith(fontSize: 16, color: AppColors.black),
           cursorColor: AppColors.black,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           textAlign: TextAlign.start,

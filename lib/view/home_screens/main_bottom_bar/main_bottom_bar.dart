@@ -14,7 +14,7 @@ import 'package:wizmo/view/home_screens/sell_screen/sell_screen/sell_screen.dart
 // ignore: must_be_immutable
 class MainBottomBar extends StatefulWidget {
   int index;
- final MainBottomBarProvider provider;
+  final MainBottomBarProvider provider;
   MainBottomBar({super.key, this.index = 0, required this.provider});
 
   @override
@@ -53,7 +53,8 @@ class _MainBottomBarState extends State<MainBottomBar> {
         Provider.of<MainBottomBarProvider>(context, listen: false);
     return WillPopScope(
       onWillPop: () {
-        return authProvider.onWillPop(context);
+        return authProvider.popupDialog(
+            buttonText: 'Yes', text: "You're going to exit", context: context);
       },
       child: Scaffold(
         bottomNavigationBar: ConvexAppBar(

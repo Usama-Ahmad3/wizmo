@@ -6,11 +6,13 @@ class AppBarWidget extends StatelessWidget {
   final String title;
   final Color color1;
   final Color color2;
+  final Color color3;
   const AppBarWidget(
       {super.key,
       required this.size,
       required this.color1,
       required this.color2,
+      required this.color3,
       required this.title});
 
   @override
@@ -52,6 +54,14 @@ class AppBarWidget extends StatelessWidget {
                 height: size.height * 0.005,
                 width: size.width * 0.2,
                 color: color2,
+              ),
+              SizedBox(
+                width: size.width * 0.01,
+              ),
+              Container(
+                height: size.height * 0.005,
+                width: size.width * 0.2,
+                color: color3,
               ),
             ],
           ),

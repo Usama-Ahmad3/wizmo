@@ -28,6 +28,7 @@ class SellCarModel {
   String? seats;
   String? tax;
   String? insurance;
+  bool? auto;
 
   SellCarModel(
       {this.carName,
@@ -44,6 +45,7 @@ class SellCarModel {
       this.acceleration,
       this.driveTrain,
       this.co2,
+      this.auto = true,
       this.registration,
       this.price,
       this.description,

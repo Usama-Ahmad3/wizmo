@@ -21,17 +21,9 @@ class GetRepository implements AppRepository {
       var apiUrl = Uri.parse(url);
       var client = http.Client();
       var request = http.MultipartRequest('POST', apiUrl);
-      details.removeWhere((key, value) => key == 'listFile');
-      print(details);
-      details.forEach((key, value) {
-        if (value is String) {
-          request.fields[key] = value;
-        }
-      });
-
       if (details['listFile'] == false) {
         if (details['profile_image'] is File) {
-          print('file');
+          // print('file');
           var file = http.MultipartFile(
             'profile_image',
             details['profile_image'].readAsBytes().asStream(),
@@ -41,7 +33,7 @@ class GetRepository implements AppRepository {
                 MediaType('image', 'jpeg'), // Adjust content type as needed
           );
           request.files.add(file);
-          print(request.files);
+          // print(request.files);
         }
       } else {
         request.headers['Authorization'] = "Bearer ${prefs.getString('token')}";
@@ -56,10 +48,18 @@ class GetRepository implements AppRepository {
           request.files.add(file);
         }
       }
+      details.removeWhere((key, value) => key == 'listFile');
+      // print(details);
+      details.forEach((key, value) {
+        if (value is String) {
+          request.fields[key] = value;
+        }
+      });
+
       var response = await client.send(request);
-      print("response ${response.stream.isBroadcast}");
+      // print("response ${response.stream.isBroadcast}");
       print(response.statusCode);
-      print(response.persistentConnection);
+      // print(response.persistentConnection);
       print(url);
       // print(await response.stream.bytesToString());
       if (response.statusCode == 200) {
@@ -73,6 +73,7 @@ class GetRepository implements AppRepository {
             'Looks like email already registered', context, "Error");
       } else {
         print('Signup failed with status ${response.statusCode}');
+        print(response.headers);
         // ignore: use_build_context_synchronously
         Exceptions().exceptionsMessages(response.statusCode, context);
       }
@@ -87,7 +88,7 @@ class GetRepository implements AppRepository {
       {required String url,
       required BuildContext context,
       Map? details}) async {
-    print(details);
+    // print(details);
     print('Post Without Image');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -99,13 +100,13 @@ class GetRepository implements AppRepository {
         });
       } else {
         print(prefs.getString('token'));
-        print(url);
+        // print(url);
         response = await http.post(Uri.parse(url), headers: {
           "Authorization": "Bearer ${prefs.getString('token')}",
         });
       }
       print(response.statusCode);
-      print(response.body);
+      // print(response.body);
       print(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
@@ -135,8 +136,8 @@ class GetRepository implements AppRepository {
         },
       );
       print(response.statusCode);
-      print(response.body);
-      print(url);
+      // print(response.body);
+      // print(url);
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         return body;

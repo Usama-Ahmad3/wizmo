@@ -73,18 +73,14 @@ class TopSearchBar extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Center(
-                              child: value.makeLoading
-                                  ? const CircularProgressIndicator()
-                                  : Text(
-                                      value.make == ''
-                                          ? 'Select Make'
-                                          : value.make,
-                                      // title!.isEmpty?'Select Make':title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline3!
-                                          .copyWith(color: AppColors.black),
-                                    ),
+                              child: Text(
+                                value.make == '' ? 'Select Make' : value.make,
+                                // title!.isEmpty?'Select Make':title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline3!
+                                    .copyWith(color: AppColors.black),
+                              ),
                             ),
                           ),
                         );
@@ -121,20 +117,16 @@ class TopSearchBar extends StatelessWidget {
                             });
                           },
                           child: Center(
-                            child: value.isLoading
-                                ? const CircularProgressIndicator()
-                                : Text(
-                                    value.model == ''
-                                        ? 'Select Model'
-                                        : value.model,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3!
-                                        .copyWith(
-                                            color: value.make == ''
-                                                ? AppColors.grey
-                                                : AppColors.black),
-                                  ),
+                            child: Text(
+                              value.model == '' ? 'Select Model' : value.model,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3!
+                                  .copyWith(
+                                      color: value.make == ''
+                                          ? AppColors.grey
+                                          : AppColors.black),
+                            ),
                           ),
                         ),
                       )),
@@ -186,7 +178,7 @@ class TopSearchBar extends StatelessWidget {
                           ),
                           Consumer<HomeProvider>(
                             builder: (context, value, child) => Text(
-                              'Search ${value.countCars} cars',
+                              'Search ${value.allCarsHome.cars != null ? value.allCarsHome.cars!.length : ''} cars',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline3!

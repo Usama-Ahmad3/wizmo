@@ -1,30 +1,32 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
-import 'package:wizmo/res/common_widgets/cashed_image.dart';
 import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.dart';
+import 'package:wizmo/view/home_screens/save_screen/save_provider.dart';
 
 import '../home_provider.dart';
 
 class CarContainer extends StatelessWidget {
-  final List image;
-  final String price;
-  final String model;
-  final String name;
-  final bool isFavourite;
-  final bool admin;
-  final String carId;
-  final VoidCallback onTap;
-  const CarContainer(
+  List image;
+  String price;
+  String model;
+  String name;
+  bool saved;
+  bool admin;
+  String addCarId;
+  VoidCallback onTap;
+  CarContainer(
       {super.key,
-      required this.carId,
       required this.image,
       required this.price,
+      required this.addCarId,
       this.admin = false,
       required this.name,
-      this.isFavourite = false,
+      this.saved = false,
       required this.onTap,
       required this.model});
 
@@ -66,29 +68,39 @@ class CarContainer extends StatelessWidget {
                               child: admin
                                   ? Banner(
                                       location: BannerLocation.topStart,
-                                      layoutDirection: TextDirection.rtl,
-                                      message: 'Approved By Admin',
+                                      layoutDirection: TextDirection.ltr,
+                                      message: 'Admin',
                                       color: Colors.red,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(
                                             height * 0.01),
-                                        child: cachedNetworkImage(
-                                            height: height * 0.23,
-                                            width: width,
-                                            cuisineImageUrl: image[index] ?? '',
-                                            imageFit: BoxFit.fill,
-                                            errorFit: BoxFit.contain),
+                                        child: Image.network(
+                                          image[index],
+                                          fit: BoxFit.fill,
+                                        ),
+                                        // cachedNetworkImage(
+                                        //     height: height * 0.23,
+                                        //     width: width,
+                                        //     cuisineImageUrl: image[index] ?? '',
+                                        //     placeholder: image[index] ?? '',
+                                        //     imageFit: BoxFit.fill,
+                                        //     errorFit: BoxFit.contain),
                                       ),
                                     )
                                   : ClipRRect(
                                       borderRadius:
                                           BorderRadius.circular(height * 0.01),
-                                      child: cachedNetworkImage(
-                                          height: height * 0.23,
-                                          width: width,
-                                          cuisineImageUrl: image[index] ?? '',
-                                          imageFit: BoxFit.fill,
-                                          errorFit: BoxFit.fill),
+                                      child: Image.network(
+                                        image[index],
+                                        fit: BoxFit.fill,
+                                      ),
+                                      // cachedNetworkImage(
+                                      //     height: height * 0.23,
+                                      //     width: width,
+                                      //     cuisineImageUrl: image[index] ?? '',
+                                      //     placeholder: image[index] ?? '',
+                                      //     imageFit: BoxFit.fill,
+                                      //     errorFit: BoxFit.fill),
                                     ),
                             ),
                           ],
@@ -175,37 +187,41 @@ class CarContainer extends StatelessWidget {
                         backgroundColor: AppColors.grey.withOpacity(0.65),
                         radius: height * 0.021,
                         child: Consumer<CarFavouritesProvider>(
-                          builder: (context, value, child) => value.loading
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : InkWell(
-                                  onTap: () {
-                                    value.getSavedIdsToRemove(carId);
-                                    value.favoriteCarIds.contains(
-                                            int.parse(carId.toString()))
-                                        ? value.favouriteCarsRemove(
-                                            carId: carId,
-                                            context: context,
-                                            url:
-                                                "${AppUrls.baseUrl}${AppUrls.removeSavedCars}",
-                                            id: value.id.toString())
-                                        : value.favouriteCarsPost(context,
-                                            details: {'car_id': carId},
-                                            url:
-                                                '${AppUrls.baseUrl}${AppUrls.postSavedCars}');
-                                  },
-                                  child: Icon(
-                                    value.favoriteCarIds
-                                            .contains(int.parse(carId))
-                                        ? Icons.star
-                                        : Icons.star_border,
-                                    color: value.favoriteCarIds
-                                            .contains(int.parse(carId))
-                                        ? AppColors.blue
-                                        : AppColors.white,
-                                  ),
-                                ),
+                          builder: (context, value, child) => InkWell(
+                            onTap: () {
+                              value.favoriteCarIds
+                                      .contains(int.parse(addCarId.toString()))
+                                  ? value.favouriteCarsRemove(
+                                      localId: addCarId,
+                                      context: context,
+                                      url:
+                                          "${AppUrls.baseUrl}${AppUrls.removeSavedCars}",
+                                    )
+                                  : value.favouriteCarsPost(
+                                      context: context,
+                                      localId: addCarId,
+                                      details: {'car_id': addCarId},
+                                      url:
+                                          '${AppUrls.baseUrl}${AppUrls.postSavedCars}');
+                              context.read<SaveProvider>().change();
+                              // Future.delayed(const Duration(seconds: 2), () {
+                              //   context.read<SaveProvider>().favouriteCarsGet(
+                              //       context: context,
+                              //       url:
+                              //           '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
+                              // });
+                            },
+                            child: Icon(
+                              value.favoriteCarIds
+                                      .contains(int.parse(addCarId.toString()))
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: value.favoriteCarIds
+                                      .contains(int.parse(addCarId.toString()))
+                                  ? AppColors.blue
+                                  : AppColors.white,
+                            ),
+                          ),
                         ))),
               ],
             );

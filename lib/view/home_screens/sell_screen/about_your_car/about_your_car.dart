@@ -41,6 +41,7 @@ class _AboutYourCarState extends State<AboutYourCar> {
           title: 'About your car',
           color1: AppColors.buttonColor,
           color2: AppColors.grey,
+          color3: AppColors.grey,
           size: MediaQuery.sizeOf(context),
         ),
       ),
@@ -430,7 +431,12 @@ class _AboutYourCarState extends State<AboutYourCar> {
                     text: 'Continue',
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        provider.navigateToPhoto(widget.sellCarModel, context);
+                        widget.sellCarModel.auto!
+                            ? provider.navigateToDescription(
+                                widget.sellCarModel, context)
+                            : provider.navigateToAddPhoto(
+                                context: context,
+                                sellCarModel: widget.sellCarModel);
                       }
                     }),
                 SizedBox(

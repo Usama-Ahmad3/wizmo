@@ -40,7 +40,7 @@ class ViewMyCars extends StatelessWidget {
                         ...List.generate(value.myAllCarModel.cars!.length,
                             (index) {
                           return CarContainer(
-                            carId:
+                            addCarId:
                                 value.myAllCarModel.cars![index].id.toString(),
                             image: value.myAllCarModel.cars![index].carImages!
                                 .toList(),
@@ -71,10 +71,11 @@ class ViewMyCars extends StatelessWidget {
                                           .myAllCarModel.cars![index].longitude,
                                       location: value
                                           .myAllCarModel.cars![index].location,
-                                      carId: value.myAllCarModel.cars![index].id
-                                          .toString(),
                                       sellerName: value
                                           .myAllCarModel.cars![index].userName,
+                                      addCarId: value
+                                          .myAllCarModel.cars![index].id
+                                          .toString(),
                                       number: value.myAllCarModel.cars![index]
                                           .userPhoneNumber,
                                       email: value.myAllCarModel.cars![index]

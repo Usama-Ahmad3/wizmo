@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:wizmo/main.dart';
 import 'package:wizmo/models/dynamic_car_detail_model.dart';
 import 'package:wizmo/res/app_urls/app_urls.dart';
+import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/res/common_widgets/empty_screen.dart';
 import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/home_widgets/car_container.dart';
 import 'package:wizmo/view/login_signup/widgets/constants.dart';
-
 import 'home_initial_params.dart';
 import 'home_widgets/top_searchbar.dart';
 
@@ -49,12 +49,13 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SafeArea(child: Image.asset('assets/images/wizmo.jpg')),
-                        Consumer<CorouselProvider>(
-                            builder: (context, value, child) => TopSearchBar(
-                                  model: value.model,
-                                  make: value.make,
-                                )),
+                        InkWell(
+                            onTap: () {
+                              print(provider.favoriteCarIds);
+                            },
+                            child: SafeArea(
+                                child: Image.asset('assets/images/wizmo.jpg'))),
+                        TopSearchBar(),
                         FutureBuilder(
                           future: context.read<HomeProvider>().getAllCarsHome(
                               details: null,
@@ -76,104 +77,108 @@ class _HomePageState extends State<HomePage> {
                                   ConnectionState.waiting) {
                                 return SizedBox(
                                   height: height * 0.4,
-                                  child: const Center(
+                                  child: Center(
                                       child: CircularProgressIndicator(
-                                          color: Colors.red)),
+                                          color: AppColors.buttonColor)),
                                 );
                               } else {
                                 return Consumer<HomeProvider>(
-                                    builder: (context, provider, child) {
+                                    builder: (context, providerHome, child) {
                                   return Column(
                                     children: [
                                       ...List.generate(
-                                          provider.allCarsHome.cars != null
-                                              ? provider
+                                          providerHome.allCarsHome.cars != null
+                                              ? providerHome
                                                   .allCarsHome.cars!.length
                                               : 1,
                                           (index) => Consumer<HomeProvider>(
                                                   builder:
                                                       (context, value, child) {
                                                 return CarContainer(
-                                                  carId: provider.allCarsHome
-                                                      .cars![index].id
+                                                  addCarId: providerHome
+                                                      .allCarsHome
+                                                      .cars![index]
+                                                      .id
                                                       .toString(),
-                                                  image: provider.allCarsHome
-                                                      .cars![index].carImages!
+                                                  image: providerHome
+                                                      .allCarsHome
+                                                      .cars![index]
+                                                      .carImages!
                                                       .toList(),
                                                   price:
-                                                      '${provider.allCarsHome.cars![index].price} \$',
-                                                  admin: provider
+                                                      '${providerHome.allCarsHome.cars![index].price} \$',
+                                                  admin: providerHome
                                                               .allCarsHome
                                                               .cars![index]
                                                               .role ==
                                                           'admin'
                                                       ? true
                                                       : false,
-                                                  name: provider.allCarsHome
+                                                  name: providerHome.allCarsHome
                                                       .cars![index].carName
                                                       .toString(),
-                                                  model: provider.allCarsHome
-                                                      .cars![index].make!
+                                                  model: providerHome
+                                                      .allCarsHome
+                                                      .cars![index]
+                                                      .make!
                                                       .toString(),
                                                   onTap: () {
-                                                    DynamicCarDetailModel imageDetail =
-                                                        DynamicCarDetailModel(
-                                                            model: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .make!,
-                                                            images: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .carImages,
-                                                            name: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .carName,
-                                                            description: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .description,
-                                                            location: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .location,
-                                                            carId: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .id
-                                                                .toString(),
-                                                            sellerType: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .sellerType,
-                                                            longitude: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .longitude,
-                                                            latitude: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .latitude,
-                                                            email: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .userEmail,
-                                                            number: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .userPhoneNumber,
-                                                            sellerName: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .userName,
-                                                            price: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .price);
+                                                    print(providerHome
+                                                        .allCarsHome
+                                                        .cars![index]
+                                                        .id
+                                                        .toString());
+                                                    DynamicCarDetailModel imageDetail = DynamicCarDetailModel(
+                                                        model: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .make!,
+                                                        images: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .carImages,
+                                                        name: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .carName,
+                                                        description: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .description,
+                                                        location: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .location,
+                                                        sellerType: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .sellerType,
+                                                        addCarId: providerHome.allCarsHome.cars![index].id
+                                                            .toString(),
+                                                        longitude: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .longitude,
+                                                        latitude: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .latitude,
+                                                        email: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .userEmail,
+                                                        number: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .userPhoneNumber,
+                                                        sellerName: providerHome
+                                                            .allCarsHome
+                                                            .cars![index]
+                                                            .userName,
+                                                        price: providerHome.allCarsHome.cars![index].price);
                                                     print(
                                                         imageDetail.sellerType);
-                                                    print(provider
+                                                    print(providerHome
                                                         .allCarsHome
                                                         .cars![index]
                                                         .sellerType);
@@ -183,10 +188,12 @@ class _HomePageState extends State<HomePage> {
                                                                 imageDetail,
                                                             featureName:
                                                                 featureNames,
-                                                            features: provider
-                                                                .allCarsHome
-                                                                .cars![index]
-                                                                .features,
+                                                            features:
+                                                                providerHome
+                                                                    .allCarsHome
+                                                                    .cars![
+                                                                        index]
+                                                                    .features,
                                                             onTap: () {},
                                                             provider: getIt());
                                                     value.navigateToCarDetail(
@@ -201,8 +208,10 @@ class _HomePageState extends State<HomePage> {
                             } else {
                               return SizedBox(
                                 height: height * 0.4,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.buttonColor,
+                                  ),
                                 ),
                               );
                             }

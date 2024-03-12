@@ -40,6 +40,7 @@ class _SellScreenState extends State<SellScreen> {
             size: MediaQuery.sizeOf(context),
             color1: AppColors.grey,
             color2: AppColors.grey,
+            color3: AppColors.grey,
             title: 'Create a new ad',
           ),
         ),
@@ -440,18 +441,36 @@ class _SellScreenState extends State<SellScreen> {
 
                   ///description
                   Consumer<SellScreenProvider>(
-                    builder: (context, provider, child) => TextFieldMultiWidget(
-                      controller: provider.descriptionController,
-                      hintText: 'Enter description',
-                      onValidate: (value) {
-                        if (value.isEmpty) {
-                          return "description field can't empty";
-                        }
-                        return null;
+                    builder: (context, provider, child) => InkWell(
+                      onTap: () {
+                        provider.auto
+                            ? provider.autoDescriptionDialog(context, height)
+                            : null;
                       },
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(height * 0.034),
-                          borderSide: BorderSide(color: AppColors.white)),
+                      child: TextFieldMultiWidget(
+                        controller: provider.descriptionController,
+                        hintText: 'Enter description',
+                        enable: provider.manual,
+                        suffixIcon: Icons.keyboard_arrow_right,
+                        suffixIconColor: AppColors.grey,
+                        hideIcon: Icons.keyboard_arrow_right,
+                        passTap: () {
+                          provider.autoDescriptionDialog(context, height);
+                        },
+                        onValidate: (value) {
+                          if (provider.auto) {
+                            return null;
+                          } else {
+                            if (value.isEmpty) {
+                              return "description field can't empty";
+                            }
+                            return null;
+                          }
+                        },
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(height * 0.034),
+                            borderSide: BorderSide(color: AppColors.white)),
+                      ),
                     ),
                   ),
                   SizedBox(height: height * 0.04),

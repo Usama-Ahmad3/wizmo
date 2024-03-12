@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 
-Widget modelList({required double width,required double height,required String modelName,required String number,required BuildContext context,required VoidCallback onTap}) {
+Widget searchWidget(
+    {required double width,
+    required double height,
+    required String modelName,
+    required String number,
+    required BuildContext context,
+    required VoidCallback onTap}) {
   return InkWell(
     onTap: onTap,
     child: Padding(

@@ -80,6 +80,10 @@ class SellScreenProvider extends ChangeNotifier {
 
   bool _isLogIn = false;
   bool _loading = false;
+  bool _auto = true;
+  bool _manual = false;
+  bool get auto => _auto;
+  bool get manual => _manual;
   bool get loading => _loading;
 
   bool get isLogIn => _isLogIn;
@@ -423,6 +427,66 @@ class SellScreenProvider extends ChangeNotifier {
     }
   }
 
+  autoDescriptionDialog(BuildContext context, double height) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: SizedBox(
+          height: height * 0.12,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        autofocus: true,
+                        activeColor: AppColors.buttonColor,
+                        value: auto,
+                        onChanged: (bool? value) {
+                          _auto = value!;
+                          _manual = !auto;
+                          descriptionController.clear();
+                          notifyListeners();
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Checkbox(
+                        autofocus: true,
+                        activeColor: AppColors.buttonColor,
+                        value: manual,
+                        onChanged: (bool? value) {
+                          _manual = value!;
+                          _auto = !value;
+                          notifyListeners();
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Auto Description"),
+                      SizedBox(
+                        height: height * 0.04,
+                      ),
+                      const Text("Manual Description")
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   navigateToHome(context) async {
     Navigation().pushRep(MainBottomBar(provider: getIt(), index: 0), context);
     await FlushBarUtils.flushBar(
@@ -435,6 +499,7 @@ class SellScreenProvider extends ChangeNotifier {
     sellCarModel.price = priceController.text;
     sellCarModel.description = descriptionController.text;
     sellCarModel.location = locationController.text;
+    sellCarModel.auto = auto;
     Navigation().push(
         AboutYourCar(provider: getIt(), sellCarModel: sellCarModel), context);
   }

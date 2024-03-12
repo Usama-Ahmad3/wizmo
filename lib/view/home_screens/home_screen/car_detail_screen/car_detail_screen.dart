@@ -151,7 +151,8 @@ class _DetailScreenState extends State<CarDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CarContainer(
-                    carId: widget.carDetailInitials.carDetails.carId.toString(),
+                    addCarId:
+                        widget.carDetailInitials.carDetails.addCarId.toString(),
                     onTap: () {
                       navigateToStory();
                     },

@@ -16,6 +16,7 @@ import 'package:wizmo/models/selling_models/type_fuel.dart';
 import 'package:wizmo/res/colors/app_colors.dart';
 import 'package:wizmo/utils/navigator_class.dart';
 import 'package:wizmo/view/home_screens/sell_screen/add_photo/add_photo.dart';
+import 'package:wizmo/view/home_screens/sell_screen/description_screen/description_screen.dart';
 
 class AboutYourCarProvider with ChangeNotifier {
   AppRepository appRepository;
@@ -388,13 +389,19 @@ class AboutYourCarProvider with ChangeNotifier {
     );
   }
 
-  navigateToPhoto(SellCarModel sellCarModel, context) {
+  navigateToDescription(SellCarModel sellCarModel, context) {
     sellCarModel.colour = colorController.text;
     sellCarModel.range = rangeController.text;
     Navigation().push(
-      AddPhoto(provider: getIt(), sellCarModel: sellCarModel),
+      DescriptionScreen(sellCarModel: sellCarModel),
       context,
     );
+  }
+
+  navigateToAddPhoto(
+      {required BuildContext context, required SellCarModel sellCarModel}) {
+    Navigation()
+        .push(AddPhoto(provider: getIt(), sellCarModel: sellCarModel), context);
   }
 
   navigateToBack(context) {

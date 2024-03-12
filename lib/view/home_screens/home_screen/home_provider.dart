@@ -29,12 +29,7 @@ class HomeProvider extends ChangeNotifier {
   String _model = '';
   String get model => _model;
   bool _loading = false;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
   bool get loading => _loading;
-  bool _makeLoading = false;
-  bool get makeLoading => _makeLoading;
-  OverlayEntry? overlayEntry;
   onRefresh() {
     _make = '';
     _model = '';
@@ -52,30 +47,22 @@ class HomeProvider extends ChangeNotifier {
 
   Future getMake(
       {required loginDetails, required url, required context}) async {
-    _makeLoading = true;
-    notifyListeners();
     var response = await appRepository.post(
         url: url, context: context, details: loginDetails);
     print("response$response");
     if (response != null) {
       makeModel = MakeModel.fromJson(response);
     }
-    _makeLoading = false;
-    notifyListeners();
   }
 
   Future getModel(
       {required loginDetails, required url, required context}) async {
-    _isLoading = true;
-    notifyListeners();
     var response = await appRepository.post(
         url: url, context: context, details: loginDetails);
     print("response$response");
     if (response != null) {
       carModel = CarModel.fromJson(response);
     }
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future getAllCarsHome(

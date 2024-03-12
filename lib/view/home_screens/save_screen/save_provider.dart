@@ -8,6 +8,7 @@ import 'package:wizmo/res/app_urls/app_urls.dart';
 import 'package:wizmo/res/authentication/authentication.dart';
 import 'package:wizmo/utils/flushbar.dart';
 import 'package:wizmo/utils/navigator_class.dart';
+import 'package:wizmo/view/home_screens/Favourites_Screens/favourites_provider.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_initials.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/car_detail_screen.dart';
 import 'package:wizmo/view/home_screens/home_screen/car_detail_screen/story_page.dart';
@@ -17,7 +18,12 @@ class SaveProvider with ChangeNotifier {
   AppRepository appRepository;
   Authentication authentication;
   GetCarFavourites getCarFavourites;
-  SaveProvider({required this.appRepository,required this.getCarFavourites,required this.authentication});
+  CarFavouritesProvider carFavouritesProvider;
+  SaveProvider(
+      {required this.appRepository,
+      required this.carFavouritesProvider,
+      required this.getCarFavourites,
+      required this.authentication});
   bool _loading = false;
   bool _isLogIn = false;
   bool get isLogIn => _isLogIn;
@@ -53,10 +59,17 @@ class SaveProvider with ChangeNotifier {
     _isLogIn = await authentication.getAuth();
     print(await authentication.getToken());
     if (isLogIn) {
-      favouriteCarsGet(
+      await carFavouritesProvider.favouriteCarsGet(
           context: context, url: '${AppUrls.baseUrl}${AppUrls.getSavedCars}');
+      getCarFavourites = carFavouritesProvider.getCarFavourites;
+      print(getCarFavourites.cars);
+      print('aaa');
+      _loading = false;
+      notifyListeners();
     } else {
       navigateToHome(context);
+      _loading = false;
+      notifyListeners();
     }
   }
 
@@ -69,9 +82,6 @@ class SaveProvider with ChangeNotifier {
   favouriteCarsGet({required BuildContext context, required String url}) async {
     var response =
         await appRepository.get(url: url, context: context, id: null);
-    if (kDebugMode) {
-      print(response);
-    }
     if (response != null) {
       try {
         getCarFavourites = GetCarFavourites.fromJson(response);
@@ -85,7 +95,7 @@ class SaveProvider with ChangeNotifier {
         }
       }
     } else {
-      print(getCarFavourites.cars);
+      getCarFavourites.cars = null;
       _loading = false;
       notifyListeners();
     }
@@ -94,5 +104,10 @@ class SaveProvider with ChangeNotifier {
   navigateToCarDetail(var carDetailInitials, context) {
     Navigation()
         .push(CarDetailScreen(carDetailInitials: carDetailInitials), context);
+  }
+
+  change() {
+    print('hi');
+    notifyListeners();
   }
 }

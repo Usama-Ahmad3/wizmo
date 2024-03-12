@@ -47,6 +47,7 @@ class _AddPhotoState extends State<AddPhoto> {
           size: MediaQuery.sizeOf(context),
           color1: AppColors.buttonColor,
           color2: AppColors.buttonColor,
+          color3: AppColors.buttonColor,
         ),
       ),
       body: Padding(
@@ -237,7 +238,6 @@ class _AddPhotoState extends State<AddPhoto> {
                                     'fuletype': widget.sellCarModel.fuelType,
                                     'enginesize':
                                         widget.sellCarModel.engineSize,
-                                    'co': widget.sellCarModel.co2,
                                     'enginepower':
                                         widget.sellCarModel.enginePower,
                                     'fuelconsumption':
@@ -258,18 +258,20 @@ class _AddPhotoState extends State<AddPhoto> {
                                     "color": widget.sellCarModel.colour,
                                     'longitude': widget.sellCarModel.longitude,
                                     'latitude': widget.sellCarModel.latitude,
-                                    'car_name': widget.sellCarModel.carName,
-                                    'image': value.image,
                                     'price': widget.sellCarModel.price,
-                                    'rgistraion':
-                                        widget.sellCarModel.registration,
+                                    'car_name': widget.sellCarModel.carName,
+                                    'co': widget.sellCarModel.co2,
                                     'insurancegroup':
                                         widget.sellCarModel.insurance,
+                                    'image': value.image,
+                                    'rgistraion':
+                                        widget.sellCarModel.registration,
                                     'range': widget.sellCarModel.range,
                                     'listFile': true
                                   };
                                   if (kDebugMode) {
-                                    print(detail);
+                                    print("SSSSSSSSSSSSSSSSSSSSS");
+                                    print(widget.sellCarModel.description);
                                   }
                                   value.addCarForSell(
                                       context: context,
